@@ -3,13 +3,27 @@ import { Link } from "react-router-dom";
 import { Search, TrendingDown, ChevronRight, BarChart3, Banknote } from "lucide-react";
 import { calculateHealthScore } from "./utils/healthScore";
 
-const SECTORS = ["Semua", "Banks", "Commodities", "Cyclical", "Consumer"];
+const SECTORS = ["Semua", "Banks", "Commodities", "Cyclical", "Consumer", "Telco"];
 
 const STOCKS_INFO = {
   BBCA: { name: "Bank Central Asia Tbk.", sector: "Banks" },
   BBRI: { name: "Bank Rakyat Indonesia Tbk.", sector: "Banks" },
   BMRI: { name: "Bank Mandiri Tbk.", sector: "Banks" },
   BBNI: { name: "Bank Negara Indonesia Tbk.", sector: "Banks" },
+  ADRO: { name: "Adaro Energy Indonesia Tbk.", sector: "Commodities" },
+  ITMG: { name: "Indo Tambangraya Megah Tbk.", sector: "Commodities" },
+  PTBA: { name: "Bukit Asam Tbk.", sector: "Commodities" },
+  HRUM: { name: "Harum Energy Tbk.", sector: "Commodities" },
+  ANTM: { name: "Aneka Tambang Tbk.", sector: "Commodities" },
+  ASII: { name: "Astra International Tbk.", sector: "Cyclical" },
+  UNTR: { name: "United Tractors Tbk.", sector: "Cyclical" },
+  TLKM: { name: "Telkom Indonesia Tbk.", sector: "Telco" },
+  ISAT: { name: "Indosat Ooredoo Hutchison Tbk.", sector: "Telco" },
+  UNVR: { name: "Unilever Indonesia Tbk.", sector: "Consumer" },
+  ICBP: { name: "Indofood CBP Sukses Makmur Tbk.", sector: "Consumer" },
+  INDF: { name: "Indofood Sukses Makmur Tbk.", sector: "Consumer" },
+  HMSP: { name: "HM Sampoerna Tbk.", sector: "Consumer" },
+  GGRM: { name: "Gudang Garam Tbk.", sector: "Consumer" },
 };
 
 export default function LandingPage() {
@@ -35,9 +49,12 @@ export default function LandingPage() {
     let result = tickers.map(ticker => {
       const tickerData = data.filter(d => d.Ticker === ticker);
       const health = calculateHealthScore(tickerData);
+      const dataInfo = tickerData.length > 0 ? tickerData[0] : null;
+      
       return {
         ticker,
-        ...STOCKS_INFO[ticker],
+        name: STOCKS_INFO[ticker]?.name || ticker,
+        sector: STOCKS_INFO[ticker]?.sector || dataInfo?.Sector || "Other",
         health,
         eventsCount: tickerData.length
       };
@@ -83,26 +100,29 @@ export default function LandingPage() {
         </p>
 
         {/* DISCOVERY CONTROLS */}
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-2 flex flex-col md:flex-row gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <div className="flex flex-col items-center gap-6">
+          {/* SEARCH BAR */}
+          <div className="w-full max-w-2xl md:max-w-3xl relative">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input 
               type="text" 
-              placeholder="Search by ticker or name..."
+              placeholder="Cari emiten dividen..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-12 pl-12 pr-4 bg-slate-50 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition-shadow"
+              className="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 rounded-full shadow-sm text-slate-950 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all font-sans"
             />
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 [&::-webkit-scrollbar]:hidden items-center px-2">
+
+          {/* SECTOR FILTERS */}
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
             {SECTORS.map(s => (
               <button
                 key={s}
                 onClick={() => setSectorFilter(s)}
-                className={`whitespace-nowrap px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                className={`px-6 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-300 ${
                   sectorFilter === s 
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20" 
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                    ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-100" 
+                    : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}
               >
                 {s}

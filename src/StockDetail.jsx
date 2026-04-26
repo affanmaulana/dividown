@@ -190,7 +190,7 @@ export default function StockDetail() {
         <div className="mb-8">
           <button 
             onClick={() => navigate('/')} 
-            className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 mb-6 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Discovery
           </button>
