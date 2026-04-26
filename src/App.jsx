@@ -7,6 +7,7 @@ import {
   TrendingUp, TrendingDown, ShieldCheck, ShieldAlert,
   AlertTriangle, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown,
+  Shield, TriangleAlert, OctagonAlert,
 } from "lucide-react";
 
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -118,22 +119,54 @@ export default function App() {
     };
   }, [filtered, capital, strategy, latestPrice]);
 
-  // ── Health Score ──────────────────────────────────────────────────────────
-  const health = useMemo(() => {
-    if (!engine) return { label: "—", scheme: "slate", Icon: ShieldCheck };
-    if (engine.avgRecovery <= 20 && engine.notRecovered === 0)
-      return { label: "Sehat", scheme: "emerald", Icon: ShieldCheck };
-    if (engine.avgRecovery <= 40)
-      return { label: "Waspada", scheme: "amber", Icon: AlertTriangle };
-    return { label: "Bahaya", scheme: "rose", Icon: ShieldAlert };
-  }, [engine]);
+  // ── Health Score (0-100) ──────────────────────────────────────────────────
+  const healthScore = useMemo(() => {
+    if (!filtered.length) return null;
 
-  const healthClass = {
-    emerald: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
-    amber: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
-    rose: "bg-rose-50 text-rose-700 ring-1 ring-rose-200",
-    slate: "bg-slate-100 text-slate-600 ring-1 ring-slate-200",
-  }[health.scheme];
+    let score = 0;
+    const breakdown = [];
+
+    // (+40) Avg Recovery Days < 30
+    const avgRecDays = filtered.reduce((s, r) => s + r.Recovery_Days, 0) / filtered.length;
+    const recoveryPassed = avgRecDays < 30;
+    if (recoveryPassed) score += 40;
+    breakdown.push({ label: "Recovery < 30d", value: `${Math.round(avgRecDays)}d avg`, passed: recoveryPassed, points: 40 });
+
+    // (+30) 100% status "Pulih"
+    const totalEvents = filtered.length;
+    const pulihCount = filtered.filter((r) => r.Status_Recovery.includes("Sudah")).length;
+    const allPulih = pulihCount === totalEvents;
+    if (allPulih) score += 30;
+    breakdown.push({ label: "100% Pulih", value: `${pulihCount}/${totalEvents}`, passed: allPulih, points: 30 });
+
+    // (+30) Avg Drop saat Ex-date < 5%
+    const avgDrop = filtered.reduce((s, r) => {
+      const drop = Math.abs(((r.Ex_Price_1day - r.Cum_Price) / r.Cum_Price) * 100);
+      return s + drop;
+    }, 0) / filtered.length;
+    const dropPassed = avgDrop < 5;
+    if (dropPassed) score += 30;
+    breakdown.push({ label: "Drop < 5%", value: `${avgDrop.toFixed(2)}% avg`, passed: dropPassed, points: 30 });
+
+    // Label & tier
+    let label, tier, Icon;
+    if (score >= 80) {
+      label = "Low Risk"; tier = "low"; Icon = Shield;
+    } else if (score >= 50) {
+      label = "Medium Risk"; tier = "medium"; Icon = TriangleAlert;
+    } else {
+      label = "High Risk / Trap"; tier = "high"; Icon = OctagonAlert;
+    }
+
+    return { score, label, tier, Icon, breakdown };
+  }, [filtered]);
+
+  // Badge styling based on tier
+  const healthBadge = healthScore ? {
+    low: { badge: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200", accent: "#10b981", bg: "bg-emerald-500", bgLight: "bg-emerald-50", text: "text-emerald-700", ring: "ring-emerald-100" },
+    medium: { badge: "bg-amber-50 text-amber-700 ring-1 ring-amber-200", accent: "#f59e0b", bg: "bg-amber-500", bgLight: "bg-amber-50", text: "text-amber-700", ring: "ring-amber-100" },
+    high: { badge: "bg-rose-50 text-rose-700 ring-1 ring-rose-200", accent: "#ef4444", bg: "bg-rose-500", bgLight: "bg-rose-50", text: "text-rose-700", ring: "ring-rose-100" },
+  }[healthScore.tier] : { badge: "bg-slate-100 text-slate-600 ring-1 ring-slate-200", accent: "#94a3b8", bg: "bg-slate-400", bgLight: "bg-slate-50", text: "text-slate-600", ring: "ring-slate-100" };
 
   // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) {
@@ -151,7 +184,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
 
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
@@ -162,21 +195,81 @@ export default function App() {
               <span className="hidden sm:inline text-xs text-slate-400 ml-2 font-normal">Dividend Trap Detector</span>
             </div>
           </div>
-          <div className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${healthClass}`}>
-            <health.Icon className="w-3.5 h-3.5" />
-            {ticker} · {health.label}
-          </div>
+          {healthScore && (
+            <div className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${healthBadge.badge}`}>
+              <healthScore.Icon className="w-3.5 h-3.5" />
+              {ticker} · {healthScore.label}
+            </div>
+          )}
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
 
-        {/* ── PAGE TITLE ── */}
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Analisis Dividen Saham Bank</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Simulasi return portofolio vs deposito 4% p.a. untuk saham BBRI, BMRI, BBNI, dan BBCA.
-          </p>
+        {/* ── PAGE TITLE + HEALTH SCORE CARD ── */}
+        <div className="flex flex-col lg:flex-row lg:items-stretch gap-5">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Analisis Dividen Saham Bank</h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Simulasi return portofolio vs deposito 4% p.a. untuk saham BBRI, BMRI, BBNI, dan BBCA.
+            </p>
+          </div>
+
+          {/* ── HEALTH SCORE HIGHLIGHT CARD ── */}
+          {healthScore && (
+            <div id="health-score-card" className={`relative overflow-hidden bg-white border border-slate-200 rounded-2xl shadow-sm p-5 lg:p-6 lg:min-w-[340px] ring-1 ${healthBadge.ring}`}>
+              {/* Decorative accent bar */}
+              <div className={`absolute top-0 left-0 right-0 h-1 ${healthBadge.bg}`} />
+
+              <div className="flex items-start gap-4">
+                {/* Score Circle */}
+                <div className="relative shrink-0">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="30" fill="none" stroke="#f1f5f9" strokeWidth="6" />
+                    <circle
+                      cx="36" cy="36" r="30" fill="none"
+                      stroke={healthBadge.accent}
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                      strokeDasharray={`${(healthScore.score / 100) * 188.5} 188.5`}
+                      transform="rotate(-90 36 36)"
+                      style={{ transition: "stroke-dasharray 0.8s ease" }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-lg font-bold text-slate-800">{healthScore.score}</span>
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-bold text-slate-900 tracking-tight">Health Score · {ticker}</span>
+                    <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${healthBadge.badge}`}>
+                      <healthScore.Icon className="w-3 h-3" />
+                      {healthScore.label}
+                    </span>
+                  </div>
+
+                  {/* Breakdown */}
+                  <div className="space-y-1.5">
+                    {healthScore.breakdown.map((b) => (
+                      <div key={b.label} className="flex items-center gap-2 text-xs">
+                        {b.passed ? (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        ) : (
+                          <XCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                        )}
+                        <span className="text-slate-600">{b.label}</span>
+                        <span className="text-slate-400 ml-auto tabular-nums">{b.value}</span>
+                        <span className={`font-semibold tabular-nums ${b.passed ? "text-emerald-600" : "text-slate-300"}`}>+{b.points}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── CONTROL PANEL ── */}
