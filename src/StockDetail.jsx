@@ -91,6 +91,16 @@ export default function StockDetail() {
   const [amount, setAmount] = useState(10000000);
   const [divStrategy, setDivStrategy] = useState("compound"); // "compound" | "passive"
   const [loading, setLoading] = useState(true);
+  const [isYearOpen, setIsYearOpen] = useState(false);
+
+  // Custom click outside for year dropdown
+  useEffect(() => {
+    const handleClick = () => setIsYearOpen(false);
+    if (isYearOpen) {
+      window.addEventListener("click", handleClick);
+    }
+    return () => window.removeEventListener("click", handleClick);
+  }, [isYearOpen]);
 
   useEffect(() => {
     Promise.all([
@@ -308,21 +318,40 @@ export default function StockDetail() {
 
             {/* 3. Tahun Mulai */}
             <div className="space-y-3">
-              <label htmlFor="start-year" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Tahun Mulai
               </label>
-              <div className="relative">
-                <select
-                  id="start-year"
-                  value={startYear}
-                  onChange={(e) => setStartYear(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer appearance-none pr-10"
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => setIsYearOpen(!isYearOpen)}
+                  className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
                 >
-                  {[2021, 2022, 2023, 2024, 2025].map(y => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  {startYear}
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
+                </button>
+                
+                {isYearOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="py-1">
+                      {[2021, 2022, 2023, 2024, 2025].map(y => (
+                        <button
+                          key={y}
+                          onClick={() => {
+                            setStartYear(y);
+                            setIsYearOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${
+                            startYear === y 
+                              ? "bg-indigo-50 text-indigo-600" 
+                              : "text-slate-600 hover:bg-slate-50"
+                          }`}
+                        >
+                          {y}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

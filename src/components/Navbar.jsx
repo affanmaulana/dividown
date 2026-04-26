@@ -3,26 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { TrendingDown, Search, Shield, X } from "lucide-react";
 import { calculateHealthScore } from "../utils/healthScore";
 
-const STOCKS_INFO = {
-  BBCA: { name: "Bank Central Asia Tbk.", sector: "Banks" },
-  BBRI: { name: "Bank Rakyat Indonesia Tbk.", sector: "Banks" },
-  BMRI: { name: "Bank Mandiri Tbk.", sector: "Banks" },
-  BBNI: { name: "Bank Negara Indonesia Tbk.", sector: "Banks" },
-  ADRO: { name: "Adaro Energy Indonesia Tbk.", sector: "Commodities" },
-  ITMG: { name: "Indo Tambangraya Megah Tbk.", sector: "Commodities" },
-  PTBA: { name: "Bukit Asam Tbk.", sector: "Commodities" },
-  HRUM: { name: "Harum Energy Tbk.", sector: "Commodities" },
-  ANTM: { name: "Aneka Tambang Tbk.", sector: "Commodities" },
-  ASII: { name: "Astra International Tbk.", sector: "Cyclical" },
-  UNTR: { name: "United Tractors Tbk.", sector: "Cyclical" },
-  TLKM: { name: "Telkom Indonesia Tbk.", sector: "Telco" },
-  ISAT: { name: "Indosat Ooredoo Hutchison Tbk.", sector: "Telco" },
-  UNVR: { name: "Unilever Indonesia Tbk.", sector: "Consumer" },
-  ICBP: { name: "Indofood CBP Sukses Makmur Tbk.", sector: "Consumer" },
-  INDF: { name: "Indofood Sukses Makmur Tbk.", sector: "Consumer" },
-  HMSP: { name: "HM Sampoerna Tbk.", sector: "Consumer" },
-  GGRM: { name: "Gudang Garam Tbk.", sector: "Consumer" },
-};
+import { STOCKS_INFO } from "../constants/stocks";
 
 export default function Navbar() {
   const navigate = useNavigate();

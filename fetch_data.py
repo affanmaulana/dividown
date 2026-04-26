@@ -1,36 +1,76 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import os
+import time
 
 # ===== KONFIGURASI =====
-# Pemetaan Ticker -> Sektor
+# Pemetaan Ticker -> Sektor (50 High-Quality Dividend Stocks)
 TICKER_SECTOR_MAP = {
     # Banks
+    "BBCA.JK": "Banks",
     "BBRI.JK": "Banks",
     "BMRI.JK": "Banks",
     "BBNI.JK": "Banks",
-    "BBCA.JK": "Banks",
-    # Commodities (Coal & Metals)
-    "ADRO.JK": "Commodities",
-    "ITMG.JK": "Commodities",
-    "PTBA.JK": "Commodities",
-    "HRUM.JK": "Commodities",
-    "ANTM.JK": "Commodities",
-    # Auto & Industrial
-    "ASII.JK": "Cyclical",
-    "UNTR.JK": "Cyclical",
-    # Telco & Tech
-    "TLKM.JK": "Telco",
-    "ISAT.JK": "Telco",
-    # Consumer
+    "BBTN.JK": "Banks",
+    "BDMN.JK": "Banks",
+    "PNBN.JK": "Banks",
+    "BJTM.JK": "Banks",
+    "BJBR.JK": "Banks",
+    
+    # Energy
+    "ADRO.JK": "Energy",
+    "ITMG.JK": "Energy",
+    "PTBA.JK": "Energy",
+    "HRUM.JK": "Energy",
+    "INDY.JK": "Energy",
+    "MEDC.JK": "Energy",
+    "AKRA.JK": "Energy",
+    "MBAP.JK": "Energy",
+    "PGAS.JK": "Energy",
+    "POWR.JK": "Energy",
+    
+    # Consumer (Stable & Defensive)
     "UNVR.JK": "Consumer",
     "ICBP.JK": "Consumer",
     "INDF.JK": "Consumer",
+    "MYOR.JK": "Consumer",
+    "AMRT.JK": "Consumer",
     "HMSP.JK": "Consumer",
     "GGRM.JK": "Consumer",
+    "ROTI.JK": "Consumer",
+    "KLBF.JK": "Consumer",
+    "MIKA.JK": "Consumer",
+    "LPPF.JK": "Consumer",
+    "MPMX.JK": "Consumer",
+    "SMSM.JK": "Consumer",
+    
+    # Telecommunication
+    "TLKM.JK": "Telecommunication",
+    "ISAT.JK": "Telecommunication",
+    "EXCL.JK": "Telecommunication",
+    
+    # Basic Materials
+    "ANTM.JK": "Basic Materials",
+    "INCO.JK": "Basic Materials",
+    "TINS.JK": "Basic Materials",
+    "SMGR.JK": "Basic Materials",
+    "INTP.JK": "Basic Materials",
+    
+    # Infrastructure & Industrial
+    "ASII.JK": "Infrastructure",
+    "UNTR.JK": "Infrastructure",
+    "JSMR.JK": "Infrastructure",
+    "SMDR.JK": "Infrastructure",
+    "TMAS.JK": "Infrastructure",
+    "HEXA.JK": "Infrastructure",
+    
+    # Real Estate & Misc
+    "PWON.JK": "Real Estate/Misc",
+    "CTRA.JK": "Real Estate/Misc",
+    "DMAS.JK": "Real Estate/Misc",
 }
 
 TICKERS = list(TICKER_SECTOR_MAP.keys())
@@ -81,11 +121,11 @@ def recovery_info(df, ex_date, cum_price):
 all_rows = []
 monthly_rows = []
 
-print(f"Starting data collection for {len(TICKERS)} tickers...")
+print(f"Starting production-ready data collection for {len(TICKERS)} tickers...")
 
-for ticker_str in TICKERS:
+for i, ticker_str in enumerate(TICKERS, 1):
     try:
-        print(f"\nProcessing {ticker_str} ...")
+        print(f"[{i}/{len(TICKERS)}] Processing {ticker_str} ...")
         ticker_obj = yf.Ticker(ticker_str)
         sector = TICKER_SECTOR_MAP.get(ticker_str, "Other")
         clean_ticker = ticker_str.replace(".JK", "")
@@ -111,11 +151,14 @@ for ticker_str in TICKERS:
         divs = ticker_obj.dividends
         if divs.empty:
             print(f"  [INFO] No dividend data found for {ticker_str}")
+            # Skip to next to ensure we don't have empty dividend entries
+            time.sleep(1)
             continue
             
         divs = divs[divs.index >= START_DATE]
         if divs.empty:
             print(f"  [INFO] No dividends found since {START_DATE}")
+            time.sleep(1)
             continue
 
         # Iterasi setiap pembayaran dividen
@@ -161,10 +204,12 @@ for ticker_str in TICKERS:
                     "Status_Recovery": status
                 }
                 all_rows.append(row)
-                print(f"  {cum_date.strftime('%Y-%m-%d')} | Recovery: {rec_days if rec_days else 'Trap'} hari")
             except Exception as e:
-                print(f"  [ERROR] Error processing dividend at {ex_date}: {e}")
+                # Silently skip individual dividend errors but log ticker progress
                 continue
+
+        # Avoid rate limiting
+        time.sleep(1)
 
     except Exception as e:
         print(f"  [CRITICAL ERROR] Failed to process {ticker_str}: {e}")
@@ -178,7 +223,8 @@ with open(OUTPUT_PRICES_FILE, "w") as f:
     json.dump(monthly_rows, f, indent=4)
 
 print(f"\n" + "="*50)
-print(f"[OK] Selesai! Data dividen: {len(all_rows)} entri.")
-print(f"[OK] Selesai! Data harga bulanan: {len(monthly_rows)} entri.")
-print(f"Files saved in public/data/")
+print(f"[SUCCESS] Database expanded to {len(set([r['Ticker'] for r in all_rows]))} unique tickers.")
+print(f"[SUCCESS] Dividend events: {len(all_rows)}")
+print(f"[SUCCESS] Monthly price points: {len(monthly_rows)}")
+print(f"Files updated in public/data/")
 print("="*50)

@@ -1,36 +1,35 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, TrendingDown, ChevronRight, BarChart3, Banknote } from "lucide-react";
+import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp } from "lucide-react";
 import { calculateHealthScore } from "./utils/healthScore";
 
-const SECTORS = ["Semua", "Banks", "Commodities", "Cyclical", "Consumer", "Telco"];
-
-const STOCKS_INFO = {
-  BBCA: { name: "Bank Central Asia Tbk.", sector: "Banks" },
-  BBRI: { name: "Bank Rakyat Indonesia Tbk.", sector: "Banks" },
-  BMRI: { name: "Bank Mandiri Tbk.", sector: "Banks" },
-  BBNI: { name: "Bank Negara Indonesia Tbk.", sector: "Banks" },
-  ADRO: { name: "Adaro Energy Indonesia Tbk.", sector: "Commodities" },
-  ITMG: { name: "Indo Tambangraya Megah Tbk.", sector: "Commodities" },
-  PTBA: { name: "Bukit Asam Tbk.", sector: "Commodities" },
-  HRUM: { name: "Harum Energy Tbk.", sector: "Commodities" },
-  ANTM: { name: "Aneka Tambang Tbk.", sector: "Commodities" },
-  ASII: { name: "Astra International Tbk.", sector: "Cyclical" },
-  UNTR: { name: "United Tractors Tbk.", sector: "Cyclical" },
-  TLKM: { name: "Telkom Indonesia Tbk.", sector: "Telco" },
-  ISAT: { name: "Indosat Ooredoo Hutchison Tbk.", sector: "Telco" },
-  UNVR: { name: "Unilever Indonesia Tbk.", sector: "Consumer" },
-  ICBP: { name: "Indofood CBP Sukses Makmur Tbk.", sector: "Consumer" },
-  INDF: { name: "Indofood Sukses Makmur Tbk.", sector: "Consumer" },
-  HMSP: { name: "HM Sampoerna Tbk.", sector: "Consumer" },
-  GGRM: { name: "Gudang Garam Tbk.", sector: "Consumer" },
-};
+import { STOCKS_INFO, SECTORS } from "./constants/stocks";
 
 export default function LandingPage() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [sectorFilter, setSectorFilter] = useState("Semua");
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState("ticker"); // ticker, health, events, sector
+  const [sortOrder, setSortOrder] = useState("asc"); // asc, desc
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = import("react").then(m => null); // Placeholder for ref logic if needed, but we'll use state
+  
+  // Custom click outside for dropdown
+  useEffect(() => {
+    const handleClick = () => setIsSortOpen(false);
+    if (isSortOpen) {
+      window.addEventListener("click", handleClick);
+    }
+    return () => window.removeEventListener("click", handleClick);
+  }, [isSortOpen]);
+
+  const SORT_OPTIONS = [
+    { key: "ticker", label: "Abjad (Ticker)" },
+    { key: "health", label: "Health Score" },
+    { key: "events", label: "Events Count" },
+    { key: "sector", label: "Sektor" }
+  ];
 
   useEffect(() => {
     fetch("/data/dividend_recovery.json")
@@ -68,9 +67,37 @@ export default function LandingPage() {
       const q = search.toLowerCase();
       result = result.filter(s => s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q));
     }
+
+    // SORTING LOGIC
+    result.sort((a, b) => {
+      let valA, valB;
+      
+      switch (sortBy) {
+        case "health":
+          // Score higher is better (Safe > Watch > Trap)
+          valA = a.health?.score || 0;
+          valB = b.health?.score || 0;
+          break;
+        case "events":
+          valA = a.eventsCount;
+          valB = b.eventsCount;
+          break;
+        case "sector":
+          valA = a.sector;
+          valB = b.sector;
+          break;
+        default:
+          valA = a.ticker;
+          valB = b.ticker;
+      }
+
+      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
     
     return result;
-  }, [data, search, sectorFilter]);
+  }, [data, search, sectorFilter, sortBy, sortOrder]);
 
   if (loading) {
     return (
@@ -134,6 +161,71 @@ export default function LandingPage() {
 
       {/* STOCK GRID */}
       <section className="px-6 pb-24 max-w-6xl mx-auto">
+        {/* SORT CONTROLS */}
+        <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-6 gap-4">
+          <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+            {stocks.length} Emiten Ditemukan
+          </div>
+          
+          <div className="flex items-center gap-3">
+            {/* Custom Sort Dropdown */}
+            <div className="relative" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setIsSortOpen(!isSortOpen)}
+                className="flex items-center gap-3 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer shadow-sm"
+              >
+                <div className="flex items-center gap-2 pr-2 border-r border-slate-100">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                  <span className="text-[10px] text-slate-400 uppercase tracking-widest">Sort:</span>
+                </div>
+                {SORT_OPTIONS.find(o => o.key === sortBy)?.label}
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isSortOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {isSortOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="py-1">
+                    {SORT_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.key}
+                        onClick={() => {
+                          setSortBy(opt.key);
+                          setIsSortOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
+                          sortBy === opt.key 
+                            ? "bg-indigo-50 text-indigo-600" 
+                            : "text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sort Order Toggle */}
+            <button
+              onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 shadow-sm hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
+            >
+              {sortOrder === "asc" ? (
+                <>
+                  <ChevronUp className="w-3.5 h-3.5" />
+                  ASCENDING
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                  DESCENDING
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {stocks.map((stock) => {
             const HIcon = stock.health?.Icon || Shield;
