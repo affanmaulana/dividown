@@ -134,14 +134,14 @@ export default function LandingPage() {
 
       {/* STOCK GRID */}
       <section className="px-6 pb-24 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {stocks.map((stock) => {
             const HIcon = stock.health?.Icon || Shield;
             return (
               <Link 
                 to={`/stock/${stock.ticker.toLowerCase()}`} 
                 key={stock.ticker}
-                className="group bg-white border border-slate-200 rounded-3xl p-6 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-300 flex flex-col"
+                className="group bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-300 flex flex-col"
               >
                 <div className="flex justify-between items-start mb-6">
                   <div>
