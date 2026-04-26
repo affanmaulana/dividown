@@ -777,7 +777,7 @@
     {
         "Ticker": "BBNI",
         "Date": "2023-04-01",
-        "Price": 3799.27
+        "Price": 3799.28
     },
     {
         "Ticker": "BBNI",
@@ -977,7 +977,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2021-04-01",
-        "Price": 5412.19
+        "Price": 5412.2
     },
     {
         "Ticker": "BBCA",
@@ -1107,7 +1107,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2023-06-01",
-        "Price": 8178.4
+        "Price": 8178.41
     },
     {
         "Ticker": "BBCA",
@@ -1162,7 +1162,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2024-05-01",
-        "Price": 8498.67
+        "Price": 8498.66
     },
     {
         "Ticker": "BBCA",
@@ -1212,7 +1212,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2025-03-01",
-        "Price": 7848.54
+        "Price": 7848.53
     },
     {
         "Ticker": "BBCA",
@@ -1612,7 +1612,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2021-03-01",
-        "Price": 5178.69
+        "Price": 5178.7
     },
     {
         "Ticker": "ITMG",
@@ -1697,7 +1697,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2022-08-01",
-        "Price": 21361.34
+        "Price": 21361.33
     },
     {
         "Ticker": "ITMG",
@@ -1747,7 +1747,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2023-06-01",
-        "Price": 17326.01
+        "Price": 17326.02
     },
     {
         "Ticker": "ITMG",
@@ -1787,7 +1787,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2024-02-01",
-        "Price": 20622.16
+        "Price": 20622.15
     },
     {
         "Ticker": "ITMG",
@@ -1987,7 +1987,7 @@
     {
         "Ticker": "PTBA",
         "Date": "2022-02-01",
-        "Price": 1443.75
+        "Price": 1443.76
     },
     {
         "Ticker": "PTBA",
@@ -2562,7 +2562,7 @@
     {
         "Ticker": "ANTM",
         "Date": "2021-01-01",
-        "Price": 1831.55
+        "Price": 1831.54
     },
     {
         "Ticker": "ANTM",
@@ -3062,7 +3062,7 @@
     {
         "Ticker": "ASII",
         "Date": "2024-01-01",
-        "Price": 4244.05
+        "Price": 4244.06
     },
     {
         "Ticker": "ASII",
@@ -3227,7 +3227,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2021-06-01",
-        "Price": 12297.0
+        "Price": 12297.01
     },
     {
         "Ticker": "UNTR",
@@ -3237,7 +3237,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2021-08-01",
-        "Price": 12190.74
+        "Price": 12190.73
     },
     {
         "Ticker": "UNTR",
@@ -3347,7 +3347,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2023-06-01",
-        "Price": 18892.76
+        "Price": 18892.75
     },
     {
         "Ticker": "UNTR",
@@ -3402,7 +3402,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2024-05-01",
-        "Price": 18398.59
+        "Price": 18398.6
     },
     {
         "Ticker": "UNTR",
@@ -3427,7 +3427,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2024-10-01",
-        "Price": 24482.3
+        "Price": 24482.31
     },
     {
         "Ticker": "UNTR",
@@ -4277,7 +4277,7 @@
     {
         "Ticker": "UNVR",
         "Date": "2022-12-01",
-        "Price": 4062.04
+        "Price": 4062.05
     },
     {
         "Ticker": "UNVR",
@@ -4572,7 +4572,7 @@
     {
         "Ticker": "ICBP",
         "Date": "2022-07-01",
-        "Price": 8111.45
+        "Price": 8111.46
     },
     {
         "Ticker": "ICBP",
@@ -4887,7 +4887,7 @@
     {
         "Ticker": "INDF",
         "Date": "2022-06-01",
-        "Price": 6037.78
+        "Price": 6037.77
     },
     {
         "Ticker": "INDF",
@@ -5457,7 +5457,7 @@
     {
         "Ticker": "GGRM",
         "Date": "2021-04-01",
-        "Price": 28402.32
+        "Price": 28402.33
     },
     {
         "Ticker": "GGRM",
@@ -5482,7 +5482,7 @@
     {
         "Ticker": "GGRM",
         "Date": "2021-09-01",
-        "Price": 27380.15
+        "Price": 27380.16
     },
     {
         "Ticker": "GGRM",
