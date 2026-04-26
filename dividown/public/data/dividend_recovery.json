@@ -1,0 +1,42 @@
+[
+    {
+        "Ticker": "BBRI",
+        "Year": 2023,
+        "Cum_Date": "2023-12-29",
+        "Cum_Price": 5725,
+        "Ex_Price_1day": 5575,
+        "Lowest_After_Ex": 5400,
+        "Recovery_Days": 15,
+        "Status_Recovery": "✅ Sudah"
+    },
+    {
+        "Ticker": "BBCA",
+        "Year": 2023,
+        "Cum_Date": "2023-11-30",
+        "Cum_Price": 9000,
+        "Ex_Price_1day": 8850,
+        "Lowest_After_Ex": 8700,
+        "Recovery_Days": 10,
+        "Status_Recovery": "✅ Sudah"
+    },
+    {
+        "Ticker": "BMRI",
+        "Year": 2023,
+        "Cum_Date": "2023-12-19",
+        "Cum_Price": 6050,
+        "Ex_Price_1day": 5900,
+        "Lowest_After_Ex": 5800,
+        "Recovery_Days": 25,
+        "Status_Recovery": "✅ Sudah"
+    },
+    {
+        "Ticker": "BBNI",
+        "Year": 2023,
+        "Cum_Date": "2023-12-15",
+        "Cum_Price": 5350,
+        "Ex_Price_1day": 5200,
+        "Lowest_After_Ex": 5100,
+        "Recovery_Days": 40,
+        "Status_Recovery": "✅ Sudah"
+    }
+]
