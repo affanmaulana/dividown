@@ -8,6 +8,7 @@ import {
   AlertTriangle, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown,
 } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const TICKERS = ["BBRI", "BMRI", "BBNI", "BBCA"];
@@ -448,6 +449,7 @@ export default function App() {
           <p className="text-xs text-slate-400">Dividown · Data historis. Bukan rekomendasi investasi.</p>
         </footer>
       </main>
+      <Analytics />
     </div>
   );
 }
