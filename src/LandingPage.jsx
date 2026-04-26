@@ -136,7 +136,7 @@ export default function LandingPage() {
               placeholder="Cari emiten dividen..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 rounded-full shadow-sm text-slate-950 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all font-sans"
+              className="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 rounded-full text-slate-950 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all font-sans"
             />
           </div>
 
@@ -148,7 +148,7 @@ export default function LandingPage() {
                 onClick={() => setSectorFilter(s)}
                 className={`px-6 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-300 ${
                   sectorFilter === s 
-                    ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-100" 
+                    ? "bg-indigo-600 text-white border-indigo-600 shadow-none" 
                     : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}
               >
@@ -172,7 +172,7 @@ export default function LandingPage() {
             <div className="relative" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center gap-3 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer shadow-sm"
+                className="flex items-center gap-3 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2 pr-2 border-r border-slate-100">
                   <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
@@ -209,7 +209,7 @@ export default function LandingPage() {
             {/* Sort Order Toggle */}
             <button
               onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 shadow-sm hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
             >
               {sortOrder === "asc" ? (
                 <>
