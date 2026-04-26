@@ -28,48 +28,19 @@ const fmt = (n) =>
 const pct = (n) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
 
 // ── Custom Tooltip ─────────────────────────────────────────────────────────
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
-  // payload[0].payload contains the original data point
-  const dataPoint = payload[0]?.payload || {};
-  const dividendType = dataPoint.dividendType || "";
-  const displayYear = dataPoint.year || "";
-  const typeClass = dividendType === "Final Dividend" ? "text-emerald-700" : "text-blue-700";
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-lg p-3 font-sans">
-      <p className="font-semibold text-slate-950 mb-1">{displayYear}</p>
-      {dividendType && (
-        <p className={`text-sm ${typeClass} mb-2`}>{dividendType}</p>
-      )}
-      <div className="space-y-1">
-        {payload.map((p) => (
-          <div key={p.name} className="flex justify-between items-center text-sm">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
-              <span className="text-slate-500">{p.name}:</span>
-            </span>
-            <span className="font-medium text-slate-900">{fmt(p.value)}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const CustomPriceTooltip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null;
-  const dataPoint = payload[0]?.payload || {};
-  const displayDate = dataPoint.displayDate || label;
-  return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-lg p-3 font-sans">
-      <p className="font-semibold text-slate-950 mb-2">{displayDate}</p>
+    <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-3 text-sm">
+      <p className="font-semibold text-slate-700 mb-2">Tahun {label}</p>
       {payload.map((p) => (
-        <div key={p.name} className="flex justify-between items-center text-sm gap-4">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
-            <span className="text-slate-500">{p.name}:</span>
-          </span>
-          <span className="font-medium text-slate-900">{fmt(p.value)}</span>
+        <div key={p.name} className="flex items-center gap-2">
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: p.color }}
+          />
+          <span className="text-slate-500">{p.name}:</span>
+          <span className="font-medium text-slate-800">{fmt(p.value)}</span>
         </div>
       ))}
     </div>
@@ -79,7 +50,6 @@ const CustomPriceTooltip = ({ active, payload, label }) => {
 // ── App ────────────────────────────────────────────────────────────────────
 export default function App() {
   const [data, setData] = useState([]);
-  const [priceData, setPriceData] = useState([]);
   const [ticker, setTicker] = useState("BBRI");
   const [capital, setCapital] = useState(10000000);
   const [strategy, setStrategy] = useState("reinvest");
@@ -87,22 +57,9 @@ export default function App() {
   const [tickerOpen, setTickerOpen] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      fetch("/data/dividend_recovery.json").then((r) => r.json()),
-      fetch("/data/stock_prices.json").then((r) => r.json())
-    ])
-      .then(([dDiv, dPrice]) => {
-        // Add dividend type based on month of Cum_Date
-        const enriched = dDiv.map((row) => {
-          const date = new Date(row.Cum_Date);
-          const month = date.getMonth() + 1; // 1-12
-          const dividendType = (month === 3 || month === 4) ? "Final Dividend" : (month === 11 || month === 12) ? "Interim Dividend" : "";
-          return { ...row, dividendType };
-        });
-        setData(enriched);
-        setPriceData(dPrice);
-        setLoading(false);
-      })
+    fetch("/data/dividend_recovery.json")
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
@@ -117,16 +74,6 @@ export default function App() {
   const filtered = useMemo(
     () => data.filter((d) => d.Ticker === ticker).sort((a, b) => a.Year - b.Year),
     [data, ticker]
-  );
-
-  const filteredPrices = useMemo(
-    () => priceData
-      .filter((p) => p.Ticker === ticker)
-      .map((p) => ({
-        ...p,
-        displayDate: new Date(p.Date).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
-      })),
-    [priceData, ticker]
   );
 
   const latestPrice = LATEST_PRICES[ticker] ?? 5000;
@@ -160,9 +107,7 @@ export default function App() {
     const notRecovered = filtered.filter((r) => r.Status_Recovery.includes("Belum")).length;
 
     const chartData = yearly.map((r, i) => ({
-      id: i,
       year: r.Year,
-      dividendType: r.dividendType,
       Portfolio: Math.round(
         r.sharesAfter * r.Cum_Price + (strategy === "cash" ? r.totalDivSoFar : 0) + leftover
       ),
@@ -350,10 +295,11 @@ export default function App() {
                   <button
                     key={t}
                     onClick={() => { setTicker(t); setTickerOpen(false); }}
-                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${t === ticker
-                      ? "bg-emerald-50 text-emerald-700 font-semibold"
-                      : "text-slate-700 hover:bg-slate-50"
-                      }`}
+                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                      t === ticker
+                        ? "bg-emerald-50 text-emerald-700 font-semibold"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
                   >
                     {t}
                   </button>
@@ -390,10 +336,11 @@ export default function App() {
                   key={s.key}
                   id={`strategy-${s.key}`}
                   onClick={() => setStrategy(s.key)}
-                  className={`flex-1 py-2.5 transition-colors ${strategy === s.key
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white text-slate-600 hover:bg-slate-50"
-                    }`}
+                  className={`flex-1 py-2.5 transition-colors ${
+                    strategy === s.key
+                      ? "bg-emerald-600 text-white"
+                      : "bg-white text-slate-600 hover:bg-slate-50"
+                  }`}
                 >
                   {s.label}
                 </button>
@@ -454,13 +401,7 @@ export default function App() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis 
-                    dataKey="id" 
-                    tickFormatter={(id) => engine.chartData[id]?.year}
-                    tick={{ fontSize: 12, fill: "#94a3b8" }} 
-                    axisLine={false} 
-                    tickLine={false} 
-                  />
+                  <XAxis dataKey="year" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
                   <YAxis
                     tick={{ fontSize: 11, fill: "#94a3b8" }}
                     axisLine={false}
@@ -490,58 +431,6 @@ export default function App() {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-
-            {/* ── PRICE HISTORY CHART ── */}
-            {filteredPrices?.length > 0 && (
-              <div id="price-chart" className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 font-sans">Market Price History</h2>
-                    <p className="text-xs text-slate-500 mt-0.5 font-sans">Monthly closing price for data validation</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <LegendDot color="bg-slate-400" label="Price (IDR)" />
-                  </div>
-                </div>
-                <ResponsiveContainer width="100%" height={250}>
-                  <AreaChart data={filteredPrices} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                    <defs>
-                      <linearGradient id="gPrice" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#cbd5e1" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#f8fafc" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                    <XAxis 
-                      dataKey="Date" 
-                      tickFormatter={(val) => new Date(val).getFullYear()}
-                      tick={{ fontSize: 12, fill: "#94a3b8", fontFamily: "Plus Jakarta Sans, sans-serif" }} 
-                      axisLine={false} 
-                      tickLine={false}
-                      minTickGap={30}
-                    />
-                    <YAxis
-                      domain={['auto', 'auto']}
-                      tick={{ fontSize: 11, fill: "#94a3b8", fontFamily: "Plus Jakarta Sans, sans-serif" }}
-                      axisLine={false}
-                      tickLine={false}
-                      tickFormatter={(v) => v.toLocaleString("id-ID")}
-                      width={50}
-                    />
-                    <Tooltip content={<CustomPriceTooltip />} />
-                    <Area
-                      type="monotone"
-                      dataKey="Price"
-                      name="Harga Penutupan"
-                      stroke="#94a3b8"
-                      strokeWidth={2}
-                      fill="url(#gPrice)"
-                      activeDot={{ r: 5, fill: "#fff", stroke: "#94a3b8", strokeWidth: 2 }}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            )}
 
             {/* ── SUMMARY ROW ── */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

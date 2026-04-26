@@ -1,0 +1,1282 @@
+[
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-01-01",
+        "Price": 2639.48
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-02-01",
+        "Price": 2974.15
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-03-01",
+        "Price": 2778.4
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-04-01",
+        "Price": 2557.39
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-05-01",
+        "Price": 2754.87
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-06-01",
+        "Price": 2547.93
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-07-01",
+        "Price": 2399.2
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-08-01",
+        "Price": 2541.47
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-09-01",
+        "Price": 2738.75
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-10-01",
+        "Price": 3023.3
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-11-01",
+        "Price": 2909.48
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2021-12-01",
+        "Price": 2923.71
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-01-01",
+        "Price": 2895.25
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-02-01",
+        "Price": 3236.71
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-03-01",
+        "Price": 3314.96
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-04-01",
+        "Price": 3601.67
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-05-01",
+        "Price": 3424.18
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-06-01",
+        "Price": 3069.19
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-07-01",
+        "Price": 3224.5
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-08-01",
+        "Price": 3209.71
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-09-01",
+        "Price": 3320.64
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-10-01",
+        "Price": 3438.97
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-11-01",
+        "Price": 3683.03
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2022-12-01",
+        "Price": 3653.44
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-01-01",
+        "Price": 3387.2
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-02-01",
+        "Price": 3497.19
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-03-01",
+        "Price": 3542.12
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-04-01",
+        "Price": 4008.35
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-05-01",
+        "Price": 4381.67
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-06-01",
+        "Price": 4263.78
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-07-01",
+        "Price": 4440.62
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-08-01",
+        "Price": 4362.03
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-09-01",
+        "Price": 4106.59
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-10-01",
+        "Price": 3898.31
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-11-01",
+        "Price": 4145.89
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2023-12-01",
+        "Price": 4499.57
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-01-01",
+        "Price": 4479.92
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-02-01",
+        "Price": 4885.63
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-03-01",
+        "Price": 4825.81
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-04-01",
+        "Price": 4090.61
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-05-01",
+        "Price": 3593.78
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-06-01",
+        "Price": 3809.07
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-07-01",
+        "Price": 3867.04
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-08-01",
+        "Price": 4264.51
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-09-01",
+        "Price": 4098.89
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-10-01",
+        "Price": 3974.69
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-11-01",
+        "Price": 3519.25
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2024-12-01",
+        "Price": 3378.48
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-01-01",
+        "Price": 3610.46
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-02-01",
+        "Price": 2874.68
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-03-01",
+        "Price": 3465.02
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-04-01",
+        "Price": 3293.9
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-05-01",
+        "Price": 4028.15
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-06-01",
+        "Price": 3385.46
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-07-01",
+        "Price": 3358.3
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-08-01",
+        "Price": 3666.07
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-09-01",
+        "Price": 3530.29
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-10-01",
+        "Price": 3602.71
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-11-01",
+        "Price": 3331.15
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2025-12-01",
+        "Price": 3313.04
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2026-01-01",
+        "Price": 3578.52
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2026-02-01",
+        "Price": 3672.44
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2026-03-01",
+        "Price": 3127.68
+    },
+    {
+        "Ticker": "BBRI",
+        "Date": "2026-04-01",
+        "Price": 3070.0
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-01-01",
+        "Price": 2446.06
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-02-01",
+        "Price": 2287.95
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-03-01",
+        "Price": 2287.95
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-04-01",
+        "Price": 2375.64
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-05-01",
+        "Price": 2308.32
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-06-01",
+        "Price": 2269.84
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-07-01",
+        "Price": 2192.9
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-08-01",
+        "Price": 2346.79
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-09-01",
+        "Price": 2366.02
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-10-01",
+        "Price": 2760.36
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-11-01",
+        "Price": 2693.04
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2021-12-01",
+        "Price": 2702.65
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-01-01",
+        "Price": 2875.78
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-02-01",
+        "Price": 2962.34
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-03-01",
+        "Price": 3039.28
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-04-01",
+        "Price": 3607.4
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-05-01",
+        "Price": 3426.02
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-06-01",
+        "Price": 3194.26
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-07-01",
+        "Price": 3335.33
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-08-01",
+        "Price": 3567.09
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-09-01",
+        "Price": 3798.85
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-10-01",
+        "Price": 4252.3
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-11-01",
+        "Price": 4242.22
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2022-12-01",
+        "Price": 4000.38
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-01-01",
+        "Price": 4010.46
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-02-01",
+        "Price": 4030.61
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-03-01",
+        "Price": 4161.61
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-04-01",
+        "Price": 4384.61
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-05-01",
+        "Price": 4278.7
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-06-01",
+        "Price": 4405.79
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-07-01",
+        "Price": 4850.61
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-08-01",
+        "Price": 5104.79
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-09-01",
+        "Price": 5104.79
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-10-01",
+        "Price": 4808.25
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-11-01",
+        "Price": 4956.52
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2023-12-01",
+        "Price": 5125.97
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-01-01",
+        "Price": 5634.33
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-02-01",
+        "Price": 5930.88
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-03-01",
+        "Price": 6142.69
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-04-01",
+        "Price": 6145.14
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-05-01",
+        "Price": 5254.54
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-06-01",
+        "Price": 5477.19
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-07-01",
+        "Price": 5699.84
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-08-01",
+        "Price": 6345.52
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-09-01",
+        "Price": 6167.4
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-10-01",
+        "Price": 5967.02
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-11-01",
+        "Price": 5477.19
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2024-12-01",
+        "Price": 5076.42
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-01-01",
+        "Price": 5365.86
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-02-01",
+        "Price": 4096.76
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-03-01",
+        "Price": 4631.12
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-04-01",
+        "Price": 4355.03
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-05-01",
+        "Price": 5195.05
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-06-01",
+        "Price": 4783.37
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-07-01",
+        "Price": 4420.69
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-08-01",
+        "Price": 4636.34
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-09-01",
+        "Price": 4312.87
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-10-01",
+        "Price": 4626.53
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-11-01",
+        "Price": 4734.36
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2025-12-01",
+        "Price": 4999.01
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2026-01-01",
+        "Price": 4724.55
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2026-02-01",
+        "Price": 5275.0
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2026-03-01",
+        "Price": 4720.0
+    },
+    {
+        "Ticker": "BMRI",
+        "Date": "2026-04-01",
+        "Price": 4500.0
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-01-01",
+        "Price": 2089.83
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-02-01",
+        "Price": 2240.45
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-03-01",
+        "Price": 2155.73
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-04-01",
+        "Price": 2146.31
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-05-01",
+        "Price": 2048.97
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-06-01",
+        "Price": 1756.8
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-07-01",
+        "Price": 1813.72
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-08-01",
+        "Price": 2048.97
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-09-01",
+        "Price": 2039.48
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-10-01",
+        "Price": 2656.07
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-11-01",
+        "Price": 2580.18
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2021-12-01",
+        "Price": 2561.21
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-01-01",
+        "Price": 2779.39
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-02-01",
+        "Price": 3035.51
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-03-01",
+        "Price": 3130.37
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-04-01",
+        "Price": 3564.91
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-05-01",
+        "Price": 3545.58
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-06-01",
+        "Price": 3033.55
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-07-01",
+        "Price": 3033.55
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-08-01",
+        "Price": 3294.4
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-09-01",
+        "Price": 3468.29
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-10-01",
+        "Price": 3632.53
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-11-01",
+        "Price": 3825.75
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2022-12-01",
+        "Price": 3564.91
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-01-01",
+        "Price": 3535.92
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-02-01",
+        "Price": 3391.01
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-03-01",
+        "Price": 3613.21
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-04-01",
+        "Price": 3799.27
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-05-01",
+        "Price": 3648.11
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-06-01",
+        "Price": 3688.42
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-07-01",
+        "Price": 3577.57
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-08-01",
+        "Price": 3698.5
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-09-01",
+        "Price": 4162.07
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-10-01",
+        "Price": 3861.76
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-11-01",
+        "Price": 4252.77
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2023-12-01",
+        "Price": 4333.39
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-01-01",
+        "Price": 4635.72
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-02-01",
+        "Price": 4837.27
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-03-01",
+        "Price": 4756.65
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-04-01",
+        "Price": 4434.88
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-05-01",
+        "Price": 3716.86
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-06-01",
+        "Price": 3936.49
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-07-01",
+        "Price": 4198.36
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-08-01",
+        "Price": 4519.36
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-09-01",
+        "Price": 4519.36
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-10-01",
+        "Price": 4434.88
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-11-01",
+        "Price": 4206.81
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2024-12-01",
+        "Price": 3674.62
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-01-01",
+        "Price": 4029.41
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-02-01",
+        "Price": 3404.3
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-03-01",
+        "Price": 3581.7
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-04-01",
+        "Price": 3531.01
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-05-01",
+        "Price": 4132.63
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-06-01",
+        "Price": 3792.08
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-07-01",
+        "Price": 3690.83
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-08-01",
+        "Price": 4031.38
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-09-01",
+        "Price": 3773.67
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-10-01",
+        "Price": 4031.38
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-11-01",
+        "Price": 3920.93
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2025-12-01",
+        "Price": 4022.18
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2026-01-01",
+        "Price": 4132.63
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2026-02-01",
+        "Price": 4049.79
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2026-03-01",
+        "Price": 3460.73
+    },
+    {
+        "Ticker": "BBNI",
+        "Date": "2026-04-01",
+        "Price": 3770.0
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-01-01",
+        "Price": 5712.17
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-02-01",
+        "Price": 5669.92
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-03-01",
+        "Price": 5251.65
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-04-01",
+        "Price": 5412.2
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-05-01",
+        "Price": 5462.36
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-06-01",
+        "Price": 5162.46
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-07-01",
+        "Price": 5115.34
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-08-01",
+        "Price": 5612.3
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-09-01",
+        "Price": 5997.88
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-10-01",
+        "Price": 6404.88
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-11-01",
+        "Price": 6233.51
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2021-12-01",
+        "Price": 6275.92
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-01-01",
+        "Price": 6555.33
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-02-01",
+        "Price": 6920.71
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-03-01",
+        "Price": 6856.23
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-04-01",
+        "Price": 7092.24
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-05-01",
+        "Price": 6764.91
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-06-01",
+        "Price": 6328.46
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-07-01",
+        "Price": 6415.75
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-08-01",
+        "Price": 7157.71
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-09-01",
+        "Price": 7463.22
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-10-01",
+        "Price": 7681.44
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-11-01",
+        "Price": 8117.89
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2022-12-01",
+        "Price": 7463.22
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-01-01",
+        "Price": 7426.64
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-02-01",
+        "Price": 7667.62
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-03-01",
+        "Price": 7667.62
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-04-01",
+        "Price": 8089.02
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-05-01",
+        "Price": 8089.02
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-06-01",
+        "Price": 8178.4
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-07-01",
+        "Price": 8156.06
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-08-01",
+        "Price": 8200.75
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-09-01",
+        "Price": 7887.91
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-10-01",
+        "Price": 7820.88
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-11-01",
+        "Price": 8021.99
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2023-12-01",
+        "Price": 8401.86
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-01-01",
+        "Price": 8576.66
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-02-01",
+        "Price": 8868.53
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-03-01",
+        "Price": 9048.15
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-04-01",
+        "Price": 9003.99
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-05-01",
+        "Price": 8498.66
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-06-01",
+        "Price": 9118.84
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-07-01",
+        "Price": 9440.41
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-08-01",
+        "Price": 9486.35
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-09-01",
+        "Price": 9486.35
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-10-01",
+        "Price": 9417.44
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-11-01",
+        "Price": 9187.75
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2024-12-01",
+        "Price": 8933.48
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-01-01",
+        "Price": 8725.72
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-02-01",
+        "Price": 7779.28
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-03-01",
+        "Price": 7848.53
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-04-01",
+        "Price": 8399.35
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-05-01",
+        "Price": 8946.62
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-06-01",
+        "Price": 8256.59
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-07-01",
+        "Price": 7875.88
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-08-01",
+        "Price": 7685.53
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-09-01",
+        "Price": 7257.23
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-10-01",
+        "Price": 8113.82
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-11-01",
+        "Price": 7875.88
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2025-12-01",
+        "Price": 7685.53
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2026-01-01",
+        "Price": 7089.64
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2026-02-01",
+        "Price": 6874.08
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2026-03-01",
+        "Price": 6179.49
+    },
+    {
+        "Ticker": "BBCA",
+        "Date": "2026-04-01",
+        "Price": 6050.0
+    }
+]
