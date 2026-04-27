@@ -231,7 +231,7 @@ export default function StockDetail() {
 
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
-      <main className="max-w-6xl mx-auto px-6 py-12 space-y-4">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-4">
 
         {/* ── HEADER ── */}
         <div className="flex flex-col gap-6">
@@ -264,7 +264,7 @@ export default function StockDetail() {
         </div>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
-        <section className="bg-white border border-slate-200/60 rounded-2xl p-6">
+        <section className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
               <Activity className="w-4 h-4 text-indigo-600" />
@@ -407,7 +407,7 @@ export default function StockDetail() {
             </div>
 
             {/* ── CHART ── */}
-            <div id="chart" className="bg-white border border-slate-200/60 rounded-3xl p-6">
+            <div id="chart" className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-6">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-6">
                 <div className="space-y-1">
                   <h2 className="text-xl font-bold text-slate-900 tracking-tight">Portfolio Performance</h2>
@@ -474,7 +474,7 @@ export default function StockDetail() {
 
             {/* ── PRICE HISTORY CHART ── */}
             {filteredPrices?.length > 0 && (
-              <div id="price-chart" className="bg-white border border-slate-200/60 rounded-3xl p-6">
+              <div id="price-chart" className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-6">
                   <div className="space-y-1">
                     <h2 className="text-xl font-bold text-slate-900 tracking-tight">Market Price History</h2>
@@ -537,7 +537,7 @@ export default function StockDetail() {
 
             {/* ── HISTORY TABLE ── */}
             <section id="history" className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden">
-              <div className="px-8 py-6 border-b border-slate-100 bg-slate-50/50">
+              <div className="px-4 md:px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                 <h2 className="text-lg font-bold text-slate-900 tracking-tight">Dividend Event History</h2>
                 <p className="text-sm font-medium text-slate-500 mt-0.5">{filtered.length} historical records analyzed</p>
               </div>
@@ -550,7 +550,7 @@ export default function StockDetail() {
                       {["Year", "Cum Date", "Cum Price", "Ex Price", "Drop", "Recovery", "Status"].map((h, i) => (
                         <th
                           key={h}
-                          className={`px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${i >= 2 ? "text-right" : "text-left"} ${i === 6 ? "text-center" : ""}`}
+                          className={`px-4 md:px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${i >= 2 ? "text-right" : "text-left"} ${i === 6 ? "text-center" : ""}`}
                         >
                           {h}
                         </th>
@@ -563,17 +563,17 @@ export default function StockDetail() {
                       const recovered = row.Status_Recovery.includes("Sudah");
                       return (
                         <tr key={`${row.Ticker}-${row.Year}`} className="group hover:bg-slate-50/80 transition-colors">
-                          <td className="px-8 py-5 font-bold text-slate-900">{row.Year}</td>
-                          <td className="px-8 py-5 text-slate-500 font-semibold">{row.Cum_Date}</td>
-                          <td className="px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price.toLocaleString("id-ID")}</td>
-                          <td className="px-8 py-5 text-right text-slate-700 font-bold">{row.Ex_Price_1day.toLocaleString("id-ID")}</td>
-                          <td className={`px-8 py-5 text-right font-bold ${drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
+                          <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
+                          <td className="px-4 md:px-8 py-5 text-slate-500 font-semibold">{row.Cum_Date}</td>
+                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price.toLocaleString("id-ID")}</td>
+                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Ex_Price_1day.toLocaleString("id-ID")}</td>
+                          <td className={`px-4 md:px-8 py-5 text-right font-bold ${drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
                             {drop.toFixed(1)}%
                           </td>
-                          <td className={`px-8 py-5 text-right font-extrabold ${row.Recovery_Days > 40 ? "text-rose-600" : row.Recovery_Days > 20 ? "text-amber-500" : "text-emerald-500"}`}>
+                          <td className={`px-4 md:px-8 py-5 text-right font-extrabold ${row.Recovery_Days > 40 ? "text-rose-600" : row.Recovery_Days > 20 ? "text-amber-500" : "text-emerald-500"}`}>
                             {row.Recovery_Days}d
                           </td>
-                          <td className="px-8 py-5 text-center">
+                          <td className="px-4 md:px-8 py-5 text-center">
                             {recovered ? (
                               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/50">
                                 <CheckCircle2 className="w-3.5 h-3.5" /> PULIH
@@ -597,7 +597,7 @@ export default function StockDetail() {
                   const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
                   const recovered = row.Status_Recovery.includes("Sudah");
                   return (
-                    <div key={`m-${row.Ticker}-${row.Year}`} className="px-6 py-5 space-y-4">
+                    <div key={`m-${row.Ticker}-${row.Year}`} className="px-4 py-5 space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-900 text-xl">{row.Year}</span>
                         {recovered ? (
@@ -642,7 +642,7 @@ export default function StockDetail() {
 
 function MetricCard({ icon: Icon, label, value, sub, positive }) {
   return (
-    <div className="bg-white border border-slate-200/60 rounded-2xl p-5 transition-all hover:-translate-y-1 group">
+    <div className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-5 transition-all hover:-translate-y-1 group">
       <div className="flex items-center justify-between mb-5">
         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">{label}</span>
         <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-colors ${positive ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-rose-50 group-hover:bg-rose-100"}`}>
@@ -657,7 +657,7 @@ function MetricCard({ icon: Icon, label, value, sub, positive }) {
 
 function MiniStat({ icon: Icon, label, value }) {
   return (
-    <div className="bg-white border border-slate-200/60 rounded-3xl p-5 flex items-center gap-4 transition-all">
+    <div className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-5 flex items-center gap-4 transition-all">
       <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
         <Icon className="w-6 h-6 text-indigo-600" />
       </div>
