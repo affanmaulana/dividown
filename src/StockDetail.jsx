@@ -196,7 +196,7 @@ export default function StockDetail() {
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
     const netProfit = portfolioValue - totalInvested;
     const avgRecovery = filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length;
-    const notRecovered = filtered.filter((r) => r.Status_Recovery.includes("Belum") || r.Status_Recovery.includes("Trap")).length;
+    const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
 
     const chartData = yearly.map((r, i) => ({
       id: i,
@@ -560,7 +560,7 @@ export default function StockDetail() {
                   <tbody className="divide-y divide-slate-100">
                     {filtered.map((row) => {
                       const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
-                      const recovered = row.Status_Recovery.includes("Sudah");
+                  const recovered = row.Status_Recovery === "Pulih";
                       return (
                         <tr key={`${row.Ticker}-${row.Year}`} className="group hover:bg-slate-50/80 transition-colors">
                           <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
@@ -574,12 +574,16 @@ export default function StockDetail() {
                             {row.Recovery_Days}d
                           </td>
                           <td className="px-4 md:px-8 py-5 text-center">
-                            {recovered ? (
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/50">
+                            {row.Status_Recovery === "Pulih" ? (
+                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                                 <CheckCircle2 className="w-3.5 h-3.5" /> PULIH
                               </span>
+                            ) : row.Status_Recovery === "Berproses" ? (
+                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                                <Clock className="w-3.5 h-3.5" /> BERPROSES
+                              </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200/50">
+                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
                                 <XCircle className="w-3.5 h-3.5" /> TRAP
                               </span>
                             )}
@@ -595,17 +599,21 @@ export default function StockDetail() {
               <div className="sm:hidden divide-y divide-slate-100 bg-white">
                 {filtered.map((row) => {
                   const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
-                  const recovered = row.Status_Recovery.includes("Sudah");
+                  const recovered = row.Status_Recovery === "Pulih";
                   return (
                     <div key={`m-${row.Ticker}-${row.Year}`} className="px-4 py-5 space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-900 text-xl">{row.Year}</span>
-                        {recovered ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/50">
+                        {row.Status_Recovery === "Pulih" ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
                             <CheckCircle2 className="w-3.5 h-3.5" /> PULIH
                           </span>
+                        ) : row.Status_Recovery === "Berproses" ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                            <Clock className="w-3.5 h-3.5" /> BERPROSES
+                          </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200/50">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
                             <XCircle className="w-3.5 h-3.5" /> TRAP
                           </span>
                         )}

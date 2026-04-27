@@ -8,7 +8,7 @@ export function calculateHealthScore(events) {
   const avgRecDays = events.reduce((s, r) => s + r.Recovery_Days, 0) / events.length;
   if (avgRecDays < 30) score += 40;
 
-  const pulihCount = events.filter((r) => r.Status_Recovery.includes("Sudah")).length;
+  const pulihCount = events.filter((r) => r.Status_Recovery.includes("Pulih")).length;
   if (pulihCount === events.length) score += 30;
 
   const avgDrop = events.reduce((s, r) => {

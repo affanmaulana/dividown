@@ -9,7 +9,7 @@
         "Lowest_After_Ex": 5106.77,
         "Recovery_Date": "2021-04-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -21,7 +21,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2021-11-22",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -33,7 +33,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2022-03-29",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -45,19 +45,19 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2023-03-29",
         "Recovery_Days": 116,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
         "Sector": "Banks",
         "Year": 2023,
         "Cum_Date": "2023-03-28",
-        "Cum_Price": 7601.9,
+        "Cum_Price": 7601.89,
         "Ex_Price_1day": 7887.92,
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2023-03-30",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -69,7 +69,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2023-12-14",
         "Recovery_Days": 9,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -77,11 +77,11 @@
         "Year": 2024,
         "Cum_Date": "2024-03-22",
         "Cum_Price": 9070.6,
-        "Ex_Price_1day": 9233.68,
+        "Ex_Price_1day": 9233.69,
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2024-03-26",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -93,7 +93,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2024-11-25",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -105,7 +105,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2025-03-26",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBCA",
@@ -117,7 +117,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "BBCA",
@@ -129,7 +129,7 @@
         "Lowest_After_Ex": 6050.0,
         "Recovery_Date": "2026-03-31",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -141,7 +141,7 @@
         "Lowest_After_Ex": 2399.2,
         "Recovery_Date": "2021-04-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -153,7 +153,7 @@
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2022-03-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -165,7 +165,7 @@
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2023-01-17",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -177,7 +177,7 @@
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2023-03-27",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -189,7 +189,7 @@
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2024-01-04",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -197,11 +197,11 @@
         "Year": 2024,
         "Cum_Date": "2024-03-13",
         "Cum_Price": 5104.99,
-        "Ex_Price_1day": 4947.66,
+        "Ex_Price_1day": 4947.65,
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2024-03-25",
         "Recovery_Days": 10,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -213,7 +213,7 @@
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2024-12-30",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -225,7 +225,7 @@
         "Lowest_After_Ex": 3033.76,
         "Recovery_Date": "2025-04-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -237,7 +237,7 @@
         "Lowest_After_Ex": 3033.76,
         "Recovery_Date": "2026-01-06",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBRI",
@@ -249,7 +249,7 @@
         "Lowest_After_Ex": 3070.0,
         "Recovery_Date": "2026-04-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -261,7 +261,7 @@
         "Lowest_After_Ex": 2173.66,
         "Recovery_Date": "2021-04-09",
         "Recovery_Days": 15,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -273,7 +273,7 @@
         "Lowest_After_Ex": 2891.96,
         "Recovery_Date": "2022-03-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -281,11 +281,11 @@
         "Year": 2023,
         "Cum_Date": "2023-03-24",
         "Cum_Price": 4393.37,
-        "Ex_Price_1day": 4289.29,
+        "Ex_Price_1day": 4289.3,
         "Lowest_After_Ex": 3927.54,
         "Recovery_Date": "2023-04-03",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -297,7 +297,7 @@
         "Lowest_After_Ex": 3927.54,
         "Recovery_Date": "2024-03-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -309,7 +309,7 @@
         "Lowest_After_Ex": 3969.8,
         "Recovery_Date": "2025-04-15",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BMRI",
@@ -321,7 +321,7 @@
         "Lowest_After_Ex": 4500.0,
         "Recovery_Date": "2026-01-15",
         "Recovery_Days": 8,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -333,7 +333,7 @@
         "Lowest_After_Ex": 1737.83,
         "Recovery_Date": "2021-04-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -345,7 +345,7 @@
         "Lowest_After_Ex": 2792.03,
         "Recovery_Date": "2022-03-25",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -357,7 +357,7 @@
         "Lowest_After_Ex": 3142.43,
         "Recovery_Date": "2023-03-29",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -369,7 +369,7 @@
         "Lowest_After_Ex": 3142.43,
         "Recovery_Date": "2024-03-20",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -381,7 +381,7 @@
         "Lowest_After_Ex": 3469.93,
         "Recovery_Date": "2025-04-25",
         "Recovery_Days": 9,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBNI",
@@ -393,7 +393,7 @@
         "Lowest_After_Ex": 3510.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "BBTN",
@@ -405,7 +405,7 @@
         "Lowest_After_Ex": 724.67,
         "Recovery_Date": "2022-03-15",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBTN",
@@ -417,7 +417,7 @@
         "Lowest_After_Ex": 724.67,
         "Recovery_Date": "2023-03-30",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBTN",
@@ -429,7 +429,7 @@
         "Lowest_After_Ex": 724.67,
         "Recovery_Date": "2024-03-20",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BBTN",
@@ -441,7 +441,7 @@
         "Lowest_After_Ex": 920.0,
         "Recovery_Date": "2025-04-16",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -453,7 +453,7 @@
         "Lowest_After_Ex": 1647.24,
         "Recovery_Date": "2021-09-01",
         "Recovery_Days": 112,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -465,7 +465,7 @@
         "Lowest_After_Ex": 1909.34,
         "Recovery_Date": "2022-04-06",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -477,7 +477,7 @@
         "Lowest_After_Ex": 2079.24,
         "Recovery_Date": "2023-04-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -489,7 +489,7 @@
         "Lowest_After_Ex": 2079.24,
         "Recovery_Date": "2026-02-19",
         "Recovery_Days": 686,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -501,7 +501,7 @@
         "Lowest_After_Ex": 2184.63,
         "Recovery_Date": "2025-04-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BDMN",
@@ -513,7 +513,7 @@
         "Lowest_After_Ex": 2480.0,
         "Recovery_Date": "2026-04-13",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PNBN",
@@ -525,7 +525,7 @@
         "Lowest_After_Ex": 935.0,
         "Recovery_Date": "2022-07-07",
         "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PNBN",
@@ -537,7 +537,7 @@
         "Lowest_After_Ex": 935.0,
         "Recovery_Date": "2025-07-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJTM",
@@ -549,7 +549,7 @@
         "Lowest_After_Ex": 409.65,
         "Recovery_Date": "2021-06-03",
         "Recovery_Days": 16,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJTM",
@@ -561,7 +561,7 @@
         "Lowest_After_Ex": 409.65,
         "Recovery_Date": "2022-03-29",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJTM",
@@ -573,7 +573,7 @@
         "Lowest_After_Ex": 409.65,
         "Recovery_Date": "2023-07-24",
         "Recovery_Days": 86,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJTM",
@@ -585,7 +585,7 @@
         "Lowest_After_Ex": 409.65,
         "Recovery_Date": "2026-01-09",
         "Recovery_Days": 687,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJTM",
@@ -597,7 +597,7 @@
         "Lowest_After_Ex": 472.0,
         "Recovery_Date": "2025-08-01",
         "Recovery_Days": 57,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJBR",
@@ -609,7 +609,7 @@
         "Lowest_After_Ex": 646.62,
         "Recovery_Date": "2022-03-28",
         "Recovery_Days": 346,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJBR",
@@ -621,7 +621,7 @@
         "Lowest_After_Ex": 646.62,
         "Recovery_Date": "2022-04-11",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJBR",
@@ -633,7 +633,7 @@
         "Lowest_After_Ex": 646.62,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "BJBR",
@@ -645,7 +645,7 @@
         "Lowest_After_Ex": 646.62,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "BJBR",
@@ -657,7 +657,7 @@
         "Lowest_After_Ex": 750.0,
         "Recovery_Date": "2025-05-15",
         "Recovery_Days": 16,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -669,7 +669,7 @@
         "Lowest_After_Ex": 382.96,
         "Recovery_Date": "2021-05-06",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -681,7 +681,7 @@
         "Lowest_After_Ex": 766.23,
         "Recovery_Date": "2022-01-03",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -693,7 +693,7 @@
         "Lowest_After_Ex": 897.73,
         "Recovery_Date": "2022-05-18",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -705,7 +705,7 @@
         "Lowest_After_Ex": 897.73,
         "Recovery_Date": "2024-06-03",
         "Recovery_Days": 517,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -717,7 +717,7 @@
         "Lowest_After_Ex": 897.73,
         "Recovery_Date": "2023-05-24",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -729,7 +729,7 @@
         "Lowest_After_Ex": 1116.28,
         "Recovery_Date": "2024-01-02",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -741,7 +741,7 @@
         "Lowest_After_Ex": 1368.75,
         "Recovery_Date": "2024-05-29",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -753,7 +753,7 @@
         "Lowest_After_Ex": 1402.56,
         "Recovery_Date": "2024-12-03",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -765,7 +765,7 @@
         "Lowest_After_Ex": 1402.56,
         "Recovery_Date": "2025-01-02",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -777,7 +777,7 @@
         "Lowest_After_Ex": 1517.62,
         "Recovery_Date": "2025-06-16",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ADRO",
@@ -789,7 +789,7 @@
         "Lowest_After_Ex": 1820.0,
         "Recovery_Date": "2026-01-02",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -801,7 +801,7 @@
         "Lowest_After_Ex": 5412.19,
         "Recovery_Date": "2021-04-16",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -813,7 +813,7 @@
         "Lowest_After_Ex": 9286.82,
         "Recovery_Date": "2021-11-24",
         "Recovery_Days": 12,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -825,19 +825,19 @@
         "Lowest_After_Ex": 14254.48,
         "Recovery_Date": "2022-04-05",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
         "Sector": "Energy",
         "Year": 2022,
         "Cum_Date": "2022-11-10",
-        "Cum_Price": 21945.64,
+        "Cum_Price": 21945.65,
         "Ex_Price_1day": 22462.09,
         "Lowest_After_Ex": 15889.66,
         "Recovery_Date": "2022-11-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -845,11 +845,11 @@
         "Year": 2023,
         "Cum_Date": "2023-04-10",
         "Cum_Price": 24747.65,
-        "Ex_Price_1day": 25405.51,
+        "Ex_Price_1day": 25405.5,
         "Lowest_After_Ex": 15889.66,
         "Recovery_Date": "2023-04-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -861,7 +861,7 @@
         "Lowest_After_Ex": 18674.07,
         "Recovery_Date": "2023-09-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -873,7 +873,7 @@
         "Lowest_After_Ex": 19215.16,
         "Recovery_Date": "2024-04-18",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -885,7 +885,7 @@
         "Lowest_After_Ex": 19215.16,
         "Recovery_Date": "2024-09-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -897,7 +897,7 @@
         "Lowest_After_Ex": 21150.0,
         "Recovery_Date": "2025-05-16",
         "Recovery_Days": 24,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ITMG",
@@ -909,7 +909,7 @@
         "Lowest_After_Ex": 21150.0,
         "Recovery_Date": "2025-11-14",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PTBA",
@@ -921,7 +921,7 @@
         "Lowest_After_Ex": 919.59,
         "Recovery_Date": "2021-04-19",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PTBA",
@@ -933,7 +933,7 @@
         "Lowest_After_Ex": 1587.93,
         "Recovery_Date": "2022-06-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PTBA",
@@ -945,7 +945,7 @@
         "Lowest_After_Ex": 1763.8,
         "Recovery_Date": "2023-06-27",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PTBA",
@@ -957,7 +957,7 @@
         "Lowest_After_Ex": 2040.81,
         "Recovery_Date": "2024-05-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PTBA",
@@ -969,7 +969,7 @@
         "Lowest_After_Ex": 2170.0,
         "Recovery_Date": "2026-02-18",
         "Recovery_Days": 239,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HRUM",
@@ -981,7 +981,7 @@
         "Lowest_After_Ex": 605.0,
         "Recovery_Date": "2021-07-06",
         "Recovery_Days": 18,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HRUM",
@@ -993,7 +993,7 @@
         "Lowest_After_Ex": 605.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "HRUM",
@@ -1005,7 +1005,7 @@
         "Lowest_After_Ex": 605.0,
         "Recovery_Date": "2022-12-15",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDY",
@@ -1017,7 +1017,7 @@
         "Lowest_After_Ex": 905.0,
         "Recovery_Date": "2022-08-18",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDY",
@@ -1029,7 +1029,7 @@
         "Lowest_After_Ex": 905.0,
         "Recovery_Date": "2023-05-08",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDY",
@@ -1041,7 +1041,7 @@
         "Lowest_After_Ex": 905.0,
         "Recovery_Date": "2024-05-20",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDY",
@@ -1053,7 +1053,7 @@
         "Lowest_After_Ex": 1285.0,
         "Recovery_Date": "2025-05-19",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1065,7 +1065,7 @@
         "Lowest_After_Ex": 505.52,
         "Recovery_Date": "2022-08-08",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1077,7 +1077,7 @@
         "Lowest_After_Ex": 549.19,
         "Recovery_Date": "2022-08-22",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1089,7 +1089,7 @@
         "Lowest_After_Ex": 816.33,
         "Recovery_Date": "2023-06-14",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1101,7 +1101,7 @@
         "Lowest_After_Ex": 898.44,
         "Recovery_Date": "2024-01-08",
         "Recovery_Days": 38,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1113,7 +1113,7 @@
         "Lowest_After_Ex": 898.44,
         "Recovery_Date": "2024-06-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1125,7 +1125,7 @@
         "Lowest_After_Ex": 898.44,
         "Recovery_Date": "2024-10-22",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1137,7 +1137,7 @@
         "Lowest_After_Ex": 1110.45,
         "Recovery_Date": "2025-06-17",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MEDC",
@@ -1149,7 +1149,7 @@
         "Lowest_After_Ex": 1230.0,
         "Recovery_Date": "2025-11-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1161,7 +1161,7 @@
         "Lowest_After_Ex": 449.38,
         "Recovery_Date": "2021-05-25",
         "Recovery_Days": 13,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1173,7 +1173,7 @@
         "Lowest_After_Ex": 518.75,
         "Recovery_Date": "2021-08-10",
         "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1185,7 +1185,7 @@
         "Lowest_After_Ex": 688.1,
         "Recovery_Date": "2022-05-19",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1197,7 +1197,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2022-09-14",
         "Recovery_Days": 40,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1209,7 +1209,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2023-06-14",
         "Recovery_Days": 34,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1221,7 +1221,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2023-08-07",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1233,7 +1233,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2023-11-06",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1245,7 +1245,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2024-05-14",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1257,7 +1257,7 @@
         "Lowest_After_Ex": 832.22,
         "Recovery_Date": "2024-08-12",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1269,7 +1269,7 @@
         "Lowest_After_Ex": 1065.0,
         "Recovery_Date": "2025-05-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AKRA",
@@ -1281,7 +1281,7 @@
         "Lowest_After_Ex": 1065.0,
         "Recovery_Date": "2025-08-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1293,7 +1293,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2021-07-22",
         "Recovery_Days": 47,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1305,7 +1305,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2021-10-12",
         "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1317,7 +1317,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2022-06-21",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1329,7 +1329,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "MBAP",
@@ -1341,7 +1341,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2023-07-05",
         "Recovery_Days": 28,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1353,7 +1353,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "MBAP",
@@ -1365,7 +1365,7 @@
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2024-05-16",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MBAP",
@@ -1377,7 +1377,7 @@
         "Lowest_After_Ex": 1575.0,
         "Recovery_Date": "2025-06-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PGAS",
@@ -1389,7 +1389,7 @@
         "Lowest_After_Ex": 872.39,
         "Recovery_Date": "2022-06-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PGAS",
@@ -1401,7 +1401,7 @@
         "Lowest_After_Ex": 872.39,
         "Recovery_Date": "2023-06-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PGAS",
@@ -1413,7 +1413,7 @@
         "Lowest_After_Ex": 1264.77,
         "Recovery_Date": "2024-06-21",
         "Recovery_Days": 10,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PGAS",
@@ -1425,7 +1425,7 @@
         "Lowest_After_Ex": 1530.0,
         "Recovery_Date": "2025-08-21",
         "Recovery_Days": 69,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1437,7 +1437,7 @@
         "Lowest_After_Ex": 391.75,
         "Recovery_Date": "2021-06-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1449,7 +1449,7 @@
         "Lowest_After_Ex": 407.79,
         "Recovery_Date": "2021-11-24",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1461,7 +1461,7 @@
         "Lowest_After_Ex": 470.71,
         "Recovery_Date": "2022-06-28",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1473,7 +1473,7 @@
         "Lowest_After_Ex": 477.45,
         "Recovery_Date": "2022-12-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1485,7 +1485,7 @@
         "Lowest_After_Ex": 515.26,
         "Recovery_Date": "2023-05-22",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1497,7 +1497,7 @@
         "Lowest_After_Ex": 531.36,
         "Recovery_Date": "2023-12-27",
         "Recovery_Days": 18,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1509,7 +1509,7 @@
         "Lowest_After_Ex": 531.36,
         "Recovery_Date": "2024-06-11",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1521,7 +1521,7 @@
         "Lowest_After_Ex": 580.25,
         "Recovery_Date": "2024-12-10",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1533,7 +1533,7 @@
         "Lowest_After_Ex": 656.98,
         "Recovery_Date": "2025-06-02",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "POWR",
@@ -1545,7 +1545,7 @@
         "Lowest_After_Ex": 690.0,
         "Recovery_Date": "2025-11-27",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1557,19 +1557,19 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2022-10-20",
         "Recovery_Days": 498,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
         "Sector": "Consumer",
         "Year": 2021,
         "Cum_Date": "2021-11-29",
-        "Cum_Price": 3820.77,
+        "Cum_Price": 3820.78,
         "Ex_Price_1day": 3608.14,
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2022-05-11",
         "Recovery_Days": 161,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1581,7 +1581,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2022-06-27",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1593,7 +1593,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2022-12-01",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1605,7 +1605,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2023-07-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1617,7 +1617,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2023-12-07",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1629,7 +1629,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2024-07-02",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1641,7 +1641,7 @@
         "Lowest_After_Ex": 951.86,
         "Recovery_Date": "2024-12-06",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1653,7 +1653,7 @@
         "Lowest_After_Ex": 1319.85,
         "Recovery_Date": "2025-07-03",
         "Recovery_Days": 16,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNVR",
@@ -1665,7 +1665,7 @@
         "Lowest_After_Ex": 1575.0,
         "Recovery_Date": "2025-12-16",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ICBP",
@@ -1677,7 +1677,7 @@
         "Lowest_After_Ex": 6525.93,
         "Recovery_Date": "2021-09-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ICBP",
@@ -1689,7 +1689,7 @@
         "Lowest_After_Ex": 6825.0,
         "Recovery_Date": "2022-08-03",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ICBP",
@@ -1701,7 +1701,7 @@
         "Lowest_After_Ex": 6825.0,
         "Recovery_Date": "2023-07-10",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ICBP",
@@ -1713,7 +1713,7 @@
         "Lowest_After_Ex": 6825.0,
         "Recovery_Date": "2024-07-10",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ICBP",
@@ -1725,7 +1725,7 @@
         "Lowest_After_Ex": 6825.0,
         "Recovery_Date": "2025-07-03",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDF",
@@ -1737,7 +1737,7 @@
         "Lowest_After_Ex": 4903.02,
         "Recovery_Date": "2021-09-09",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDF",
@@ -1749,7 +1749,7 @@
         "Lowest_After_Ex": 5376.56,
         "Recovery_Date": "2022-08-04",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDF",
@@ -1761,7 +1761,7 @@
         "Lowest_After_Ex": 5430.03,
         "Recovery_Date": "2023-07-10",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDF",
@@ -1773,7 +1773,7 @@
         "Lowest_After_Ex": 5722.68,
         "Recovery_Date": "2024-07-10",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INDF",
@@ -1785,7 +1785,7 @@
         "Lowest_After_Ex": 5900.0,
         "Recovery_Date": "2025-07-03",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MYOR",
@@ -1797,7 +1797,7 @@
         "Lowest_After_Ex": 1397.06,
         "Recovery_Date": "2021-08-04",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MYOR",
@@ -1809,7 +1809,7 @@
         "Lowest_After_Ex": 1627.91,
         "Recovery_Date": "2022-07-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MYOR",
@@ -1821,7 +1821,7 @@
         "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2023-07-05",
         "Recovery_Days": 12,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MYOR",
@@ -1833,7 +1833,7 @@
         "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2024-06-26",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MYOR",
@@ -1845,7 +1845,7 @@
         "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2025-06-20",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AMRT",
@@ -1857,7 +1857,7 @@
         "Lowest_After_Ex": 867.51,
         "Recovery_Date": "2021-05-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AMRT",
@@ -1869,7 +1869,7 @@
         "Lowest_After_Ex": 1405.0,
         "Recovery_Date": "2022-06-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AMRT",
@@ -1881,7 +1881,7 @@
         "Lowest_After_Ex": 1405.0,
         "Recovery_Date": "2023-06-05",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AMRT",
@@ -1893,7 +1893,7 @@
         "Lowest_After_Ex": 1405.0,
         "Recovery_Date": "2024-07-09",
         "Recovery_Days": 40,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "AMRT",
@@ -1905,7 +1905,7 @@
         "Lowest_After_Ex": 1405.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "HMSP",
@@ -1917,7 +1917,7 @@
         "Lowest_After_Ex": 466.9,
         "Recovery_Date": "2023-02-28",
         "Recovery_Days": 629,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HMSP",
@@ -1929,7 +1929,7 @@
         "Lowest_After_Ex": 466.9,
         "Recovery_Date": "2022-06-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HMSP",
@@ -1941,7 +1941,7 @@
         "Lowest_After_Ex": 466.9,
         "Recovery_Date": "2023-06-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HMSP",
@@ -1953,7 +1953,7 @@
         "Lowest_After_Ex": 466.9,
         "Recovery_Date": "2024-05-17",
         "Recovery_Days": 13,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HMSP",
@@ -1965,7 +1965,7 @@
         "Lowest_After_Ex": 520.0,
         "Recovery_Date": "2025-06-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "GGRM",
@@ -1977,7 +1977,7 @@
         "Lowest_After_Ex": 8186.19,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "GGRM",
@@ -1989,7 +1989,7 @@
         "Lowest_After_Ex": 8186.19,
         "Recovery_Date": "2022-07-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "GGRM",
@@ -2001,7 +2001,7 @@
         "Lowest_After_Ex": 8186.19,
         "Recovery_Date": "2023-07-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "GGRM",
@@ -2013,7 +2013,7 @@
         "Lowest_After_Ex": 8300.0,
         "Recovery_Date": "2025-07-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ROTI",
@@ -2025,7 +2025,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": "2021-05-20",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ROTI",
@@ -2037,7 +2037,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": "2022-07-21",
         "Recovery_Days": 89,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ROTI",
@@ -2049,7 +2049,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "ROTI",
@@ -2061,7 +2061,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": "2024-04-23",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ROTI",
@@ -2073,7 +2073,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "ROTI",
@@ -2085,7 +2085,7 @@
         "Lowest_After_Ex": 655.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "KLBF",
@@ -2097,7 +2097,7 @@
         "Lowest_After_Ex": 875.0,
         "Recovery_Date": "2021-06-21",
         "Recovery_Days": 12,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "KLBF",
@@ -2109,7 +2109,7 @@
         "Lowest_After_Ex": 875.0,
         "Recovery_Date": "2022-06-02",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "KLBF",
@@ -2121,7 +2121,7 @@
         "Lowest_After_Ex": 875.0,
         "Recovery_Date": "2023-05-15",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "KLBF",
@@ -2133,7 +2133,7 @@
         "Lowest_After_Ex": 875.0,
         "Recovery_Date": "2024-05-30",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "KLBF",
@@ -2145,7 +2145,7 @@
         "Lowest_After_Ex": 875.0,
         "Recovery_Date": "2025-06-05",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MIKA",
@@ -2157,7 +2157,7 @@
         "Lowest_After_Ex": 1978.55,
         "Recovery_Date": "2021-06-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MIKA",
@@ -2169,7 +2169,7 @@
         "Lowest_After_Ex": 2040.0,
         "Recovery_Date": "2022-05-24",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MIKA",
@@ -2181,7 +2181,7 @@
         "Lowest_After_Ex": 2040.0,
         "Recovery_Date": "2023-06-06",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MIKA",
@@ -2193,7 +2193,7 @@
         "Lowest_After_Ex": 2040.0,
         "Recovery_Date": "2024-06-14",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MIKA",
@@ -2205,7 +2205,7 @@
         "Lowest_After_Ex": 2040.0,
         "Recovery_Date": "2025-07-01",
         "Recovery_Days": 13,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "LPPF",
@@ -2215,21 +2215,21 @@
         "Cum_Price": 2288.18,
         "Ex_Price_1day": 2288.18,
         "Lowest_After_Ex": 994.15,
-        "Recovery_Date": "2021-11-12",
-        "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Recovery_Date": "2021-11-16",
+        "Recovery_Days": 4,
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "LPPF",
         "Sector": "Consumer",
         "Year": 2022,
         "Cum_Date": "2022-04-13",
-        "Cum_Price": 3381.55,
+        "Cum_Price": 3381.54,
         "Ex_Price_1day": 3484.46,
         "Lowest_After_Ex": 994.15,
         "Recovery_Date": "2022-04-18",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "LPPF",
@@ -2241,7 +2241,7 @@
         "Lowest_After_Ex": 994.15,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "LPPF",
@@ -2253,7 +2253,7 @@
         "Lowest_After_Ex": 994.15,
         "Recovery_Date": "2024-04-30",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "LPPF",
@@ -2265,7 +2265,7 @@
         "Lowest_After_Ex": 1354.61,
         "Recovery_Date": "2025-04-23",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "LPPF",
@@ -2277,7 +2277,7 @@
         "Lowest_After_Ex": null,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "MPMX",
@@ -2289,7 +2289,7 @@
         "Lowest_After_Ex": 400.82,
         "Recovery_Date": "2021-06-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MPMX",
@@ -2301,7 +2301,7 @@
         "Lowest_After_Ex": 672.06,
         "Recovery_Date": "2022-05-31",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MPMX",
@@ -2313,7 +2313,7 @@
         "Lowest_After_Ex": 777.49,
         "Recovery_Date": "2023-06-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MPMX",
@@ -2325,7 +2325,7 @@
         "Lowest_After_Ex": 814.27,
         "Recovery_Date": "2024-06-10",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "MPMX",
@@ -2337,7 +2337,7 @@
         "Lowest_After_Ex": 920.0,
         "Recovery_Date": "2025-06-13",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2349,7 +2349,7 @@
         "Lowest_After_Ex": 931.37,
         "Recovery_Date": "2021-06-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2361,7 +2361,7 @@
         "Lowest_After_Ex": 953.8,
         "Recovery_Date": "2021-07-01",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2373,7 +2373,7 @@
         "Lowest_After_Ex": 953.8,
         "Recovery_Date": "2021-08-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2385,7 +2385,7 @@
         "Lowest_After_Ex": 953.8,
         "Recovery_Date": "2022-04-22",
         "Recovery_Days": 162,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2397,7 +2397,7 @@
         "Lowest_After_Ex": 953.8,
         "Recovery_Date": "2022-10-24",
         "Recovery_Days": 157,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2409,7 +2409,7 @@
         "Lowest_After_Ex": 953.8,
         "Recovery_Date": "2022-09-01",
         "Recovery_Days": 23,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2421,7 +2421,7 @@
         "Lowest_After_Ex": 1012.76,
         "Recovery_Date": "2022-09-09",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2433,7 +2433,7 @@
         "Lowest_After_Ex": 1159.78,
         "Recovery_Date": "2022-11-15",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2445,7 +2445,7 @@
         "Lowest_After_Ex": 1364.65,
         "Recovery_Date": "2023-05-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2455,9 +2455,9 @@
         "Cum_Price": 1466.84,
         "Ex_Price_1day": 1466.84,
         "Lowest_After_Ex": 1364.65,
-        "Recovery_Date": "2023-06-05",
-        "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Recovery_Date": "2023-05-31",
+        "Recovery_Days": null,
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2469,7 +2469,7 @@
         "Lowest_After_Ex": 1364.65,
         "Recovery_Date": "2023-08-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2481,7 +2481,7 @@
         "Lowest_After_Ex": 1364.65,
         "Recovery_Date": "2023-11-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2493,7 +2493,7 @@
         "Lowest_After_Ex": 1364.65,
         "Recovery_Date": "2024-05-14",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2505,19 +2505,19 @@
         "Lowest_After_Ex": 1565.56,
         "Recovery_Date": "2024-07-03",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
         "Sector": "Consumer",
         "Year": 2024,
         "Cum_Date": "2024-08-07",
-        "Cum_Price": 1883.0,
+        "Cum_Price": 1882.99,
         "Ex_Price_1day": 1823.72,
         "Lowest_After_Ex": 1565.56,
         "Recovery_Date": "2024-09-05",
         "Recovery_Days": 27,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2529,7 +2529,7 @@
         "Lowest_After_Ex": 1565.56,
         "Recovery_Date": "2024-11-11",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2541,7 +2541,7 @@
         "Lowest_After_Ex": 1655.0,
         "Recovery_Date": "2025-05-14",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2553,7 +2553,7 @@
         "Lowest_After_Ex": 1655.0,
         "Recovery_Date": "2025-06-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2565,7 +2565,7 @@
         "Lowest_After_Ex": 1655.0,
         "Recovery_Date": "2025-08-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMSM",
@@ -2577,7 +2577,7 @@
         "Lowest_After_Ex": 1655.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "TLKM",
@@ -2589,7 +2589,7 @@
         "Lowest_After_Ex": 2122.8,
         "Recovery_Date": "2021-06-10",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TLKM",
@@ -2601,7 +2601,7 @@
         "Lowest_After_Ex": 2122.8,
         "Recovery_Date": "2022-06-14",
         "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TLKM",
@@ -2613,7 +2613,7 @@
         "Lowest_After_Ex": 2122.8,
         "Recovery_Date": "2023-06-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TLKM",
@@ -2625,7 +2625,7 @@
         "Lowest_After_Ex": 2122.8,
         "Recovery_Date": "2024-05-17",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TLKM",
@@ -2637,7 +2637,7 @@
         "Lowest_After_Ex": 2580.0,
         "Recovery_Date": "2025-06-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ISAT",
@@ -2649,7 +2649,7 @@
         "Lowest_After_Ex": 1108.25,
         "Recovery_Date": "2022-08-12",
         "Recovery_Days": 247,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ISAT",
@@ -2661,7 +2661,7 @@
         "Lowest_After_Ex": 1204.92,
         "Recovery_Date": "2022-08-30",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ISAT",
@@ -2673,7 +2673,7 @@
         "Lowest_After_Ex": 1204.92,
         "Recovery_Date": "2023-05-26",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ISAT",
@@ -2685,7 +2685,7 @@
         "Lowest_After_Ex": 1204.92,
         "Recovery_Date": "2024-06-04",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ISAT",
@@ -2697,19 +2697,19 @@
         "Lowest_After_Ex": 1645.0,
         "Recovery_Date": "2025-06-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
         "Sector": "Telecommunication",
         "Year": 2021,
         "Cum_Date": "2021-05-03",
-        "Cum_Price": 1736.99,
+        "Cum_Price": 1737.0,
         "Ex_Price_1day": 1764.14,
         "Lowest_After_Ex": 1507.25,
         "Recovery_Date": "2021-05-05",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
@@ -2721,7 +2721,7 @@
         "Lowest_After_Ex": 1507.25,
         "Recovery_Date": "2025-08-12",
         "Recovery_Days": 1188,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
@@ -2733,7 +2733,7 @@
         "Lowest_After_Ex": 1687.53,
         "Recovery_Date": "2023-05-17",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
@@ -2745,7 +2745,7 @@
         "Lowest_After_Ex": 1887.84,
         "Recovery_Date": "2025-07-15",
         "Recovery_Days": 424,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
@@ -2757,7 +2757,7 @@
         "Lowest_After_Ex": 1973.81,
         "Recovery_Date": "2025-04-15",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "EXCL",
@@ -2769,7 +2769,7 @@
         "Lowest_After_Ex": 2560.0,
         "Recovery_Date": "2025-12-03",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ANTM",
@@ -2781,7 +2781,7 @@
         "Lowest_After_Ex": 1152.61,
         "Recovery_Date": "2021-04-19",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ANTM",
@@ -2793,7 +2793,7 @@
         "Lowest_After_Ex": 1152.61,
         "Recovery_Date": "2025-04-22",
         "Recovery_Days": 1050,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ANTM",
@@ -2805,7 +2805,7 @@
         "Lowest_After_Ex": 1152.61,
         "Recovery_Date": "2023-06-27",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ANTM",
@@ -2817,7 +2817,7 @@
         "Lowest_After_Ex": 1152.61,
         "Recovery_Date": "2024-10-02",
         "Recovery_Days": 133,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ANTM",
@@ -2829,7 +2829,7 @@
         "Lowest_After_Ex": 2810.0,
         "Recovery_Date": "2025-06-24",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INCO",
@@ -2841,7 +2841,7 @@
         "Lowest_After_Ex": 1812.71,
         "Recovery_Date": "2021-05-11",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INCO",
@@ -2853,7 +2853,7 @@
         "Lowest_After_Ex": 1812.71,
         "Recovery_Date": "2023-05-24",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INCO",
@@ -2865,7 +2865,7 @@
         "Lowest_After_Ex": 3090.0,
         "Recovery_Date": "2025-06-03",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TINS",
@@ -2877,7 +2877,7 @@
         "Lowest_After_Ex": 513.57,
         "Recovery_Date": "2022-06-07",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TINS",
@@ -2889,7 +2889,7 @@
         "Lowest_After_Ex": 513.57,
         "Recovery_Date": "2023-07-04",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TINS",
@@ -2901,7 +2901,7 @@
         "Lowest_After_Ex": 980.0,
         "Recovery_Date": "2025-07-21",
         "Recovery_Days": 27,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMGR",
@@ -2913,7 +2913,7 @@
         "Lowest_After_Ex": 2017.92,
         "Recovery_Date": "2021-04-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMGR",
@@ -2925,7 +2925,7 @@
         "Lowest_After_Ex": 2017.92,
         "Recovery_Date": "2022-05-24",
         "Recovery_Days": 42,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMGR",
@@ -2937,7 +2937,7 @@
         "Lowest_After_Ex": 2017.92,
         "Recovery_Date": "2023-05-05",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMGR",
@@ -2949,7 +2949,7 @@
         "Lowest_After_Ex": 2017.92,
         "Recovery_Date": "2024-05-17",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMGR",
@@ -2961,7 +2961,7 @@
         "Lowest_After_Ex": 2130.0,
         "Recovery_Date": "2025-06-10",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INTP",
@@ -2973,7 +2973,7 @@
         "Lowest_After_Ex": 4167.89,
         "Recovery_Date": "2021-07-21",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INTP",
@@ -2985,7 +2985,7 @@
         "Lowest_After_Ex": 4167.89,
         "Recovery_Date": "2022-06-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INTP",
@@ -2997,7 +2997,7 @@
         "Lowest_After_Ex": 4167.89,
         "Recovery_Date": "2023-05-30",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INTP",
@@ -3009,7 +3009,7 @@
         "Lowest_After_Ex": 4167.89,
         "Recovery_Date": "2024-06-04",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "INTP",
@@ -3021,7 +3021,7 @@
         "Lowest_After_Ex": 5025.0,
         "Recovery_Date": "2025-06-10",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3033,7 +3033,7 @@
         "Lowest_After_Ex": 3310.62,
         "Recovery_Date": "2021-05-04",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3045,7 +3045,7 @@
         "Lowest_After_Ex": 3803.42,
         "Recovery_Date": "2021-10-11",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3053,11 +3053,11 @@
         "Year": 2022,
         "Cum_Date": "2022-04-28",
         "Cum_Price": 5436.02,
-        "Ex_Price_1day": 5155.41,
+        "Ex_Price_1day": 5155.42,
         "Lowest_After_Ex": 3873.95,
         "Recovery_Date": "2023-05-24",
         "Recovery_Days": 379,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3069,7 +3069,7 @@
         "Lowest_After_Ex": 3873.95,
         "Recovery_Date": "2022-10-19",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3081,7 +3081,7 @@
         "Lowest_After_Ex": 3873.95,
         "Recovery_Date": "2023-05-08",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3093,7 +3093,7 @@
         "Lowest_After_Ex": 3873.95,
         "Recovery_Date": "2023-10-13",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3105,7 +3105,7 @@
         "Lowest_After_Ex": 3873.95,
         "Recovery_Date": "2024-05-16",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3117,7 +3117,7 @@
         "Lowest_After_Ex": 4125.18,
         "Recovery_Date": "2024-10-21",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3129,7 +3129,7 @@
         "Lowest_After_Ex": 4355.15,
         "Recovery_Date": "2025-05-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "ASII",
@@ -3141,127 +3141,139 @@
         "Lowest_After_Ex": 5625.0,
         "Recovery_Date": "2025-10-15",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2021,
         "Cum_Date": "2021-04-19",
-        "Cum_Price": 13193.93,
-        "Ex_Price_1day": 13648.16,
-        "Lowest_After_Ex": 11295.03,
+        "Cum_Price": 12739.91,
+        "Ex_Price_1day": 13178.5,
+        "Lowest_After_Ex": 10906.35,
         "Recovery_Date": "2021-04-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2021,
         "Cum_Date": "2021-10-06",
-        "Cum_Price": 16107.56,
-        "Ex_Price_1day": 16067.58,
-        "Lowest_After_Ex": 13100.08,
+        "Cum_Price": 15553.28,
+        "Ex_Price_1day": 15514.68,
+        "Lowest_After_Ex": 12649.28,
         "Recovery_Date": "2021-10-11",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2022,
         "Cum_Date": "2022-04-19",
-        "Cum_Price": 18204.8,
-        "Ex_Price_1day": 17843.18,
-        "Lowest_After_Ex": 15555.05,
+        "Cum_Price": 17578.35,
+        "Ex_Price_1day": 17229.17,
+        "Lowest_After_Ex": 15019.78,
         "Recovery_Date": "2022-04-26",
         "Recovery_Days": 5,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2022,
         "Cum_Date": "2022-10-04",
-        "Cum_Price": 21443.53,
-        "Ex_Price_1day": 21357.71,
-        "Lowest_After_Ex": 15555.05,
+        "Cum_Price": 20705.63,
+        "Ex_Price_1day": 20622.77,
+        "Lowest_After_Ex": 15019.78,
         "Recovery_Date": "2022-10-07",
         "Recovery_Days": 1,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2023,
         "Cum_Date": "2023-04-27",
-        "Cum_Price": 20203.68,
-        "Ex_Price_1day": 21835.24,
-        "Lowest_After_Ex": 17440.12,
+        "Cum_Price": 19508.45,
+        "Ex_Price_1day": 21083.86,
+        "Lowest_After_Ex": 16839.98,
         "Recovery_Date": "2023-05-02",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2023,
         "Cum_Date": "2023-10-10",
-        "Cum_Price": 21814.94,
-        "Ex_Price_1day": 21565.74,
-        "Lowest_After_Ex": 17440.12,
+        "Cum_Price": 21064.26,
+        "Ex_Price_1day": 20823.63,
+        "Lowest_After_Ex": 16839.98,
         "Recovery_Date": "2023-10-16",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2024,
         "Cum_Date": "2024-05-03",
-        "Cum_Price": 19961.33,
-        "Ex_Price_1day": 19844.49,
-        "Lowest_After_Ex": 18379.72,
+        "Cum_Price": 19274.43,
+        "Ex_Price_1day": 19161.62,
+        "Lowest_After_Ex": 17747.25,
         "Recovery_Date": "2024-05-14",
         "Recovery_Days": 7,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2024,
         "Cum_Date": "2024-10-07",
-        "Cum_Price": 24147.85,
-        "Ex_Price_1day": 24323.42,
-        "Lowest_After_Ex": 18379.72,
+        "Cum_Price": 23316.89,
+        "Ex_Price_1day": 23486.42,
+        "Lowest_After_Ex": 17747.25,
         "Recovery_Date": "2024-10-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2025,
         "Cum_Date": "2025-05-06",
-        "Cum_Price": 20917.22,
-        "Ex_Price_1day": 20999.36,
-        "Lowest_After_Ex": 20437.1,
+        "Cum_Price": 20197.43,
+        "Ex_Price_1day": 20276.75,
+        "Lowest_After_Ex": 19733.83,
         "Recovery_Date": "2025-05-08",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "UNTR",
         "Sector": "Infrastructure",
         "Year": 2025,
         "Cum_Date": "2025-10-07",
-        "Cum_Price": 25033.0,
-        "Ex_Price_1day": 25850.0,
-        "Lowest_After_Ex": 24400.0,
+        "Cum_Price": 24171.58,
+        "Ex_Price_1day": 24960.47,
+        "Lowest_After_Ex": 23560.36,
         "Recovery_Date": "2025-10-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
+    },
+    {
+        "Ticker": "UNTR",
+        "Sector": "Infrastructure",
+        "Year": 2026,
+        "Cum_Date": "2026-04-23",
+        "Cum_Price": 31381.63,
+        "Ex_Price_1day": null,
+        "Lowest_After_Ex": null,
+        "Recovery_Date": null,
+        "Recovery_Days": null,
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "JSMR",
@@ -3273,7 +3285,7 @@
         "Lowest_After_Ex": 3000.0,
         "Recovery_Date": "2023-05-23",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "JSMR",
@@ -3285,7 +3297,7 @@
         "Lowest_After_Ex": 3000.0,
         "Recovery_Date": "2024-05-22",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "JSMR",
@@ -3297,7 +3309,7 @@
         "Lowest_After_Ex": 3000.0,
         "Recovery_Date": "2025-05-21",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3309,7 +3321,7 @@
         "Lowest_After_Ex": 82.24,
         "Recovery_Date": "2021-07-13",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3321,7 +3333,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": "2022-07-11",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3333,7 +3345,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Trap"
     },
     {
         "Ticker": "SMDR",
@@ -3345,7 +3357,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": "2023-07-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3357,7 +3369,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": "2023-08-23",
         "Recovery_Days": 13,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3369,7 +3381,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": "2024-07-08",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3381,7 +3393,7 @@
         "Lowest_After_Ex": 194.76,
         "Recovery_Date": "2024-08-13",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3393,7 +3405,7 @@
         "Lowest_After_Ex": 294.0,
         "Recovery_Date": "2025-07-10",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "SMDR",
@@ -3405,7 +3417,7 @@
         "Lowest_After_Ex": 294.0,
         "Recovery_Date": "2025-08-11",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3417,7 +3429,7 @@
         "Lowest_After_Ex": 19.05,
         "Recovery_Date": "2021-06-23",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3429,7 +3441,7 @@
         "Lowest_After_Ex": 39.93,
         "Recovery_Date": "2022-01-11",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3441,7 +3453,7 @@
         "Lowest_After_Ex": 39.93,
         "Recovery_Date": "2022-06-27",
         "Recovery_Days": 6,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3453,7 +3465,7 @@
         "Lowest_After_Ex": 39.93,
         "Recovery_Date": "2022-12-27",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3465,7 +3477,7 @@
         "Lowest_After_Ex": 39.93,
         "Recovery_Date": "2023-05-02",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3477,7 +3489,7 @@
         "Lowest_After_Ex": 118.19,
         "Recovery_Date": "2024-04-17",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "TMAS",
@@ -3489,7 +3501,7 @@
         "Lowest_After_Ex": 122.0,
         "Recovery_Date": "2025-04-14",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HEXA",
@@ -3501,7 +3513,7 @@
         "Lowest_After_Ex": 2611.32,
         "Recovery_Date": "2021-09-29",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HEXA",
@@ -3513,7 +3525,7 @@
         "Lowest_After_Ex": 3939.98,
         "Recovery_Date": "2022-10-04",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HEXA",
@@ -3525,7 +3537,7 @@
         "Lowest_After_Ex": 3939.98,
         "Recovery_Date": "2024-01-15",
         "Recovery_Days": 100,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HEXA",
@@ -3537,7 +3549,7 @@
         "Lowest_After_Ex": 3939.98,
         "Recovery_Date": "2024-10-07",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "HEXA",
@@ -3549,7 +3561,7 @@
         "Lowest_After_Ex": 4170.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
-        "Status_Recovery": "[X] Trap"
+        "Status_Recovery": "Berproses"
     },
     {
         "Ticker": "PWON",
@@ -3561,7 +3573,7 @@
         "Lowest_After_Ex": 301.16,
         "Recovery_Date": "2022-07-19",
         "Recovery_Days": 4,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PWON",
@@ -3573,7 +3585,7 @@
         "Lowest_After_Ex": 301.16,
         "Recovery_Date": "2023-07-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PWON",
@@ -3585,7 +3597,7 @@
         "Lowest_After_Ex": 301.16,
         "Recovery_Date": "2024-06-26",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "PWON",
@@ -3597,7 +3609,7 @@
         "Lowest_After_Ex": 332.0,
         "Recovery_Date": "2025-07-10",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "CTRA",
@@ -3609,7 +3621,7 @@
         "Lowest_After_Ex": 680.0,
         "Recovery_Date": "2021-08-18",
         "Recovery_Days": 8,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "CTRA",
@@ -3621,7 +3633,7 @@
         "Lowest_After_Ex": 680.0,
         "Recovery_Date": "2022-08-08",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "CTRA",
@@ -3633,7 +3645,7 @@
         "Lowest_After_Ex": 680.0,
         "Recovery_Date": "2023-07-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "CTRA",
@@ -3645,7 +3657,7 @@
         "Lowest_After_Ex": 680.0,
         "Recovery_Date": "2024-07-01",
         "Recovery_Days": 2,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "CTRA",
@@ -3657,7 +3669,7 @@
         "Lowest_After_Ex": 680.0,
         "Recovery_Date": "2025-06-30",
         "Recovery_Days": 3,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3669,7 +3681,7 @@
         "Lowest_After_Ex": 104.65,
         "Recovery_Date": "2021-06-02",
         "Recovery_Days": 11,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3681,7 +3693,7 @@
         "Lowest_After_Ex": 104.65,
         "Recovery_Date": "2023-08-30",
         "Recovery_Days": 627,
-        "Status_Recovery": "[WARN] Lambat (>365)"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3693,7 +3705,7 @@
         "Lowest_After_Ex": 104.65,
         "Recovery_Date": "2022-07-28",
         "Recovery_Days": 42,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3705,7 +3717,7 @@
         "Lowest_After_Ex": 107.74,
         "Recovery_Date": "2022-11-09",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3717,7 +3729,7 @@
         "Lowest_After_Ex": 107.74,
         "Recovery_Date": "2023-07-04",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3729,7 +3741,7 @@
         "Lowest_After_Ex": 107.74,
         "Recovery_Date": "2023-12-12",
         "Recovery_Days": null,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "DMAS",
@@ -3741,6 +3753,6 @@
         "Lowest_After_Ex": 128.0,
         "Recovery_Date": "2025-07-22",
         "Recovery_Days": 74,
-        "Status_Recovery": "[OK] Sudah"
+        "Status_Recovery": "Pulih"
     }
 ]

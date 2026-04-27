@@ -181,14 +181,19 @@ for i, ticker_str in enumerate(TICKERS, 1):
                 # Tentukan tahun dari cum_date
                 year = cum_date.year
                 
-                # Status recovery
+                # Status recovery (Rule update 2026-04-27)
+                today = pd.Timestamp('2026-04-27')
+                # Ensure ex_date is timezone-naive for comparison if needed, or keep both naive
+                ex_date_naive = ex_date.replace(tzinfo=None) if ex_date.tzinfo else ex_date
+                
                 if rec_days is not None:
-                    if rec_days <= 365:
-                        status = "[OK] Sudah"
-                    else:
-                        status = "[WARN] Lambat (>365)"
+                    status = "Pulih"
                 else:
-                    status = "[X] Trap"
+                    days_since_ex = (today - ex_date_naive).days
+                    if days_since_ex < 365:
+                        status = "Berproses"
+                    else:
+                        status = "Trap"
                 
                 # Simpan baris dengan properti Sector
                 row = {
@@ -216,15 +221,25 @@ for i, ticker_str in enumerate(TICKERS, 1):
         continue
 
 # ===== SIMPAN JSON =====
-with open(OUTPUT_FILE, "w") as f:
-    json.dump(all_rows, f, indent=4)
+# Safety check: Only write if at least 1 ticker was processed successfully
+unique_tickers = set([r['Ticker'] for r in all_rows])
 
-with open(OUTPUT_PRICES_FILE, "w") as f:
-    json.dump(monthly_rows, f, indent=4)
+if len(all_rows) > 0:
+    with open(OUTPUT_FILE, "w") as f:
+        json.dump(all_rows, f, indent=4)
+    print(f"[SUCCESS] Wrote {len(all_rows)} dividend events to {OUTPUT_FILE}")
+else:
+    print("[SKIPPED] No dividend data found. File NOT updated to protect existing data.")
+
+if len(monthly_rows) > 0:
+    with open(OUTPUT_PRICES_FILE, "w") as f:
+        json.dump(monthly_rows, f, indent=4)
+    print(f"[SUCCESS] Wrote {len(monthly_rows)} price points to {OUTPUT_PRICES_FILE}")
+else:
+    print("[SKIPPED] No price data found. File NOT updated to protect existing data.")
 
 print(f"\n" + "="*50)
-print(f"[SUCCESS] Database expanded to {len(set([r['Ticker'] for r in all_rows]))} unique tickers.")
-print(f"[SUCCESS] Dividend events: {len(all_rows)}")
-print(f"[SUCCESS] Monthly price points: {len(monthly_rows)}")
-print(f"Files updated in public/data/")
+print(f"[SUMMARY] Total unique tickers processed: {len(unique_tickers)}")
+print(f"[SUMMARY] Total dividend events: {len(all_rows)}")
+print(f"[SUMMARY] Total monthly price points: {len(monthly_rows)}")
 print("="*50)
