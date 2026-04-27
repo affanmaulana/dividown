@@ -154,6 +154,7 @@ export default function ComparePage() {
     });
 
     const portfolioValue = currentShares * latestPrice + (divStrategy === "passive" ? totalDiv : 0) + leftover;
+    const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
     
     // Calculate actual historical yields
     const yields = tickerDivs.map(r => r.Dividend / r.Cum_Price);
