@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
+import { STOCKS_INFO } from "./constants/stocks";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const DEPOSIT_RATE = 0.04;
@@ -180,8 +181,11 @@ export default function StockDetail() {
     }
 
     const yearly = filtered.map((row) => {
-      const divPerShare = Math.round(row.Cum_Price * EST_YIELD);
+      // 10% Tax applies if not reinvested (Passive strategy)
+      const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
+      const divPerShare = Math.round(row.Cum_Price * EST_YIELD * taxFactor);
       const divPayout = currentShares * divPerShare;
+      
       totalDiv += divPayout;
       if (divStrategy === "compound") {
         currentShares += Math.floor(divPayout / row.Cum_Price);
@@ -247,15 +251,20 @@ export default function StockDetail() {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
-              <div className="flex items-center gap-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">{ticker}</h1>
-                {health && (
-                  <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${health.badgeClass}`}>
-                    <health.Icon className="w-3.5 h-3.5" />
-                    {health.label}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none">{ticker}</h1>
+                    {health && (
+                      <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${health.badgeClass}`}>
+                        <health.Icon className="w-3.5 h-3.5" />
+                        {health.label}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                  <p className="text-xs md:text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">
+                    {STOCKS_INFO[ticker]?.name || ""}
+                  </p>
+                </div>
               <p className="text-lg text-slate-500 max-w-2xl font-medium">
                 Historical performance & recovery simulation vs 4% p.a. deposit.
               </p>
@@ -355,8 +364,11 @@ export default function StockDetail() {
 
             {/* 4. Strategi Dividen */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
                 Strategi Dividen
+                {divStrategy === "passive" && (
+                  <span className="text-[10px] text-rose-500 font-bold normal-case tracking-normal animate-pulse">Potong Pajak 10%</span>
+                )}
               </label>
               <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
                 {[{ key: "compound", label: "Putar Kembali" }, { key: "passive", label: "Cairkan" }].map((s) => (
