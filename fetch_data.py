@@ -200,6 +200,7 @@ for i, ticker_str in enumerate(TICKERS, 1):
                     "Ticker": clean_ticker,
                     "Sector": sector,
                     "Year": year,
+                    "Dividend": round(div_amount, 2),
                     "Cum_Date": cum_date.strftime("%Y-%m-%d"),
                     "Cum_Price": round(cum_price, 2),
                     "Ex_Price_1day": round(ex_price_1day, 2) if ex_price_1day else None,

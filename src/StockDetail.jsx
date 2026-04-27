@@ -15,7 +15,6 @@ import { STOCKS_INFO } from "./constants/stocks";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const DEPOSIT_RATE = 0.04;
-const EST_YIELD = 0.05;
 const LATEST_PRICES = { BBRI: 4410, BMRI: 5600, BBCA: 9800, BBNI: 4850 };
 
 // ── Formatters ─────────────────────────────────────────────────────────────
@@ -183,8 +182,8 @@ export default function StockDetail() {
     const yearly = filtered.map((row) => {
       // 10% Tax applies if not reinvested (Passive strategy)
       const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
-      const divPerShare = Math.round(row.Cum_Price * EST_YIELD * taxFactor);
-      const divPayout = currentShares * divPerShare;
+      const divPerShare = (row.Dividend || (row.Cum_Price * 0.05)) * taxFactor;
+      const divPayout = Math.round(currentShares * divPerShare);
       
       totalDiv += divPayout;
       if (divStrategy === "compound") {
@@ -212,10 +211,14 @@ export default function StockDetail() {
       Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, i + 1)),
     }));
 
+    // Real Yield Calculation
+    const yields = filtered.map(r => (r.Dividend / r.Cum_Price));
+    const avgYield = (yields.reduce((s, y) => s + y, 0) / yields.length) * 100;
+
     return {
       shares: investStyle === "lumpsum" ? Math.floor(amount / filtered[0].Cum_Price) : currentShares,
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
-      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years,
+      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield
     };
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear]);
 
