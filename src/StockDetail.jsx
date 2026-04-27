@@ -34,7 +34,7 @@ const CustomTooltip = ({ active, payload }) => {
   const dividendType = dataPoint.dividendType || "";
   const displayYear = dataPoint.year || "";
   const typeClass = dividendType === "Final Dividend" ? "text-emerald-700" : "text-indigo-700";
-  
+
   return (
     <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-4 font-sans ring-1 ring-slate-900/5">
       <p className="font-semibold text-slate-900 mb-1">{displayYear}</p>
@@ -60,7 +60,7 @@ const CustomPriceTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   const dataPoint = payload[0]?.payload || {};
   const displayDate = dataPoint.displayDate || label;
-  
+
   return (
     <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-4 font-sans ring-1 ring-slate-900/5">
       <p className="font-semibold text-slate-900 mb-3">{displayDate}</p>
@@ -231,12 +231,12 @@ export default function StockDetail() {
 
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-4">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-3 md:space-y-4">
 
         {/* ── HEADER ── */}
         <div className="flex flex-col gap-6">
-          <button 
-            onClick={() => navigate('/')} 
+          <button
+            onClick={() => navigate('/')}
             className="group inline-flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors cursor-pointer w-fit"
           >
             <div className="p-1.5 rounded-full bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
@@ -244,7 +244,7 @@ export default function StockDetail() {
             </div>
             Back to Discovery
           </button>
-          
+
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-4">
@@ -271,7 +271,7 @@ export default function StockDetail() {
             </div>
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 1. Nominal Rupiah */}
             <div className="space-y-3">
@@ -304,11 +304,10 @@ export default function StockDetail() {
                   <button
                     key={s.key}
                     onClick={() => setInvestStyle(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      investStyle === s.key
-                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
-                      : "text-slate-500 hover:text-slate-900"
-                    }`}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key
+                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                        : "text-slate-500 hover:text-slate-900"
+                      }`}
                   >
                     {s.label}
                   </button>
@@ -329,7 +328,7 @@ export default function StockDetail() {
                   {startYear}
                   <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
                 </button>
-                
+
                 {isYearOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="py-1">
@@ -340,11 +339,10 @@ export default function StockDetail() {
                             setStartYear(y);
                             setIsYearOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${
-                            startYear === y 
-                              ? "bg-indigo-50 text-indigo-600" 
+                          className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${startYear === y
+                              ? "bg-indigo-50 text-indigo-600"
                               : "text-slate-600 hover:bg-slate-50"
-                          }`}
+                            }`}
                         >
                           {y}
                         </button>
@@ -365,11 +363,10 @@ export default function StockDetail() {
                   <button
                     key={s.key}
                     onClick={() => setDivStrategy(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      divStrategy === s.key
-                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
-                      : "text-slate-500 hover:text-slate-900"
-                    }`}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key
+                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                        : "text-slate-500 hover:text-slate-900"
+                      }`}
                   >
                     {s.label}
                   </button>
@@ -380,14 +377,14 @@ export default function StockDetail() {
         </section>
 
         {engine && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="space-y-3 md:space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* ── METRIC CARDS ── */}
-            <div id="metrics" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div id="metrics" className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <MetricCard
                 icon={TrendingUp}
                 label="Total Return"
                 value={pct(engine.totalReturn)}
-                sub={`Deposit baseline ${pct(((engine.depositValue - engine.totalInvested) / engine.totalInvested) * 100)}`}
+                sub={`Acuan Deposito Bank 4% p.a: ${pct(((engine.depositValue - engine.totalInvested) / engine.totalInvested) * 100)}`}
                 positive={engine.totalReturn >= 0}
               />
               <MetricCard
@@ -411,11 +408,11 @@ export default function StockDetail() {
               <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-6">
                 <div className="space-y-1">
                   <h2 className="text-xl font-bold text-slate-900 tracking-tight">Portfolio Performance</h2>
-                  <p className="text-sm font-medium text-slate-500">Value comparison vs Bank Deposit</p>
+                  <p className="text-sm font-medium text-slate-500">Perbandingan nilai vs Deposito Bank (4% p.a)</p>
                 </div>
                 <div className="flex items-center gap-6 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
                   <LegendDot color="bg-indigo-500" label="Portfolio" />
-                  <LegendDot color="bg-slate-300" label="Deposit" />
+                  <LegendDot color="bg-slate-300" label="Deposito Bank" />
                 </div>
               </div>
               <div className="h-[360px] w-full">
@@ -432,11 +429,11 @@ export default function StockDetail() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                    <XAxis 
-                      dataKey="id" 
+                    <XAxis
+                      dataKey="id"
                       tickFormatter={(id) => engine.chartData[id]?.year}
-                      tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
-                      axisLine={false} 
+                      tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                      axisLine={false}
                       tickLine={false}
                       dy={10}
                     />
@@ -494,11 +491,11 @@ export default function StockDetail() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis 
-                        dataKey="Date" 
+                      <XAxis
+                        dataKey="Date"
                         tickFormatter={(val) => new Date(val).getFullYear()}
-                        tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
-                        axisLine={false} 
+                        tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                        axisLine={false}
                         tickLine={false}
                         minTickGap={40}
                         dy={10}
@@ -528,11 +525,11 @@ export default function StockDetail() {
             )}
 
             {/* ── SUMMARY ROW ── */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
               <MiniStat icon={BarChart3} label="Owned Shares" value={engine.currentShares.toLocaleString("id-ID")} />
               <MiniStat icon={Banknote} label="Total Dividends" value={fmt(engine.totalDiv)} />
               <MiniStat icon={Wallet} label="Portfolio Value" value={fmt(engine.portfolioValue)} />
-              <MiniStat icon={Activity} label="Deposit Value" value={fmt(engine.depositValue)} />
+              <MiniStat icon={Activity} label="Simulasi Deposito" value={fmt(engine.depositValue)} />
             </div>
 
             {/* ── HISTORY TABLE ── */}
@@ -560,7 +557,7 @@ export default function StockDetail() {
                   <tbody className="divide-y divide-slate-100">
                     {filtered.map((row) => {
                       const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
-                  const recovered = row.Status_Recovery === "Pulih";
+                      const recovered = row.Status_Recovery === "Pulih";
                       return (
                         <tr key={`${row.Ticker}-${row.Year}`} className="group hover:bg-slate-50/80 transition-colors">
                           <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
@@ -599,37 +596,42 @@ export default function StockDetail() {
               <div className="sm:hidden divide-y divide-slate-100 bg-white">
                 {filtered.map((row) => {
                   const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
-                  const recovered = row.Status_Recovery === "Pulih";
                   return (
-                    <div key={`m-${row.Ticker}-${row.Year}`} className="px-4 py-5 space-y-4">
+                    <div key={`m-${row.Ticker}-${row.Year}`} className="px-4 py-4 flex flex-col gap-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-900 text-xl">{row.Year}</span>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-slate-900 text-lg leading-tight">{row.Year}</span>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{row.Cum_Date}</span>
+                        </div>
                         {row.Status_Recovery === "Pulih" ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> PULIH
+                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <CheckCircle2 className="w-3 h-3" /> PULIH
                           </span>
                         ) : row.Status_Recovery === "Berproses" ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
-                            <Clock className="w-3.5 h-3.5" /> BERPROSES
+                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                            <Clock className="w-3 h-3" /> BERPROSES
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
-                            <XCircle className="w-3.5 h-3.5" /> TRAP
+                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
+                            <XCircle className="w-3 h-3" /> TRAP
                           </span>
                         )}
                       </div>
-                      <div className="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cum</p>
-                          <p className="font-bold text-slate-900">{row.Cum_Price.toLocaleString("id-ID")}</p>
+
+                      <div className="flex items-center justify-between bg-slate-50/50 rounded-xl px-4 py-2.5 border border-slate-100/50">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Cum Price</span>
+                          <span className="text-xs font-bold text-slate-900">{row.Cum_Price.toLocaleString("id-ID")}</span>
                         </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Drop</p>
-                          <p className={`font-bold ${drop < -3 ? "text-rose-600" : "text-slate-900"}`}>{drop.toFixed(1)}%</p>
+                        <div className="w-px h-6 bg-slate-200" />
+                        <div className="flex flex-col items-center">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Drop</span>
+                          <span className={`text-xs font-bold ${drop < -3 ? "text-rose-600" : "text-slate-900"}`}>{drop.toFixed(1)}%</span>
                         </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rec</p>
-                          <p className={`font-bold ${row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500"}`}>{row.Recovery_Days}d</p>
+                        <div className="w-px h-6 bg-slate-200" />
+                        <div className="flex flex-col items-end">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Recovery</span>
+                          <span className={`text-xs font-extrabold ${row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500"}`}>{row.Recovery_Days}d</span>
                         </div>
                       </div>
                     </div>
@@ -651,7 +653,7 @@ export default function StockDetail() {
 function MetricCard({ icon: Icon, label, value, sub, positive }) {
   return (
     <div className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-5 transition-all hover:-translate-y-1 group">
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">{label}</span>
         <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-colors ${positive ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-rose-50 group-hover:bg-rose-100"}`}>
           <Icon className={`w-5 h-5 ${positive ? "text-emerald-600" : "text-rose-600"}`} />

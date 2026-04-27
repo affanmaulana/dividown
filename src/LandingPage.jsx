@@ -231,7 +231,7 @@ export default function LandingPage() {
             <div className="relative" ref={sortRef} onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center gap-3 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer"
+                className="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2 pr-2 border-r border-slate-100">
                   <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
@@ -268,7 +268,7 @@ export default function LandingPage() {
             {/* Sort Order Toggle */}
             <button
               onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
+              className="flex items-center gap-2 px-5 py-3 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
             >
               {sortOrder === "asc" ? (
                 <>
