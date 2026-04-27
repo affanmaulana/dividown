@@ -5,14 +5,15 @@ export function calculateHealthScore(events) {
 
   let score = 0;
   
-  const avgRecDays = events.reduce((s, r) => s + r.Recovery_Days, 0) / events.length;
+  const avgRecDays = events.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / events.length;
   if (avgRecDays < 30) score += 40;
 
-  const pulihCount = events.filter((r) => r.Status_Recovery.includes("Pulih")).length;
+  const pulihCount = events.filter((r) => (r.Status_Recovery || "").includes("Pulih")).length;
   if (pulihCount === events.length) score += 30;
 
   const avgDrop = events.reduce((s, r) => {
-    const drop = Math.abs(((r.Ex_Price_1day - r.Cum_Price) / r.Cum_Price) * 100);
+    const cp = r.Cum_Price || 1; // Prevent division by zero
+    const drop = Math.abs((((r.Ex_Price_1day || cp) - cp) / cp) * 100);
     return s + drop;
   }, 0) / events.length;
   if (avgDrop < 5) score += 30;

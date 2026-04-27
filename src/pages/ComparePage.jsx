@@ -157,7 +157,7 @@ export default function ComparePage() {
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
     
     // Calculate actual historical yields
-    const yields = tickerDivs.map(r => r.Dividend / r.Cum_Price);
+    const yields = tickerDivs.map(r => (r.Dividend || 0) / (r.Cum_Price || 1));
     const avgYield = yields.length > 0 ? (yields.reduce((s, y) => s + y, 0) / yields.length) * 100 : 0;
     const avgRecovery = tickerDivs.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / tickerDivs.length;
 

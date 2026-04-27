@@ -212,8 +212,8 @@ export default function StockDetail() {
     }));
 
     // Real Yield Calculation
-    const yields = filtered.map(r => (r.Dividend / r.Cum_Price));
-    const avgYield = (yields.reduce((s, y) => s + y, 0) / yields.length) * 100;
+    const yields = filtered.map(r => ((r.Dividend || 0) / (r.Cum_Price || 1)));
+    const avgYield = (yields.reduce((s, y) => s + y, 0) / (yields.length || 1)) * 100;
 
     return {
       shares: investStyle === "lumpsum" ? Math.floor(amount / filtered[0].Cum_Price) : currentShares,
