@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import {
   TrendingUp, Banknote, Clock, Wallet, BarChart3,
-  Activity, CheckCircle2, XCircle, ChevronDown
+  Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
@@ -92,15 +92,19 @@ export default function StockDetail() {
   const [divStrategy, setDivStrategy] = useState("compound"); // "compound" | "passive"
   const [loading, setLoading] = useState(true);
   const [isYearOpen, setIsYearOpen] = useState(false);
+  const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
 
-  // Custom click outside for year dropdown
+  // Custom click outside for dropdowns & mobile tooltips
   useEffect(() => {
-    const handleClick = () => setIsYearOpen(false);
-    if (isYearOpen) {
+    const handleClick = () => {
+      setIsYearOpen(false);
+      setActiveMobileTooltip(null);
+    };
+    if (isYearOpen || activeMobileTooltip) {
       window.addEventListener("click", handleClick);
     }
     return () => window.removeEventListener("click", handleClick);
-  }, [isYearOpen]);
+  }, [isYearOpen, activeMobileTooltip]);
 
   useEffect(() => {
     Promise.all([
@@ -179,27 +183,46 @@ export default function StockDetail() {
       leftover = dcaLeftover;
     }
 
+    const today = new Date();
     const yearly = filtered.map((row) => {
       // 10% Tax applies if not reinvested (Passive strategy)
       const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
       const divPerShare = (row.Dividend || (row.Cum_Price * 0.05)) * taxFactor;
       const divPayout = Math.round(currentShares * divPerShare);
-      
+
       totalDiv += divPayout;
       if (divStrategy === "compound") {
         currentShares += Math.floor(divPayout / row.Cum_Price);
       }
-      return { ...row, divPerShare, divPayout, sharesAfter: currentShares, totalDivSoFar: totalDiv };
-    });
 
-    const portfolioValue =
-      currentShares * latestPrice + (divStrategy === "passive" ? totalDiv : 0) + leftover;
-    const years = filtered.length;
-    const depositValue = totalInvested * Math.pow(1 + DEPOSIT_RATE, years);
-    const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
-    const netProfit = portfolioValue - totalInvested;
-    const avgRecovery = filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length;
-    const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
+      // New Status Logic
+      const cumDate = new Date(row.Cum_Date);
+      const ageInDays = Math.floor((today - cumDate) / (1000 * 60 * 60 * 24));
+      const hasRecoveredOnce = row.Status_Recovery === "Pulih";
+      const isDroppedNow = latestPrice < (row.Cum_Price * 0.95);
+
+      let newStatus = "";
+      if (hasRecoveredOnce) {
+        newStatus = isDroppedNow ? "DROP RECOVERED" : "RECOVERED";
+      } else {
+        newStatus = ageInDays > 365 ? "DIVIDEND TRAP" : "BERPROSES";
+      }
+
+      const recoveryDisplay = hasRecoveredOnce
+        ? `${row.Recovery_Days || 0}d`
+        : `${ageInDays}d++`;
+
+      return {
+        ...row,
+        divPerShare,
+        divPayout,
+        sharesAfter: currentShares,
+        totalDivSoFar: totalDiv,
+        newStatus,
+        recoveryDisplay,
+        hasRecoveredOnce
+      };
+    });
 
     const chartData = yearly.map((r, i) => ({
       id: i,
@@ -211,6 +234,26 @@ export default function StockDetail() {
       Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, i + 1)),
     }));
 
+    // Source of Truth: Derived from chartData to avoid visual discrepancy
+    const lastPoint = chartData[chartData.length - 1];
+    const portfolioValue = lastPoint ? lastPoint.Portfolio : 0;
+    const depositValue = lastPoint ? lastPoint.Deposito : totalInvested;
+    const netProfit = portfolioValue - totalInvested;
+    const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
+
+    const avgRecovery = filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length;
+    const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
+    const years = filtered.length;
+
+    // Divergence Warning logic
+    const portfolioTrend = chartData.length >= 2
+      ? chartData[chartData.length - 1].Portfolio > chartData[0].Portfolio
+      : false;
+    const priceTrend = filteredPrices.length >= 2
+      ? filteredPrices[filteredPrices.length - 1].Price < filteredPrices[0].Price
+      : false;
+    const isDivergent = portfolioTrend && priceTrend;
+
     // Real Yield Calculation
     const yields = filtered.map(r => ((r.Dividend || 0) / (r.Cum_Price || 1)));
     const avgYield = (yields.reduce((s, y) => s + y, 0) / (yields.length || 1)) * 100;
@@ -218,7 +261,7 @@ export default function StockDetail() {
     return {
       shares: investStyle === "lumpsum" ? Math.floor(amount / filtered[0].Cum_Price) : currentShares,
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
-      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield
+      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield, isDivergent
     };
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear]);
 
@@ -254,20 +297,20 @@ export default function StockDetail() {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-4">
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none">{ticker}</h1>
-                    {health && (
-                      <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${health.badgeClass}`}>
-                        <health.Icon className="w-3.5 h-3.5" />
-                        {health.label}
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-xs md:text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">
-                    {STOCKS_INFO[ticker]?.name || ""}
-                  </p>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-4">
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none">{ticker}</h1>
+                  {health && (
+                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${health.badgeClass}`}>
+                      <health.Icon className="w-3.5 h-3.5" />
+                      {health.label}
+                    </div>
+                  )}
                 </div>
+                <p className="text-xs md:text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">
+                  {STOCKS_INFO[ticker]?.name || ""}
+                </p>
+              </div>
               <p className="text-lg text-slate-500 max-w-2xl font-medium">
                 Historical performance & recovery simulation vs 4% p.a. deposit.
               </p>
@@ -317,8 +360,8 @@ export default function StockDetail() {
                     key={s.key}
                     onClick={() => setInvestStyle(s.key)}
                     className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key
-                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
-                        : "text-slate-500 hover:text-slate-900"
+                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                      : "text-slate-500 hover:text-slate-900"
                       }`}
                   >
                     {s.label}
@@ -352,8 +395,8 @@ export default function StockDetail() {
                             setIsYearOpen(false);
                           }}
                           className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${startYear === y
-                              ? "bg-indigo-50 text-indigo-600"
-                              : "text-slate-600 hover:bg-slate-50"
+                            ? "bg-indigo-50 text-indigo-600"
+                            : "text-slate-600 hover:bg-slate-50"
                             }`}
                         >
                           {y}
@@ -379,8 +422,8 @@ export default function StockDetail() {
                     key={s.key}
                     onClick={() => setDivStrategy(s.key)}
                     className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key
-                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
-                        : "text-slate-500 hover:text-slate-900"
+                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                      : "text-slate-500 hover:text-slate-900"
                       }`}
                   >
                     {s.label}
@@ -391,6 +434,20 @@ export default function StockDetail() {
           </div>
         </section>
 
+        {engine && engine.isDivergent && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-bold text-amber-900">Portfolio Divergence Warning</p>
+              <p className="text-xs font-medium text-amber-700 leading-relaxed">
+                Warning: Pertumbuhan portfolio Anda saat ini hanya ditopang oleh akumulasi dividen (Yield Support), sementara nilai aset dasar Anda (Capital) sedang mengalami penurunan signifikan.
+              </p>
+            </div>
+          </div>
+        )}
+
         {engine && (
           <div className="space-y-3 md:space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* ── METRIC CARDS ── */}
@@ -399,7 +456,7 @@ export default function StockDetail() {
                 icon={TrendingUp}
                 label="Total Return"
                 value={pct(engine.totalReturn)}
-                sub={`Acuan Deposito Bank 4% p.a: ${pct(((engine.depositValue - engine.totalInvested) / engine.totalInvested) * 100)}`}
+                sub={`vs Deposito Bank 4% p.a: ${pct(((engine.depositValue - engine.totalInvested) / engine.totalInvested) * 100)}`}
                 positive={engine.totalReturn >= 0}
               />
               <MetricCard
@@ -570,11 +627,10 @@ export default function StockDetail() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {filtered.map((row) => {
+                    {engine.yearly.map((row) => {
                       const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
-                      const recovered = row.Status_Recovery === "Pulih";
                       return (
-                        <tr key={`${row.Ticker}-${row.Year}`} className="group hover:bg-slate-50/80 transition-colors">
+                        <tr key={`${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="group hover:bg-slate-50/80 transition-colors">
                           <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
                           <td className="px-4 md:px-8 py-5 text-slate-500 font-semibold">{row.Cum_Date}</td>
                           <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price.toLocaleString("id-ID")}</td>
@@ -582,21 +638,40 @@ export default function StockDetail() {
                           <td className={`px-4 md:px-8 py-5 text-right font-bold ${drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
                             {drop.toFixed(1)}%
                           </td>
-                          <td className={`px-4 md:px-8 py-5 text-right font-extrabold ${row.Recovery_Days > 40 ? "text-rose-600" : row.Recovery_Days > 20 ? "text-amber-500" : "text-emerald-500"}`}>
-                            {row.Recovery_Days}d
+                          <td className={`px-4 md:px-8 py-5 text-right font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-400"}`}>
+                            {row.recoveryDisplay}
                           </td>
                           <td className="px-4 md:px-8 py-5 text-center">
-                            {row.Status_Recovery === "Pulih" ? (
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                <CheckCircle2 className="w-3.5 h-3.5" /> PULIH
+                            {row.newStatus === "RECOVERED" && (
+                              <span 
+                                title={`Saham berhasil pulih ke level harga Cum Date dalam ${row.Recovery_Days} hari dan saat ini harganya masih terjaga.`}
+                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 cursor-help"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" /> RECOVERED
                               </span>
-                            ) : row.Status_Recovery === "Berproses" ? (
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                            )}
+                            {row.newStatus === "DROP RECOVERED" && (
+                              <span
+                                title={`Saham ini sempat pulih dalam ${row.Recovery_Days} hari, namun tren harga saat ini melemah kembali ke Rp ${latestPrice.toLocaleString("id-ID")}, di bawah modal Cum Date tahun tersebut.`}
+                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 cursor-help"
+                              >
+                                <AlertTriangle className="w-3.5 h-3.5" /> DROP RECOVERED
+                              </span>
+                            )}
+                            {row.newStatus === "DIVIDEND TRAP" && (
+                              <span 
+                                title="Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal."
+                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 cursor-help"
+                              >
+                                <XCircle className="w-3.5 h-3.5" /> DIVIDEND TRAP
+                              </span>
+                            )}
+                            {row.newStatus === "BERPROSES" && (
+                              <span 
+                                title="Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun."
+                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-slate-50 text-slate-500 border border-slate-100 cursor-help"
+                              >
                                 <Clock className="w-3.5 h-3.5" /> BERPROSES
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
-                                <XCircle className="w-3.5 h-3.5" /> TRAP
                               </span>
                             )}
                           </td>
@@ -609,27 +684,95 @@ export default function StockDetail() {
 
               {/* Mobile cards */}
               <div className="sm:hidden divide-y divide-slate-100 bg-white">
-                {filtered.map((row) => {
+                {engine.yearly.map((row) => {
                   const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
                   return (
-                    <div key={`m-${row.Ticker}-${row.Year}`} className="px-4 py-4 flex flex-col gap-3">
+                    <div key={`m-${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="px-4 py-4 flex flex-col gap-3">
                       <div className="flex items-center justify-between">
                         <div className="flex flex-col">
                           <span className="font-bold text-slate-900 text-lg leading-tight">{row.Year}</span>
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{row.Cum_Date}</span>
                         </div>
-                        {row.Status_Recovery === "Pulih" ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            <CheckCircle2 className="w-3 h-3" /> PULIH
-                          </span>
-                        ) : row.Status_Recovery === "Berproses" ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100">
-                            <Clock className="w-3 h-3" /> BERPROSES
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-100">
-                            <XCircle className="w-3 h-3" /> TRAP
-                          </span>
+                        {row.newStatus === "RECOVERED" && (
+                          <div className="relative">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const key = `m-rec-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                              }}
+                              className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 cursor-pointer"
+                            >
+                              <CheckCircle2 className="w-3 h-3" /> RECOVERED
+                            </button>
+                            {activeMobileTooltip === `m-rec-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                              <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                {`Saham berhasil pulih ke level harga Cum Date dalam ${row.Recovery_Days} hari dan saat ini harganya masih terjaga.`}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {row.newStatus === "DROP RECOVERED" && (
+                          <div className="relative">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const key = `m-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                              }}
+                              className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 cursor-pointer"
+                            >
+                              <AlertTriangle className="w-3 h-3" /> DROP RECOVERED
+                            </button>
+                            
+                            {activeMobileTooltip === `m-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                              <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                {`Saham ini sempat pulih dalam ${row.Recovery_Days} hari, namun tren harga saat ini melemah kembali ke Rp ${latestPrice.toLocaleString("id-ID")}, di bawah modal Cum Date tahun tersebut.`}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {row.newStatus === "DIVIDEND TRAP" && (
+                          <div className="relative">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const key = `m-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                              }}
+                              className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-100 cursor-pointer"
+                            >
+                              <XCircle className="w-3 h-3" /> DIVIDEND TRAP
+                            </button>
+                            {activeMobileTooltip === `m-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                              <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                {`Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal.`}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {row.newStatus === "BERPROSES" && (
+                          <div className="relative">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const key = `m-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                              }}
+                              className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-slate-50 text-slate-500 border border-slate-100 cursor-pointer"
+                            >
+                              <Clock className="w-3 h-3" /> BERPROSES
+                            </button>
+                            {activeMobileTooltip === `m-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                              <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                {`Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun.`}
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
 
@@ -646,7 +789,7 @@ export default function StockDetail() {
                         <div className="w-px h-6 bg-slate-200" />
                         <div className="flex flex-col items-end">
                           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Recovery</span>
-                          <span className={`text-xs font-extrabold ${row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500"}`}>{row.Recovery_Days}d</span>
+                          <span className={`text-xs font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-900"}`}>{row.recoveryDisplay}</span>
                         </div>
                       </div>
                     </div>
