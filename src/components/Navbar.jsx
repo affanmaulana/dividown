@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { TrendingDown, Search, Shield, X } from "lucide-react";
+import { TrendingDown, Search, Shield, X, GitCompare } from "lucide-react";
 import { calculateHealthScore } from "../utils/healthScore";
 
 import { STOCKS_INFO } from "../constants/stocks";
@@ -79,10 +79,15 @@ export default function Navbar() {
           {!mobileSearchActive && (
             <Link 
               to="/compare" 
-              className={`text-xs md:text-sm font-bold tracking-tight transition-colors shrink-0 ${
-                location.pathname === "/compare" ? "text-indigo-600" : "text-slate-500 hover:text-slate-900"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${
+                location.pathname === "/compare" 
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20" 
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
               }`}
             >
+              <GitCompare className={`w-3.5 h-3.5 transition-transform duration-500 group-hover:rotate-[360deg] ${
+                location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
+              }`} />
               Compare
             </Link>
           )}

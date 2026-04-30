@@ -2,7 +2,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Search, TrendingUp, Banknote, Clock, Wallet, 
-  ChevronDown, ArrowLeft, Activity, Shield
+  ChevronDown, ArrowLeft, Activity, Shield,
+  ChevronLeft, ChevronRight, Calendar
 } from "lucide-react";
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, 
@@ -11,8 +12,8 @@ import {
 import { STOCKS_INFO } from "../constants/stocks";
 import { calculateHealthScore } from "../utils/healthScore";
 
-// ── Constants ──────────────────────────────────────────────────────────────
 const DEPOSIT_RATE = 0.04;
+const MONTHS = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
 // ── Formatters ─────────────────────────────────────────────────────────────
 const fmt = (n) =>
@@ -62,6 +63,7 @@ export default function ComparePage() {
 
   // Common Controls
   const [startYear, setStartYear] = useState(2021);
+  const [startMonth, setStartMonth] = useState(1);
   const [investStyle, setInvestStyle] = useState("lumpsum");
   const [amount, setAmount] = useState(10000000);
   const [divStrategy, setDivStrategy] = useState("compound");
@@ -106,7 +108,12 @@ export default function ComparePage() {
   const filteredB = useMemo(() => availableStocks.filter(s => s.ticker.toLowerCase().includes(searchB.toLowerCase()) || s.name.toLowerCase().includes(searchB.toLowerCase())), [searchB, availableStocks]);
 
   const runSim = (ticker) => {
-    const tickerDivs = data.filter(d => d.Ticker === ticker && d.Year >= startYear).sort((a, b) => a.Year - b.Year);
+    const tickerDivs = data.filter(d => {
+      const dYear = d.Year;
+      const dMonth = new Date(d.Cum_Date).getMonth() + 1;
+      return d.Ticker === ticker && (dYear > startYear || (dYear === startYear && dMonth >= startMonth));
+    }).sort((a, b) => new Date(a.Cum_Date) - new Date(b.Cum_Date));
+    
     const tickerPrices = priceData.filter(p => p.Ticker === ticker);
     const latestPrice = tickerPrices.length ? tickerPrices[tickerPrices.length - 1].Price : 5000;
 
@@ -118,7 +125,12 @@ export default function ComparePage() {
     let leftover = 0;
 
     const monthlyForTicker = priceData
-      .filter(p => p.Ticker === ticker && new Date(p.Date).getFullYear() >= startYear)
+      .filter(p => {
+        const pDate = new Date(p.Date);
+        const pYear = pDate.getFullYear();
+        const pMonth = pDate.getMonth() + 1;
+        return p.Ticker === ticker && (pYear > startYear || (pYear === startYear && pMonth >= startMonth));
+      })
       .sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
     if (investStyle === "lumpsum") {
@@ -247,11 +259,15 @@ export default function ComparePage() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* 1. Nominal Rupiah */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Modal / Setoran</label>
+              <label htmlFor="amount-input" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {investStyle === "lumpsum" ? "Modal Awal" : "Setoran Bulanan"}
+              </label>
               <div className="relative">
                 <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
+                  id="amount-input"
                   type="text"
                   inputMode="numeric"
                   value={amount.toLocaleString("id-ID")}
@@ -264,31 +280,93 @@ export default function ComparePage() {
               </div>
             </div>
 
+            {/* 2. Metode Investasi */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Metode Investasi</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Metode Investasi
+              </label>
               <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
                 {[{ key: "lumpsum", label: "Sekali Beli" }, { key: "dca", label: "Nabung Rutin" }].map((s) => (
-                  <button key={s.key} onClick={() => setInvestStyle(s.key)} className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40" : "text-slate-500 hover:text-slate-900"}`}>{s.label}</button>
+                  <button
+                    key={s.key}
+                    onClick={() => setInvestStyle(s.key)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key
+                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                      : "text-slate-500 hover:text-slate-900"
+                      }`}
+                  >
+                    {s.label}
+                  </button>
                 ))}
               </div>
             </div>
 
+            {/* 3. Waktu Mulai */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Tahun Mulai</label>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Waktu Mulai
+              </label>
               <div className="relative" onClick={(e) => e.stopPropagation()}>
-                <button onClick={() => setIsYearOpen(!isYearOpen)} className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 transition-all cursor-pointer">
-                  {startYear} <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
+                <button
+                  onClick={() => setIsYearOpen(!isYearOpen)}
+                  className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-indigo-500" />
+                    <span>{MONTHS[startMonth - 1]} {startYear}</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
                 </button>
+
                 {isYearOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50">
-                    {[2021, 2022, 2023, 2024, 2025].map(y => (
-                      <button key={y} onClick={() => { setStartYear(y); setIsYearOpen(false); }} className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${startYear === y ? "bg-indigo-50 text-indigo-600" : "text-slate-600 hover:bg-slate-50"}`}>{y}</button>
-                    ))}
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-2">
+                      <div className="flex items-center justify-between mb-2 bg-slate-50 p-1.5 rounded-xl">
+                        <button
+                          onClick={() => setStartYear(prev => Math.max(2021, prev - 1))}
+                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                          disabled={startYear <= 2021}
+                        >
+                          <ChevronLeft className="w-3.5 h-3.5 text-slate-600" />
+                        </button>
+                        <span className="text-xs font-bold text-slate-900">{startYear}</span>
+                        <button
+                          onClick={() => setStartYear(prev => Math.min(2026, prev + 1))}
+                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                          disabled={startYear >= 2026}
+                        >
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-1">
+                        {MONTHS.map((m, idx) => {
+                          const mIdx = idx + 1;
+                          const isSelected = startMonth === mIdx;
+                          return (
+                            <button
+                              key={m}
+                              onClick={() => {
+                                setStartMonth(mIdx);
+                                setIsYearOpen(false);
+                              }}
+                              className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                                }`}
+                            >
+                              {m.substring(0, 3)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
+            {/* 4. Strategi Dividen */}
             <div className="space-y-3">
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
                 Strategi Dividen
@@ -296,7 +374,16 @@ export default function ComparePage() {
               </label>
               <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
                 {[{ key: "compound", label: "Putar Kembali" }, { key: "passive", label: "Cairkan" }].map((s) => (
-                  <button key={s.key} onClick={() => setDivStrategy(s.key)} className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40" : "text-slate-500 hover:text-slate-900"}`}>{s.label}</button>
+                  <button
+                    key={s.key}
+                    onClick={() => setDivStrategy(s.key)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key
+                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                      : "text-slate-500 hover:text-slate-900"
+                      }`}
+                  >
+                    {s.label}
+                  </button>
                 ))}
               </div>
             </div>

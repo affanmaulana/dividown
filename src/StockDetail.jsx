@@ -7,7 +7,8 @@ import {
 } from "recharts";
 import {
   TrendingUp, Banknote, Clock, Wallet, BarChart3,
-  Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle
+  Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle,
+  Calendar, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
@@ -26,6 +27,11 @@ const fmt = (n) =>
   }).format(n);
 
 const pct = (n) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+
+const MONTHS = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
 
 // ── Custom Tooltip ─────────────────────────────────────────────────────────
 const CustomTooltip = ({ active, payload }) => {
@@ -87,6 +93,7 @@ export default function StockDetail() {
 
   // New simulation inputs
   const [startYear, setStartYear] = useState(2021);
+  const [startMonth, setStartMonth] = useState(1); // 1-12
   const [investStyle, setInvestStyle] = useState("lumpsum"); // "lumpsum" | "dca"
   const [amount, setAmount] = useState(10000000);
   const [divStrategy, setDivStrategy] = useState("compound"); // "compound" | "passive"
@@ -126,18 +133,32 @@ export default function StockDetail() {
   }, []);
 
   const filtered = useMemo(
-    () => data.filter((d) => d.Ticker === ticker && d.Year >= startYear).sort((a, b) => a.Year - b.Year),
-    [data, ticker, startYear]
+    () => data
+      .filter((d) => {
+        const dDate = new Date(d.Cum_Date);
+        const dYear = dDate.getFullYear();
+        const dMonth = dDate.getMonth() + 1;
+        const isAfterStart = dYear > startYear || (dYear === startYear && dMonth >= startMonth);
+        return d.Ticker === ticker && isAfterStart;
+      })
+      .sort((a, b) => new Date(a.Cum_Date) - new Date(b.Cum_Date)),
+    [data, ticker, startYear, startMonth]
   );
 
   const filteredPrices = useMemo(
     () => priceData
-      .filter((p) => p.Ticker === ticker)
+      .filter((p) => {
+        const pDate = new Date(p.Date);
+        const pYear = pDate.getFullYear();
+        const pMonth = pDate.getMonth() + 1;
+        const isAfterStart = pYear > startYear || (pYear === startYear && pMonth >= startMonth);
+        return p.Ticker === ticker && isAfterStart;
+      })
       .map((p) => ({
         ...p,
         displayDate: new Date(p.Date).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
       })),
-    [priceData, ticker]
+    [priceData, ticker, startYear, startMonth]
   );
 
   const latestPrice = useMemo(() => {
@@ -155,16 +176,23 @@ export default function StockDetail() {
     let totalInvested = 0;
     let leftover = 0;
 
-    // Get monthly prices for this ticker filtered by startYear
+    // Get monthly prices for this ticker filtered by start date
     const monthlyForTicker = priceData
-      .filter(p => p.Ticker === ticker && new Date(p.Date).getFullYear() >= startYear)
+      .filter(p => {
+        const pDate = new Date(p.Date);
+        const pYear = pDate.getFullYear();
+        const pMonth = pDate.getMonth() + 1;
+        const isAfterStart = pYear > startYear || (pYear === startYear && pMonth >= startMonth);
+        return p.Ticker === ticker && isAfterStart;
+      })
       .sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
     if (investStyle === "lumpsum") {
-      // Buy all shares at the first available cum price
-      const cumPrice0 = filtered[0].Cum_Price;
-      currentShares = Math.floor(amount / cumPrice0);
-      leftover = amount - currentShares * cumPrice0;
+      // Buy all shares at the first available monthly price (the start date price)
+      const startPrice = monthlyForTicker[0]?.Price || filtered[0]?.Cum_Price;
+      if (!startPrice) return null;
+      currentShares = Math.floor(amount / startPrice);
+      leftover = amount - currentShares * startPrice;
       totalInvested = amount;
     } else {
       // DCA: buy shares each month using monthly prices
@@ -203,7 +231,7 @@ export default function StockDetail() {
 
       let newStatus = "";
       if (hasRecoveredOnce) {
-        newStatus = isDroppedNow ? "DROP RECOVERED" : "RECOVERED";
+        newStatus = isDroppedNow ? "DROP AGAIN" : "RECOVERED";
       } else {
         newStatus = ageInDays > 365 ? "DIVIDEND TRAP" : "BERPROSES";
       }
@@ -263,7 +291,7 @@ export default function StockDetail() {
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
       totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield, isDivergent
     };
-  }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear]);
+  }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear, startMonth]);
 
   const health = useMemo(() => calculateHealthScore(filtered), [filtered]);
 
@@ -301,9 +329,24 @@ export default function StockDetail() {
                 <div className="flex items-center gap-4">
                   <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none">{ticker}</h1>
                   {health && (
-                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${health.badgeClass}`}>
-                      <health.Icon className="w-3.5 h-3.5" />
-                      {health.label}
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
+                        }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 cursor-pointer transition-all hover:scale-105 ${health.badgeClass}`}
+                      >
+                        <health.Icon className="w-3.5 h-3.5" />
+                        {health.label}
+                      </button>
+                      {activeMobileTooltip === 'health-info' && (
+                        <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl shadow-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                          <div className="absolute top-0 left-6 -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
+                          <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Status Reason</p>
+                          <p className="leading-relaxed">{health.reason}</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -311,9 +354,7 @@ export default function StockDetail() {
                   {STOCKS_INFO[ticker]?.name || ""}
                 </p>
               </div>
-              <p className="text-lg text-slate-500 max-w-2xl font-medium">
-                Historical performance & recovery simulation vs 4% p.a. deposit.
-              </p>
+
             </div>
           </div>
         </div>
@@ -370,38 +411,65 @@ export default function StockDetail() {
               </div>
             </div>
 
-            {/* 3. Tahun Mulai */}
+            {/* 3. Waktu Mulai */}
             <div className="space-y-3">
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Tahun Mulai
+                Waktu Mulai
               </label>
               <div className="relative" onClick={(e) => e.stopPropagation()}>
                 <button
                   onClick={() => setIsYearOpen(!isYearOpen)}
                   className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
                 >
-                  {startYear}
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-indigo-500" />
+                    <span>{MONTHS[startMonth - 1]} {startYear}</span>
+                  </div>
                   <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {isYearOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="py-1">
-                      {[2021, 2022, 2023, 2024, 2025].map(y => (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-2">
+                      <div className="flex items-center justify-between mb-2 bg-slate-50 p-1.5 rounded-xl">
                         <button
-                          key={y}
-                          onClick={() => {
-                            setStartYear(y);
-                            setIsYearOpen(false);
-                          }}
-                          className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${startYear === y
-                            ? "bg-indigo-50 text-indigo-600"
-                            : "text-slate-600 hover:bg-slate-50"
-                            }`}
+                          onClick={() => setStartYear(prev => Math.max(2021, prev - 1))}
+                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                          disabled={startYear <= 2021}
                         >
-                          {y}
+                          <ChevronLeft className="w-3.5 h-3.5 text-slate-600" />
                         </button>
-                      ))}
+                        <span className="text-xs font-bold text-slate-900">{startYear}</span>
+                        <button
+                          onClick={() => setStartYear(prev => Math.min(2026, prev + 1))}
+                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                          disabled={startYear >= 2026}
+                        >
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-1">
+                        {MONTHS.map((m, idx) => {
+                          const mIdx = idx + 1;
+                          const isSelected = startMonth === mIdx;
+                          return (
+                            <button
+                              key={m}
+                              onClick={() => {
+                                setStartMonth(mIdx);
+                                setIsYearOpen(false);
+                              }}
+                              className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                                }`}
+                            >
+                              {m.substring(0, 3)}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -643,36 +711,84 @@ export default function StockDetail() {
                           </td>
                           <td className="px-4 md:px-8 py-5 text-center">
                             {row.newStatus === "RECOVERED" && (
-                              <span 
-                                title={`Saham berhasil pulih ke level harga Cum Date dalam ${row.Recovery_Days} hari dan saat ini harganya masih terjaga.`}
-                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 cursor-help"
-                              >
-                                <CheckCircle2 className="w-3.5 h-3.5" /> RECOVERED
-                              </span>
+                              <div className="relative inline-block">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const key = `d-rec-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                    setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                                  }}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 cursor-pointer"
+                                >
+                                  <CheckCircle2 className="w-3.5 h-3.5" /> RECOVERED
+                                </button>
+                                {activeMobileTooltip === `d-rec-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                                  <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                    Saham berhasil pulih ke level harga Cum Date dalam {row.Recovery_Days} hari dan saat ini harganya masih terjaga.
+                                  </div>
+                                )}
+                              </div>
                             )}
-                            {row.newStatus === "DROP RECOVERED" && (
-                              <span
-                                title={`Saham ini sempat pulih dalam ${row.Recovery_Days} hari, namun tren harga saat ini melemah kembali ke Rp ${latestPrice.toLocaleString("id-ID")}, di bawah modal Cum Date tahun tersebut.`}
-                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 cursor-help"
-                              >
-                                <AlertTriangle className="w-3.5 h-3.5" /> DROP RECOVERED
-                              </span>
+                            {row.newStatus === "DROP AGAIN" && (
+                              <div className="relative inline-block">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const key = `d-drop-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                    setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                                  }}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 cursor-pointer"
+                                >
+                                  <AlertTriangle className="w-3.5 h-3.5" /> DROP AGAIN
+                                </button>
+                                {activeMobileTooltip === `d-drop-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                                  <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                    Saham ini sempat pulih dalam {row.Recovery_Days} hari, namun tren harga saat ini melemah kembali ke Rp {latestPrice.toLocaleString("id-ID")}, di bawah modal Cum Date tahun tersebut.
+                                  </div>
+                                )}
+                              </div>
                             )}
                             {row.newStatus === "DIVIDEND TRAP" && (
-                              <span 
-                                title="Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal."
-                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 cursor-help"
-                              >
-                                <XCircle className="w-3.5 h-3.5" /> DIVIDEND TRAP
-                              </span>
+                              <div className="relative inline-block">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const key = `d-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                    setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                                  }}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 cursor-pointer"
+                                >
+                                  <XCircle className="w-3.5 h-3.5" /> DIVIDEND TRAP
+                                </button>
+                                {activeMobileTooltip === `d-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                                  <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                    Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal.
+                                  </div>
+                                )}
+                              </div>
                             )}
                             {row.newStatus === "BERPROSES" && (
-                              <span 
-                                title="Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun."
-                                className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-slate-50 text-slate-500 border border-slate-100 cursor-help"
-                              >
-                                <Clock className="w-3.5 h-3.5" /> BERPROSES
-                              </span>
+                              <div className="relative inline-block">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const key = `d-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
+                                    setActiveMobileTooltip(activeMobileTooltip === key ? null : key);
+                                  }}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-full bg-slate-50 text-slate-500 border border-slate-100 cursor-pointer"
+                                >
+                                  <Clock className="w-3.5 h-3.5" /> BERPROSES
+                                </button>
+                                {activeMobileTooltip === `d-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
+                                  <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
+                                    Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun.
+                                  </div>
+                                )}
+                              </div>
                             )}
                           </td>
                         </tr>
@@ -695,7 +811,7 @@ export default function StockDetail() {
                         </div>
                         {row.newStatus === "RECOVERED" && (
                           <div className="relative">
-                            <button 
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 const key = `m-rec-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
@@ -713,9 +829,9 @@ export default function StockDetail() {
                             )}
                           </div>
                         )}
-                        {row.newStatus === "DROP RECOVERED" && (
+                        {row.newStatus === "DROP AGAIN" && (
                           <div className="relative">
-                            <button 
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 const key = `m-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
@@ -723,9 +839,9 @@ export default function StockDetail() {
                               }}
                               className="inline-flex items-center gap-1 text-[9px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 cursor-pointer"
                             >
-                              <AlertTriangle className="w-3 h-3" /> DROP RECOVERED
+                              <AlertTriangle className="w-3 h-3" /> DROP AGAIN
                             </button>
-                            
+
                             {activeMobileTooltip === `m-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
                               <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
                                 <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
@@ -736,7 +852,7 @@ export default function StockDetail() {
                         )}
                         {row.newStatus === "DIVIDEND TRAP" && (
                           <div className="relative">
-                            <button 
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 const key = `m-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}`;
@@ -756,7 +872,7 @@ export default function StockDetail() {
                         )}
                         {row.newStatus === "BERPROSES" && (
                           <div className="relative">
-                            <button 
+                            <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 const key = `m-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}`;

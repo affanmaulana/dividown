@@ -17,7 +17,7 @@ export default function LandingPage() {
   const searchRef = useRef(null);
   const sortRef = useRef(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  
+
   // Custom click outside for dropdowns
   useEffect(() => {
     function handleClickOutside(event) {
@@ -35,15 +35,20 @@ export default function LandingPage() {
   const SORT_OPTIONS = [
     { key: "ticker", label: "Abjad (Ticker)" },
     { key: "health", label: "Health Score" },
-    { key: "events", label: "Events Count" },
-    { key: "sector", label: "Sektor" }
+    { key: "yield", label: "Div. Yield" },
+    { key: "return", label: "Annual Return" }
   ];
 
+  const [priceData, setPriceData] = useState([]);
+
   useEffect(() => {
-    fetch("/data/dividend_recovery.json")
-      .then((r) => r.json())
-      .then((dDiv) => {
+    Promise.all([
+      fetch("/data/dividend_recovery.json").then((r) => r.json()),
+      fetch("/data/stock_prices.json").then((r) => r.json())
+    ])
+      .then(([dDiv, dPrice]) => {
         setData(dDiv);
+        setPriceData(dPrice);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -52,25 +57,51 @@ export default function LandingPage() {
   const stocks = useMemo(() => {
     if (!data.length) return [];
     const tickers = Object.keys(STOCKS_INFO);
-    
+
     let result = tickers.map(ticker => {
       const tickerData = data.filter(d => d.Ticker === ticker);
+      const tickerPrices = priceData.filter(p => p.Ticker === ticker);
       const health = calculateHealthScore(tickerData);
-      const dataInfo = tickerData.length > 0 ? tickerData[0] : null;
-      
+
+      // Calculate Avg Annual Dividend %
+      const years = [...new Set(tickerData.map(d => d.Year))];
+      const annualYields = years.map(y => {
+        const events = tickerData.filter(d => d.Year === y);
+        const totalDiv = events.reduce((s, e) => s + (e.Dividend || 0), 0);
+        const avgPrice = events.reduce((s, e) => s + (e.Cum_Price || 0), 0) / events.length;
+        return (totalDiv / (avgPrice || 1)) * 100;
+      });
+      const avgAnnualYield = annualYields.length > 0
+        ? annualYields.reduce((s, y) => s + y, 0) / annualYields.length
+        : 0;
+
+      // Calculate Average Annual Return (Simplified CAGR)
+      let annualReturn = 0;
+      if (tickerPrices.length > 0 && tickerData.length > 0) {
+        const startPrice = tickerPrices[0].Price;
+        const endPrice = tickerPrices[tickerPrices.length - 1].Price;
+        const totalDividends = tickerData.reduce((s, d) => s + (d.Dividend || 0), 0);
+
+        const totalReturn = ((endPrice + totalDividends - startPrice) / startPrice);
+        const numYears = (new Date(tickerPrices[tickerPrices.length - 1].Date) - new Date(tickerPrices[0].Date)) / (1000 * 60 * 60 * 24 * 365.25);
+
+        annualReturn = (totalReturn / Math.max(0.5, numYears)) * 100;
+      }
+
       return {
         ticker,
         name: STOCKS_INFO[ticker]?.name || ticker,
-        sector: STOCKS_INFO[ticker]?.sector || dataInfo?.Sector || "Other",
+        sector: STOCKS_INFO[ticker]?.sector || tickerData[0]?.Sector || "Other",
         health,
-        eventsCount: tickerData.length
+        avgAnnualYield,
+        annualReturn
       };
     });
 
     if (sectorFilter !== "Semua") {
       result = result.filter(s => s.sector === sectorFilter);
     }
-    
+
     if (search) {
       const q = search.toLowerCase();
       result = result.filter(s => s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q));
@@ -79,20 +110,19 @@ export default function LandingPage() {
     // SORTING LOGIC
     result.sort((a, b) => {
       let valA, valB;
-      
+
       switch (sortBy) {
         case "health":
-          // Score higher is better (Safe > Watch > Trap)
           valA = a.health?.score || 0;
           valB = b.health?.score || 0;
           break;
-        case "events":
-          valA = a.eventsCount;
-          valB = b.eventsCount;
+        case "yield":
+          valA = a.avgAnnualYield;
+          valB = b.avgAnnualYield;
           break;
-        case "sector":
-          valA = a.sector;
-          valB = b.sector;
+        case "return":
+          valA = a.annualReturn;
+          valB = b.annualReturn;
           break;
         default:
           valA = a.ticker;
@@ -103,7 +133,7 @@ export default function LandingPage() {
       if (valA > valB) return sortOrder === "asc" ? 1 : -1;
       return 0;
     });
-    
+
     return result;
   }, [data, search, sectorFilter, sortBy, sortOrder]);
 
@@ -128,7 +158,7 @@ export default function LandingPage() {
           Financial Portal
         </div>
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-          Invest With <span className="text-indigo-600">Confidence.</span>
+          Dividend, kok <span className="text-indigo-600">Down?</span>
         </h1>
         <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
           Discover hidden dividend traps, analyze recovery patterns, and protect your portfolio with data-driven insights.
@@ -139,8 +169,8 @@ export default function LandingPage() {
           {/* SEARCH BAR */}
           <div className="w-full max-w-2xl md:max-w-3xl relative" ref={searchRef}>
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Cari emiten dividen..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -148,7 +178,7 @@ export default function LandingPage() {
               className="w-full h-14 pl-14 pr-12 bg-white border border-slate-200 rounded-full text-slate-950 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all font-sans"
             />
             {search && (
-              <button 
+              <button
                 onClick={() => {
                   setSearch("");
                   setIsSearchFocused(false);
@@ -205,11 +235,10 @@ export default function LandingPage() {
               <button
                 key={s}
                 onClick={() => setSectorFilter(s)}
-                className={`px-6 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-300 ${
-                  sectorFilter === s 
-                    ? "bg-indigo-600 text-white border-indigo-600 shadow-none" 
-                    : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
-                }`}
+                className={`px-6 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-300 ${sectorFilter === s
+                  ? "bg-indigo-600 text-white border-indigo-600 shadow-none"
+                  : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                  }`}
               >
                 {s}
               </button>
@@ -225,7 +254,7 @@ export default function LandingPage() {
           <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">
             {stocks.length} Emiten Ditemukan
           </div>
-          
+
           <div className="flex items-center gap-3">
             {/* Custom Sort Dropdown */}
             <div className="relative" ref={sortRef} onClick={(e) => e.stopPropagation()}>
@@ -251,11 +280,10 @@ export default function LandingPage() {
                           setSortBy(opt.key);
                           setIsSortOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
-                          sortBy === opt.key 
-                            ? "bg-indigo-50 text-indigo-600" 
-                            : "text-slate-600 hover:bg-slate-50"
-                        }`}
+                        className={`w-full text-left px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer ${sortBy === opt.key
+                          ? "bg-indigo-50 text-indigo-600"
+                          : "text-slate-600 hover:bg-slate-50"
+                          }`}
                       >
                         {opt.label}
                       </button>
@@ -288,49 +316,54 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {stocks.map((stock) => {
             const HIcon = stock.health?.Icon || Shield;
+            const healthColor = stock.health?.badgeClass.split(' ').find(c => c.startsWith('text-')) || 'text-slate-500';
+
             return (
-              <Link 
-                to={`/stock/${stock.ticker.toLowerCase()}`} 
+              <Link
+                to={`/stock/${stock.ticker.toLowerCase()}`}
                 key={stock.ticker}
-                className="group bg-white border border-slate-200 rounded-2xl p-4 md:p-5 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-300 flex flex-col"
+                className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-500 flex flex-col"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold tracking-tight mb-1">{stock.ticker}</h3>
-                    <p className="text-sm text-slate-500 line-clamp-1">{stock.name}</p>
+                <div className="flex justify-between items-start mb-8">
+                  <div className="space-y-1.5">
+                    <h3 className="text-3xl font-bold tracking-tight text-slate-900">{stock.ticker}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] leading-none">
+                      {stock.sector}
+                    </p>
                   </div>
-                  {stock.health && (
-                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${stock.health.badgeClass}`}>
-                      <HIcon className="w-3.5 h-3.5" />
-                      {stock.health.label}
+                  <div className="text-right">
+                    {stock.health && (
+                      <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ring-1 ${stock.health.badgeClass}`}>
+                        <HIcon className="w-3.5 h-3.5" />
+                        {stock.health.label}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-auto grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Avg. Annual Return</span>
+                    <div className={`text-xl font-black tracking-tight ${stock.annualReturn >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                      {stock.annualReturn >= 0 ? '+' : ''}{stock.annualReturn.toFixed(1)}%
                     </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
-                    <BarChart3 className="w-3.5 h-3.5" /> {stock.sector}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">
-                    <Banknote className="w-3.5 h-3.5" /> {stock.eventsCount} Events
-                  </span>
-                </div>
-
-                <div className="mt-auto flex items-center text-sm font-semibold text-indigo-600 group-hover:text-indigo-700 transition-colors">
-                  Analyze Stock 
-                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                  <div className="flex flex-col gap-1.5 items-end">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Avg. Div Yield</span>
+                    <span className="text-xs font-bold text-slate-900">{stock.avgAnnualYield.toFixed(1)}%</span>
+                  </div>
                 </div>
               </Link>
             );
           })}
           {stocks.length === 0 && (
-             <div className="col-span-full py-12 text-center text-slate-500">
-               No stocks found matching your criteria.
-             </div>
+            <div className="col-span-full py-12 text-center text-slate-500">
+              No stocks found matching your criteria.
+            </div>
           )}
         </div>
       </section>
-      
+
       {/* FOOTER */}
       <footer className="border-t border-slate-100 py-12 text-center">
         <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>

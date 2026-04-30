@@ -18,7 +18,12 @@ export function calculateHealthScore(events) {
   }, 0) / events.length;
   if (avgDrop < 5) score += 30;
 
-  let label, tier, badgeClass, bgClass, textClass, Icon;
+  const hasLongRecovery = events.some(r => r.Recovery_Days > 365);
+  if (hasLongRecovery && score >= 80) {
+    score = 79; // Force to Watch if even one event took > 365 days
+  }
+
+  let label, tier, badgeClass, bgClass, textClass, Icon, reason;
   if (score >= 80) {
     label = "Safe";
     tier = "low";
@@ -26,6 +31,7 @@ export function calculateHealthScore(events) {
     bgClass = "bg-emerald-500";
     textClass = "text-emerald-700";
     Icon = Shield;
+    reason = "Emiten ini memiliki rekam jejak pemulihan harga yang sangat cepat dan konsisten di setiap pembagian dividen.";
   } else if (score >= 50) {
     label = "Watch";
     tier = "medium";
@@ -33,6 +39,9 @@ export function calculateHealthScore(events) {
     bgClass = "bg-amber-500";
     textClass = "text-amber-700";
     Icon = TriangleAlert;
+    reason = hasLongRecovery 
+      ? "Meskipun sering pulih, emiten ini pernah memakan waktu lebih dari 1 tahun untuk kembali ke harga Cum Date."
+      : "Riwayat pemulihan harga emiten ini kurang konsisten atau memiliki rata-rata waktu pemulihan yang cukup lama.";
   } else {
     label = "Trap";
     tier = "high";
@@ -40,7 +49,8 @@ export function calculateHealthScore(events) {
     bgClass = "bg-rose-500";
     textClass = "text-rose-700";
     Icon = OctagonAlert;
+    reason = "Hati-hati! Emiten ini memiliki riwayat 'Dividend Trap' di mana harga saham tidak pernah kembali ke level Cum Date.";
   }
 
-  return { score, label, tier, badgeClass, bgClass, textClass, Icon };
+  return { score, label, tier, badgeClass, bgClass, textClass, Icon, reason };
 }
