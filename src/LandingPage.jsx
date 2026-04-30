@@ -154,8 +154,13 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section className="py-24 px-4 md:px-6 text-center max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-8 ring-1 ring-indigo-500/10">
-          Financial Portal
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-[0.1em] ring-1 ring-indigo-500/10">
+            Dividend Trap
+          </div>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold uppercase tracking-[0.1em] ring-1 ring-rose-500/10">
+            Dividend Capital Loss
+          </div>
         </div>
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
           Dividend, kok <span className="text-indigo-600">Down?</span>
