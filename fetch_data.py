@@ -221,20 +221,31 @@ for i, ticker_str in enumerate(TICKERS, 1):
         print(f"  [CRITICAL ERROR] Failed to process {ticker_str}: {e}")
         continue
 
+def atomic_save_json(data, filename):
+    """Menyimpan data ke JSON dengan sistem Atomic Replace agar tidak korup saat proses tulis."""
+    temp_filename = filename + ".tmp"
+    try:
+        with open(temp_filename, "w") as f:
+            json.dump(data, f, indent=4)
+        # os.replace memindahkan temp ke target secara atomik (menimpa jika sudah ada)
+        os.replace(temp_filename, filename)
+    except Exception as e:
+        if os.path.exists(temp_filename):
+            os.remove(temp_filename)
+        raise e
+
 # ===== SIMPAN JSON =====
 # Safety check: Only write if at least 1 ticker was processed successfully
 unique_tickers = set([r['Ticker'] for r in all_rows])
 
 if len(all_rows) > 0:
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(all_rows, f, indent=4)
+    atomic_save_json(all_rows, OUTPUT_FILE)
     print(f"[SUCCESS] Wrote {len(all_rows)} dividend events to {OUTPUT_FILE}")
 else:
     print("[SKIPPED] No dividend data found. File NOT updated to protect existing data.")
 
 if len(monthly_rows) > 0:
-    with open(OUTPUT_PRICES_FILE, "w") as f:
-        json.dump(monthly_rows, f, indent=4)
+    atomic_save_json(monthly_rows, OUTPUT_PRICES_FILE)
     print(f"[SUCCESS] Wrote {len(monthly_rows)} price points to {OUTPUT_PRICES_FILE}")
 else:
     print("[SKIPPED] No price data found. File NOT updated to protect existing data.")
