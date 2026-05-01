@@ -166,7 +166,7 @@ export default function LandingPage() {
           Dividend, kok <span className="text-indigo-600">Down?</span>
         </h1>
         <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
-          Discover hidden dividend traps, analyze recovery patterns, and protect your portfolio with data-driven insights.
+          Temukan jebakan tersembunyi di balik dividen tinggi. Analisis pemulihan, hindari capital loss, dan jaga portofolio dengan data, bukan tebakan.
         </p>
 
         {/* DISCOVERY CONTROLS */}
