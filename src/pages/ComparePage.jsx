@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { 
-  Search, TrendingUp, Banknote, Clock, Wallet, 
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Search, TrendingUp, Banknote, Clock, Wallet,
   ChevronDown, ArrowLeft, Activity, Shield,
-  ChevronLeft, ChevronRight, Calendar
+  ChevronLeft, ChevronRight, Calendar, Share2, Check
 } from "lucide-react";
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, 
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer
 } from "recharts";
 import { STOCKS_INFO } from "../constants/stocks";
@@ -50,10 +50,20 @@ export default function ComparePage() {
   const [data, setData] = useState([]);
   const [priceData, setPriceData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Initial values from URL or defaults
+  const initialA = searchParams.get("a") || "BBRI";
+  const initialB = searchParams.get("b") || "BBCA";
+  const initialAmount = Number(searchParams.get("amount")) || 10000000;
+  const initialYear = Number(searchParams.get("start_year")) || 2021;
+  const initialMonth = Number(searchParams.get("start_month")) || 1;
+  const initialStyle = searchParams.get("style") || "lumpsum";
+  const initialStrategy = searchParams.get("strategy") || "compound";
 
   // Stock Selection
-  const [stockA, setStockA] = useState("BBRI");
-  const [stockB, setStockB] = useState("BBCA");
+  const [stockA, setStockA] = useState(initialA);
+  const [stockB, setStockB] = useState(initialB);
   const [searchA, setSearchA] = useState("");
   const [searchB, setSearchB] = useState("");
   const [isMenuAOpen, setIsMenuAOpen] = useState(false);
@@ -62,12 +72,33 @@ export default function ComparePage() {
   const menuBRef = useRef(null);
 
   // Common Controls
-  const [startYear, setStartYear] = useState(2021);
-  const [startMonth, setStartMonth] = useState(1);
-  const [investStyle, setInvestStyle] = useState("lumpsum");
-  const [amount, setAmount] = useState(10000000);
-  const [divStrategy, setDivStrategy] = useState("compound");
+  const [startYear, setStartYear] = useState(initialYear);
+  const [startMonth, setStartMonth] = useState(initialMonth);
+  const [investStyle, setInvestStyle] = useState(initialStyle);
+  const [amount, setAmount] = useState(initialAmount);
+  const [divStrategy, setDivStrategy] = useState(initialStrategy);
   const [isYearOpen, setIsYearOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set("a", stockA);
+    params.set("b", stockB);
+    params.set("amount", amount.toString());
+    params.set("start_year", startYear.toString());
+    params.set("start_month", startMonth.toString());
+    params.set("style", investStyle);
+    params.set("strategy", divStrategy);
+    
+    setSearchParams(params, { replace: true });
+  }, [stockA, stockB, amount, startYear, startMonth, investStyle, divStrategy, setSearchParams]);
 
   useEffect(() => {
     Promise.all([
@@ -113,7 +144,7 @@ export default function ComparePage() {
       const dMonth = new Date(d.Cum_Date).getMonth() + 1;
       return d.Ticker === ticker && (dYear > startYear || (dYear === startYear && dMonth >= startMonth));
     }).sort((a, b) => new Date(a.Cum_Date) - new Date(b.Cum_Date));
-    
+
     const tickerPrices = priceData.filter(p => p.Ticker === ticker);
     const latestPrice = tickerPrices.length ? tickerPrices[tickerPrices.length - 1].Price : 5000;
 
@@ -167,7 +198,7 @@ export default function ComparePage() {
 
     const portfolioValue = currentShares * latestPrice + (divStrategy === "passive" ? totalDiv : 0) + leftover;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
-    
+
     // Calculate actual historical yields
     const yields = tickerDivs.map(r => (r.Dividend || 0) / (r.Cum_Price || 1));
     const avgYield = yields.length > 0 ? (yields.reduce((s, y) => s + y, 0) / yields.length) * 100 : 0;
@@ -201,48 +232,59 @@ export default function ComparePage() {
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-3 md:space-y-4">
-        
+
         {/* ── HEADER ── */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6  mb-6 md:mb-8">
           <button onClick={() => navigate('/')} className="group inline-flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors cursor-pointer w-fit">
             <div className="p-1.5 rounded-full bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </div>
             Back to Discovery
           </button>
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Stock <span className="text-indigo-600">Comparison.</span></h1>
-              <p className="text-lg text-slate-500 max-w-2xl font-medium">
-                Head-to-head analysis of dividend growth & portfolio performance.
-              </p>
+
+          <div className="flex flex-row items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Stock <span className="text-indigo-600">Comparison.</span></h1>
             </div>
+
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all active:scale-95 group h-fit shrink-0"
+            >
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-emerald-500" />
+              ) : (
+                <Share2 className="w-3.5 h-3.5" />
+              )}
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                {copied ? "Copied!" : "Share Link"}
+              </span>
+            </button>
           </div>
         </div>
 
         {/* ── SELECTORS ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <StockSelector 
-            label="Stock A" 
-            ticker={stockA} 
-            isOpen={isMenuAOpen} 
-            setOpen={setIsMenuAOpen} 
-            search={searchA} 
-            setSearch={setSearchA} 
-            filtered={filteredA} 
+          <StockSelector
+            label="Stock A"
+            ticker={stockA}
+            isOpen={isMenuAOpen}
+            setOpen={setIsMenuAOpen}
+            search={searchA}
+            setSearch={setSearchA}
+            filtered={filteredA}
             onSelect={setStockA}
             menuRef={menuARef}
             colorClass="bg-indigo-600"
           />
-          <StockSelector 
-            label="Stock B" 
-            ticker={stockB} 
-            isOpen={isMenuBOpen} 
-            setOpen={setIsMenuBOpen} 
-            search={searchB} 
-            setSearch={setSearchB} 
-            filtered={filteredB} 
+          <StockSelector
+            label="Stock B"
+            ticker={stockB}
+            isOpen={isMenuBOpen}
+            setOpen={setIsMenuBOpen}
+            search={searchB}
+            setSearch={setSearchB}
+            filtered={filteredB}
             onSelect={setStockB}
             menuRef={menuBRef}
             colorClass="bg-slate-400"
@@ -257,7 +299,7 @@ export default function ComparePage() {
             </div>
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi Bersama</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 1. Nominal Rupiah */}
             <div className="space-y-3">
@@ -351,8 +393,8 @@ export default function ComparePage() {
                                 setIsYearOpen(false);
                               }}
                               className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
-                                  ? "bg-indigo-600 text-white"
-                                  : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                                ? "bg-indigo-600 text-white"
+                                : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                                 }`}
                             >
                               {m.substring(0, 3)}
@@ -424,7 +466,7 @@ export default function ComparePage() {
             </div>
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">Head-to-Head Stats</h2>
           </div>
-          
+
           {/* Desktop Header */}
           <div className="hidden sm:grid grid-cols-3 bg-slate-50/50 border-b border-slate-100">
             <div className="px-4 md:px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Metric</div>
@@ -437,7 +479,7 @@ export default function ComparePage() {
               {stockB}
             </div>
           </div>
-          
+
           <div className="divide-y divide-slate-100">
             <ComparisonRow icon={TrendingUp} label="Total Return" valA={pct(simA?.totalReturn || 0)} valB={pct(simB?.totalReturn || 0)} winner={simA?.totalReturn > simB?.totalReturn ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
             <ComparisonRow icon={Banknote} label="Avg Yield" valA={pct(simA?.avgYield || 0)} valB={pct(simB?.avgYield || 0)} winner={simA?.avgYield > simB?.avgYield ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
@@ -456,7 +498,7 @@ function StockSelector({ label, ticker, isOpen, setOpen, search, setSearch, filt
     <div className={`relative ${isOpen ? "z-[100]" : "z-10"}`} ref={menuRef} onClick={(e) => e.stopPropagation()}>
       <div className="space-y-3">
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">{label}</label>
-        <button 
+        <button
           onClick={() => setOpen(!isOpen)}
           className="w-full flex items-center justify-between bg-white border border-slate-200/60 rounded-2xl px-5 py-4 text-left hover:border-indigo-300 transition-all cursor-pointer"
         >
@@ -475,7 +517,7 @@ function StockSelector({ label, ticker, isOpen, setOpen, search, setSearch, filt
           <div className="p-3 border-b border-slate-50 bg-slate-50/50">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input 
+              <input
                 autoFocus
                 placeholder="Cari emiten..."
                 value={search}
@@ -519,7 +561,7 @@ function ComparisonRow({ icon: Icon, label, valA, valB, winner, tickerA, tickerB
         </div>
         <span className="text-sm font-bold text-slate-900 tracking-tight">{label}</span>
       </div>
-      
+
       {/* Values */}
       <div className="grid grid-cols-2 sm:contents">
         <div className={`px-4 md:px-8 py-2.5 sm:py-3 text-center transition-all ${winner === 'A' ? 'text-emerald-700 bg-emerald-100/60 font-black' : 'text-slate-500 font-bold'} border-r sm:border-0 border-slate-100/50`}>

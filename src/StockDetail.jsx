@@ -8,7 +8,7 @@ import {
 import {
   TrendingUp, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle,
-  Calendar, ChevronLeft, ChevronRight
+  Calendar, ChevronLeft, ChevronRight, Share2, Check
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
@@ -92,7 +92,7 @@ export default function StockDetail() {
   const ticker = urlTicker ? urlTicker.toUpperCase() : "BBRI";
 
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   // Initial values from URL or defaults
   const initialAmount = Number(searchParams.get("amount")) || 10000000;
   const initialYear = Number(searchParams.get("start_year")) || 2021;
@@ -110,6 +110,13 @@ export default function StockDetail() {
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   // Sync state to URL
   useEffect(() => {
@@ -119,7 +126,7 @@ export default function StockDetail() {
     params.set("start_month", startMonth.toString());
     params.set("style", investStyle);
     params.set("strategy", divStrategy);
-    
+
     setSearchParams(params, { replace: true });
   }, [amount, startYear, startMonth, investStyle, divStrategy, setSearchParams]);
 
@@ -198,8 +205,6 @@ export default function StockDetail() {
 
   // ── Calculation Engine (Lumpsum + DCA) ────────────────────────────────────
   const engine = useMemo(() => {
-    if (!filtered.length) return null;
-
     let currentShares = 0;
     let totalDiv = 0;
     let totalInvested = 0;
@@ -216,9 +221,11 @@ export default function StockDetail() {
       })
       .sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
+    if (monthlyForTicker.length === 0) return null;
+
     if (investStyle === "lumpsum") {
       // Buy all shares at the first available monthly price (the start date price)
-      const startPrice = monthlyForTicker[0]?.Price || filtered[0]?.Cum_Price;
+      const startPrice = monthlyForTicker[0]?.Price;
       if (!startPrice) return null;
       currentShares = Math.floor(amount / startPrice);
       leftover = amount - currentShares * startPrice;
@@ -228,9 +235,6 @@ export default function StockDetail() {
       const monthlyAmount = amount;
       let dcaLeftover = 0;
       for (const mp of monthlyForTicker) {
-        const mpYear = new Date(mp.Date).getFullYear();
-        // Only DCA up to the last dividend year in data
-        if (mpYear > filtered[filtered.length - 1].Year) break;
         const available = monthlyAmount + dcaLeftover;
         const newShares = Math.floor(available / mp.Price);
         dcaLeftover = available - newShares * mp.Price;
@@ -281,7 +285,7 @@ export default function StockDetail() {
       };
     });
 
-    const chartData = yearly.map((r, i) => ({
+    let chartData = yearly.map((r, i) => ({
       id: i,
       year: r.Year,
       dividendType: r.dividendType,
@@ -291,6 +295,24 @@ export default function StockDetail() {
       Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, i + 1)),
     }));
 
+    // FALLBACK: If no dividends happened, show start vs end price
+    if (chartData.length === 0) {
+      chartData = [
+        {
+          id: 0,
+          year: startYear,
+          Portfolio: totalInvested,
+          Deposito: totalInvested
+        },
+        {
+          id: 1,
+          year: new Date().getFullYear(),
+          Portfolio: Math.round(currentShares * latestPrice + leftover),
+          Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, (new Date().getFullYear() - startYear) || 1))
+        }
+      ];
+    }
+
     // Source of Truth: Derived from chartData to avoid visual discrepancy
     const lastPoint = chartData[chartData.length - 1];
     const portfolioValue = lastPoint ? lastPoint.Portfolio : 0;
@@ -298,9 +320,10 @@ export default function StockDetail() {
     const netProfit = portfolioValue - totalInvested;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
 
-    const avgRecovery = filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length;
+    const avgRecovery = filtered.length > 0 ? filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length : 0;
     const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
     const years = filtered.length;
+    const isCapitalGainOnly = filtered.length === 0;
 
     // Divergence Warning logic
     const portfolioTrend = chartData.length >= 2
@@ -316,9 +339,9 @@ export default function StockDetail() {
     const avgYield = (yields.reduce((s, y) => s + y, 0) / (yields.length || 1)) * 100;
 
     return {
-      shares: investStyle === "lumpsum" ? Math.floor(amount / filtered[0].Cum_Price) : currentShares,
+      shares: investStyle === "lumpsum" ? Math.floor(amount / (monthlyForTicker[0]?.Price || 1)) : currentShares,
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
-      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield, isDivergent
+      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield, isDivergent, isCapitalGainOnly
     };
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear, startMonth]);
 
@@ -341,7 +364,7 @@ export default function StockDetail() {
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-3 md:space-y-4">
 
         {/* ── HEADER ── */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 mb-6 md:mb-8">
           <button
             onClick={() => navigate('/')}
             className="group inline-flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors cursor-pointer w-fit"
@@ -352,19 +375,19 @@ export default function StockDetail() {
             Back to Discovery
           </button>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
+          <div className="flex flex-row items-start md:items-end justify-between gap-4">
+            <div className="space-y-2 min-w-0">
               <div className="flex flex-col">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none">{ticker}</h1>
+                <div className="flex items-center gap-3 md:gap-4 flex-wrap">
+                  <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none shrink-0">{ticker}</h1>
                   {health && (
-                    <div className="relative">
+                    <div className="relative shrink-0">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
                         }}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 cursor-pointer transition-all hover:scale-105 ${health.badgeClass}`}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold ring-1 cursor-pointer transition-all hover:scale-105 ${health.badgeClass}`}
                       >
                         <health.Icon className="w-3.5 h-3.5" />
                         {health.label}
@@ -379,12 +402,25 @@ export default function StockDetail() {
                     </div>
                   )}
                 </div>
-                <p className="text-xs md:text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest">
+                <p className="text-[10px] md:text-sm font-bold text-slate-400 mt-2 uppercase tracking-widest truncate">
                   {STOCKS_INFO[ticker]?.name || ""}
                 </p>
               </div>
-
             </div>
+
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all active:scale-95 group h-fit shrink-0 mt-1 md:mt-0"
+            >
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-emerald-500" />
+              ) : (
+                <Share2 className="w-3.5 h-3.5" />
+              )}
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                {copied ? "Copied!" : "Share Link"}
+              </span>
+            </button>
           </div>
         </div>
 
@@ -490,8 +526,8 @@ export default function StockDetail() {
                                 setIsYearOpen(false);
                               }}
                               className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
-                                  ? "bg-indigo-600 text-white"
-                                  : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                                ? "bg-indigo-600 text-white"
+                                : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                                 }`}
                             >
                               {m.substring(0, 3)}
@@ -529,6 +565,14 @@ export default function StockDetail() {
               </div>
             </div>
           </div>
+          {engine && engine.isCapitalGainOnly && (
+            <div className="mt-4 pt-4 border-t border-slate-100">
+              <p className="text-[10px] md:text-xs text-slate-400 font-medium italic flex items-center gap-1.5">
+                <AlertTriangle className="w-3 h-3" />
+                Simulasi saat ini hanya mencakup Capital Gain karena belum ada pembagian dividen di periode terpilih.
+              </p>
+            </div>
+          )}
         </section>
 
         {engine && engine.isDivergent && (
@@ -660,20 +704,20 @@ export default function StockDetail() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                        <XAxis
-                          dataKey="Date"
-                          tickFormatter={(val) => {
-                            const d = new Date(val);
-                            const m = MONTHS[d.getMonth()].substring(0, 3);
-                            const y = d.getFullYear().toString().slice(-2);
-                            return `${m} ${y}`;
-                          }}
-                          tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
-                          interval={isMobile ? 11 : 2}
-                          axisLine={false}
-                          tickLine={false}
-                          dy={10}
-                        />
+                      <XAxis
+                        dataKey="Date"
+                        tickFormatter={(val) => {
+                          const d = new Date(val);
+                          const m = MONTHS[d.getMonth()].substring(0, 3);
+                          const y = d.getFullYear().toString().slice(-2);
+                          return `${m} ${y}`;
+                        }}
+                        tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                        interval={isMobile ? 11 : 2}
+                        axisLine={false}
+                        tickLine={false}
+                        dy={10}
+                      />
                       <YAxis
                         domain={['auto', 'auto']}
                         tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
