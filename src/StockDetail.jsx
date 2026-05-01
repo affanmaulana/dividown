@@ -168,36 +168,7 @@ export default function StockDetail() {
       .catch(() => setLoading(false));
   }, []);
 
-  // ── SEO Dynamic Title & Meta ──────────────────────────────────────────────
-  useEffect(() => {
-    if (engine) {
-      const stockName = STOCKS_INFO[ticker]?.name || "";
-      // Update Title
-      document.title = `${ticker} - Dividend Trap Analysis & Total Return | Dividown`;
 
-      // Update Meta Description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement('meta');
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-
-      const returnText = engine.totalReturn !== undefined ? `Total return: ${pct(engine.totalReturn)}.` : "";
-      const healthText = health ? `Health Score: ${health.score}/100.` : "";
-      const recoveryText = engine.avgRecovery ? `Rata-rata recovery: ${Math.round(engine.avgRecovery)} hari.` : "";
-
-      metaDescription.content = `Analisis mendalam saham ${ticker} (${stockName}). ${healthText} ${recoveryText} ${returnText} Cek apakah ${ticker} layak investasi atau hanya jebakan dividen (Dividend Trap) di Dividown.`;
-    }
-
-    return () => {
-      document.title = "Dividown — Deteksi Dividend Trap & Hitung Total Return Saham IHSG";
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.content = "Validasi apakah saham dividenmu benar-benar untung atau justru jebakan harga (Trap). Analisis recovery harga 50 emiten unggulan.";
-      }
-    };
-  }, [ticker, engine, health]);
 
   const filtered = useMemo(
     () => data
@@ -377,6 +348,37 @@ export default function StockDetail() {
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear, startMonth]);
 
   const health = useMemo(() => calculateHealthScore(filtered), [filtered]);
+
+  // ── SEO Dynamic Title & Meta ──────────────────────────────────────────────
+  useEffect(() => {
+    if (engine) {
+      const stockName = STOCKS_INFO[ticker]?.name || "";
+      // Update Title
+      document.title = `${ticker} - Dividend Trap Analysis & Total Return | Dividown`;
+
+      // Update Meta Description
+      let metaDescription = document.querySelector('meta[name="description"]');
+      if (!metaDescription) {
+        metaDescription = document.createElement('meta');
+        metaDescription.name = "description";
+        document.head.appendChild(metaDescription);
+      }
+
+      const returnText = engine.totalReturn !== undefined ? `Total return: ${pct(engine.totalReturn)}.` : "";
+      const healthText = health ? `Health Score: ${health.score}/100.` : "";
+      const recoveryText = engine.avgRecovery ? `Rata-rata recovery: ${Math.round(engine.avgRecovery)} hari.` : "";
+
+      metaDescription.content = `Analisis mendalam saham ${ticker} (${stockName}). ${healthText} ${recoveryText} ${returnText} Cek apakah ${ticker} layak investasi atau hanya jebakan dividen (Dividend Trap) di Dividown.`;
+    }
+
+    return () => {
+      document.title = "Dividown — Deteksi Dividend Trap & Hitung Total Return Saham IHSG";
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.content = "Validasi apakah saham dividenmu benar-benar untung atau justru jebakan harga (Trap). Analisis recovery harga 50 emiten unggulan.";
+      }
+    };
+  }, [ticker, engine, health]);
 
   // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) {
