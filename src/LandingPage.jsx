@@ -13,6 +13,7 @@ export default function LandingPage() {
   const [sortBy, setSortBy] = useState("ticker"); // ticker, health, events, sector
   const [sortOrder, setSortOrder] = useState("asc"); // asc, desc
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [status, setStatus] = useState(null);
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const sortRef = useRef(null);
@@ -44,11 +45,13 @@ export default function LandingPage() {
   useEffect(() => {
     Promise.all([
       fetch("/data/dividend_recovery.json").then((r) => r.json()),
-      fetch("/data/stock_prices.json").then((r) => r.json())
+      fetch("/data/stock_prices.json").then((r) => r.json()),
+      fetch("/data/status.json").then((r) => r.ok ? r.json() : null).catch(() => null)
     ])
-      .then(([dDiv, dPrice]) => {
+      .then(([dDiv, dPrice, dStatus]) => {
         setData(dDiv);
         setPriceData(dPrice);
+        setStatus(dStatus);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -372,6 +375,11 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="border-t border-slate-100 py-12 text-center">
         <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
+        {status && (
+          <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
+            Data terakhir diperbarui: {status.last_updated}
+          </p>
+        )}
       </footer>
     </div>
   );

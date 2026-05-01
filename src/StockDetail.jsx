@@ -88,6 +88,7 @@ export default function StockDetail() {
   const [data, setData] = useState([]);
   const [priceData, setPriceData] = useState([]);
   const { ticker: urlTicker } = useParams();
+  const [status, setStatus] = useState(null);
   const navigate = useNavigate();
   const ticker = urlTicker ? urlTicker.toUpperCase() : "BBRI";
 
@@ -152,9 +153,10 @@ export default function StockDetail() {
   useEffect(() => {
     Promise.all([
       fetch("/data/dividend_recovery.json").then((r) => r.json()),
-      fetch("/data/stock_prices.json").then((r) => r.json())
+      fetch("/data/stock_prices.json").then((r) => r.json()),
+      fetch("/data/status.json").then((r) => r.ok ? r.json() : null).catch(() => null)
     ])
-      .then(([dDiv, dPrice]) => {
+      .then(([dDiv, dPrice, dStatus]) => {
         const enriched = dDiv.map((row) => {
           const date = new Date(row.Cum_Date);
           const month = date.getMonth() + 1;
@@ -163,6 +165,7 @@ export default function StockDetail() {
         });
         setData(enriched);
         setPriceData(dPrice);
+        setStatus(dStatus);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -1027,8 +1030,20 @@ export default function StockDetail() {
           </div>
         )}
 
-      </main>
-      <Analytics />
+        </main>
+        
+        <InterpretationGuide />
+        
+        <footer className="border-t border-slate-100 py-12 text-center">
+          <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
+          {status && (
+            <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
+              Data terakhir diperbarui: {status.last_updated}
+            </p>
+          )}
+        </footer>
+        
+        <Analytics />
     </div>
   );
 }
@@ -1070,5 +1085,82 @@ function LegendDot({ color, label }) {
       <span className={`w-2.5 h-2.5 rounded-full ${color} shadow-sm`} />
       <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">{label}</span>
     </div>
+  );
+}
+
+function InterpretationGuide() {
+  return (
+    <section className="max-w-6xl mx-auto px-4 md:px-6 pb-12 pt-8 border-t border-slate-200/60">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="space-y-3">
+          <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Metrik Utama</h4>
+          <div className="space-y-4">
+            <div>
+              <p className="text-[11px] font-bold text-slate-500 mb-1">Total Return</p>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Gabungan Capital Gain (kenaikan harga) dan Dividen Bersih. Strategi "Cairkan" memotong pajak 10% sesuai regulasi Indonesia, sedangkan "Putar Kembali" menginvestasikan dividen kotor untuk efek bunga majemuk.
+              </p>
+            </div>
+            <div>
+              <p className="text-[11px] font-bold text-slate-500 mb-1">Divergence Warning</p>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Muncul jika Portfolio tumbuh positif tapi harga saham dasar turun. Ini menandakan keuntungan Anda hanya berasal dari akumulasi dividen, bukan pertumbuhan aset dasar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Tabel Histori</h4>
+          <div className="space-y-4">
+            <div>
+              <p className="text-[11px] font-bold text-slate-500 mb-1">Drop % (Ex-Date)</p>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Penurunan harga dari Cum Date ke penutupan hari bursa berikutnya (Ex-Date + 1). Angka merah menandakan penurunan tajam yang sering memicu psikologi "Dividend Trap".
+              </p>
+            </div>
+            <div>
+              <p className="text-[11px] font-bold text-slate-500 mb-1">Recovery Duration</p>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Jumlah hari kalender hingga harga penutupan kembali menyentuh modal Anda (Cum Price). Label <span className="font-bold">"XXd++"</span> berarti harga belum pernah kembali sejak tanggal tersebut.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Status Indikator</h4>
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1 shrink-0"></span>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                <span className="font-bold text-slate-500">RECOVERED:</span> Harga sudah pernah menyentuh modal dan saat ini masih di atas 95% modal awal.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1 shrink-0"></span>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                <span className="font-bold text-slate-500">DROP AGAIN:</span> Harga pernah pulih, namun saat ini turun kembali di bawah 95% modal awal Anda.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1 shrink-0"></span>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                <span className="font-bold text-slate-500">DIVIDEND TRAP:</span> Harga belum pulih setelah lebih dari 365 hari sejak pembagian dividen.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3 p-5 bg-slate-100/50 rounded-2xl border border-slate-200/40">
+          <h4 className="text-[10px] font-bold text-rose-600 uppercase tracking-widest">Disclaimer Hukum</h4>
+          <p className="text-[9px] text-slate-400 leading-relaxed italic">
+            Simulasi ini menggunakan data historis Yahoo Finance yang mungkin memiliki delay. Performa masa lalu bukan jaminan hasil masa depan. Dividown adalah alat bantu edukasi, bukan penasihat investasi berlisensi. Semua keputusan investasi dan risiko kerugian sepenuhnya merupakan tanggung jawab pribadi pengguna.
+          </p>
+        </div>
+      </div>
+      
+
+    </section>
   );
 }

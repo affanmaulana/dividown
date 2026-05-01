@@ -254,4 +254,14 @@ print(f"\n" + "="*50)
 print(f"[SUMMARY] Total unique tickers processed: {len(unique_tickers)}")
 print(f"[SUMMARY] Total dividend events: {len(all_rows)}")
 print(f"[SUMMARY] Total monthly price points: {len(monthly_rows)}")
+
+# Save status
+STATUS_FILE = "public/data/status.json"
+status_data = {
+    "last_updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    "total_tickers": len(unique_tickers),
+    "total_events": len(all_rows)
+}
+atomic_save_json(status_data, STATUS_FILE)
+print(f"[SUCCESS] Status updated at {status_data['last_updated']}")
 print("="*50)
