@@ -8,7 +8,7 @@ import {
 import {
   TrendingUp, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle,
-  Calendar, ChevronLeft, ChevronRight, Share2, Check
+  Calendar, ChevronLeft, ChevronRight, Share2, Check, ArrowUp
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
@@ -112,6 +112,17 @@ export default function StockDetail() {
   const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [copied, setCopied] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -271,7 +282,7 @@ export default function StockDetail() {
       if (hasRecoveredOnce) {
         newStatus = isDroppedNow ? "DROP AGAIN" : "RECOVERED";
       } else {
-        newStatus = ageInDays > 365 ? "DIVIDEND TRAP" : "BERPROSES";
+        newStatus = ageInDays > 60 ? "DIVIDEND TRAP" : "BERPROSES";
       }
 
       const recoveryDisplay = hasRecoveredOnce
@@ -879,7 +890,7 @@ export default function StockDetail() {
                                 {activeMobileTooltip === `d-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
                                   <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
                                     <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
-                                    Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal.
+                                    Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 60 hari (2 bulan). Dividen ini menjadi jebakan modal.
                                   </div>
                                 )}
                               </div>
@@ -899,7 +910,7 @@ export default function StockDetail() {
                                 {activeMobileTooltip === `d-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
                                   <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
                                     <div className="absolute bottom-0 right-6 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
-                                    Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun.
+                                    Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 60 hari.
                                   </div>
                                 )}
                               </div>
@@ -979,7 +990,7 @@ export default function StockDetail() {
                             {activeMobileTooltip === `m-trap-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
                               <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
                                 <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
-                                {`Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 1 tahun. Dividen ini menjadi jebakan modal.`}
+                                {`Harga saham tidak pernah kembali ke level Cum Date setelah lebih dari 60 hari (2 bulan). Dividen ini menjadi jebakan modal.`}
                               </div>
                             )}
                           </div>
@@ -999,7 +1010,7 @@ export default function StockDetail() {
                             {activeMobileTooltip === `m-proc-${row.Ticker}-${row.Year}-${row.Cum_Date}` && (
                               <div className="absolute bottom-full right-0 mb-2 w-64 bg-slate-900 text-white text-[10px] p-3 rounded-xl shadow-xl z-[100] animate-in fade-in zoom-in-95 duration-200">
                                 <div className="absolute bottom-0 right-4 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900" />
-                                {`Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 1 tahun.`}
+                                {`Saham belum pulih ke level Cum Date, namun durasi saat ini masih di bawah 60 hari.`}
                               </div>
                             )}
                           </div>
@@ -1042,6 +1053,15 @@ export default function StockDetail() {
             </p>
           )}
         </footer>
+
+        {/* Scroll to Top - Subtle White */}
+        <button
+          onClick={scrollToTop}
+          className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white shadow-lg border border-slate-100 text-slate-400 hover:text-indigo-600 transition-all duration-300 transform md:hidden ${showScrollTop ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
         
         <Analytics />
     </div>
@@ -1146,7 +1166,7 @@ function InterpretationGuide() {
             <div className="flex gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1 shrink-0"></span>
               <p className="text-[10px] text-slate-400 leading-relaxed">
-                <span className="font-bold text-slate-500">DIVIDEND TRAP:</span> Harga belum pulih setelah lebih dari 365 hari sejak pembagian dividen.
+                <span className="font-bold text-slate-500">DIVIDEND TRAP:</span> Harga belum pulih setelah lebih dari 60 hari (2 bulan) sejak pembagian dividen.
               </p>
             </div>
           </div>

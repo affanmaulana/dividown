@@ -190,7 +190,7 @@ for i, ticker_str in enumerate(TICKERS, 1):
                     status = "Pulih"
                 else:
                     days_since_ex = (today - ex_date_naive).days
-                    if days_since_ex < 365:
+                    if days_since_ex < 60:
                         status = "Berproses"
                     else:
                         status = "Trap"

@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Search, TrendingUp, Banknote, Clock, Wallet,
   ChevronDown, ArrowLeft, Activity, Shield,
-  ChevronLeft, ChevronRight, Calendar, Share2, Check
+  ChevronLeft, ChevronRight, Calendar, Share2, Check, ArrowUp
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
@@ -51,6 +51,8 @@ export default function ComparePage() {
   const [priceData, setPriceData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [status, setStatus] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   
   // Initial values from URL or defaults
   const initialA = searchParams.get("a") || "BBRI";
@@ -103,15 +105,27 @@ export default function ComparePage() {
   useEffect(() => {
     Promise.all([
       fetch("/data/dividend_recovery.json").then((r) => r.json()),
-      fetch("/data/stock_prices.json").then((r) => r.json())
+      fetch("/data/stock_prices.json").then((r) => r.json()),
+      fetch("/data/status.json").then((r) => r.ok ? r.json() : null).catch(() => null)
     ])
-      .then(([dDiv, dPrice]) => {
+      .then(([dDiv, dPrice, dStatus]) => {
         setData(dDiv);
         setPriceData(dPrice);
+        setStatus(dStatus);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -487,8 +501,25 @@ export default function ComparePage() {
             <ComparisonRow icon={Wallet} label="Final Portfolio" valA={fmt(simA?.portfolioValue || 0)} valB={fmt(simB?.portfolioValue || 0)} winner={simA?.portfolioValue > simB?.portfolioValue ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
           </div>
         </section>
-
       </main>
+
+      <footer className="border-t border-slate-100 py-12 text-center">
+        <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
+        {status && (
+          <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
+            Data terakhir diperbarui: {status.last_updated}
+          </p>
+        )}
+      </footer>
+
+      {/* Scroll to Top - Subtle White */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white shadow-lg border border-slate-100 text-slate-400 hover:text-indigo-600 transition-all duration-300 transform md:hidden ${showScrollTop ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp className="w-5 h-5" />
+      </button>
     </div>
   );
 }
