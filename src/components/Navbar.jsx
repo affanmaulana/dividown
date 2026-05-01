@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { TrendingDown, Search, Shield, X, GitCompare } from "lucide-react";
+import { Search, Shield, X, GitCompare } from "lucide-react";
 import { calculateHealthScore } from "../utils/healthScore";
 
 import { STOCKS_INFO } from "../constants/stocks";
@@ -67,9 +67,7 @@ export default function Navbar() {
         {/* LEFT: LOGO */}
         {!mobileSearchActive && (
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20">
-              <TrendingDown className="w-4 h-4 text-white" />
-            </div>
+            <img src="/favicon.svg" alt="Dividown Logo" className="w-9 h-9" />
             <span className="text-xl font-bold tracking-tight text-slate-950 font-sans">Dividown</span>
           </Link>
         )}
