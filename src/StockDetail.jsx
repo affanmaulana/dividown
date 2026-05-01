@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
@@ -91,15 +91,44 @@ export default function StockDetail() {
   const navigate = useNavigate();
   const ticker = urlTicker ? urlTicker.toUpperCase() : "BBRI";
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Initial values from URL or defaults
+  const initialAmount = Number(searchParams.get("amount")) || 10000000;
+  const initialYear = Number(searchParams.get("start_year")) || 2021;
+  const initialMonth = Number(searchParams.get("start_month")) || 1;
+  const initialStyle = searchParams.get("style") || "lumpsum";
+  const initialStrategy = searchParams.get("strategy") || "compound";
+
   // New simulation inputs
-  const [startYear, setStartYear] = useState(2021);
-  const [startMonth, setStartMonth] = useState(1); // 1-12
-  const [investStyle, setInvestStyle] = useState("lumpsum"); // "lumpsum" | "dca"
-  const [amount, setAmount] = useState(10000000);
-  const [divStrategy, setDivStrategy] = useState("compound"); // "compound" | "passive"
+  const [startYear, setStartYear] = useState(initialYear);
+  const [startMonth, setStartMonth] = useState(initialMonth);
+  const [investStyle, setInvestStyle] = useState(initialStyle);
+  const [amount, setAmount] = useState(initialAmount);
+  const [divStrategy, setDivStrategy] = useState(initialStrategy);
   const [loading, setLoading] = useState(true);
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Sync state to URL
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set("amount", amount.toString());
+    params.set("start_year", startYear.toString());
+    params.set("start_month", startMonth.toString());
+    params.set("style", investStyle);
+    params.set("strategy", divStrategy);
+    
+    setSearchParams(params, { replace: true });
+  }, [amount, startYear, startMonth, investStyle, divStrategy, setSearchParams]);
+
+  // Responsive listener
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Custom click outside for dropdowns & mobile tooltips
   useEffect(() => {
@@ -631,15 +660,20 @@ export default function StockDetail() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis
-                        dataKey="Date"
-                        tickFormatter={(val) => new Date(val).getFullYear()}
-                        tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
-                        axisLine={false}
-                        tickLine={false}
-                        minTickGap={40}
-                        dy={10}
-                      />
+                        <XAxis
+                          dataKey="Date"
+                          tickFormatter={(val) => {
+                            const d = new Date(val);
+                            const m = MONTHS[d.getMonth()].substring(0, 3);
+                            const y = d.getFullYear().toString().slice(-2);
+                            return `${m} ${y}`;
+                          }}
+                          tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                          interval={isMobile ? 11 : 2}
+                          axisLine={false}
+                          tickLine={false}
+                          dy={10}
+                        />
                       <YAxis
                         domain={['auto', 'auto']}
                         tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
