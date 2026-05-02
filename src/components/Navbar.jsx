@@ -12,6 +12,7 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [mobileSearchActive, setMobileSearchActive] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -32,6 +33,22 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (location.pathname === "/") {
+        setIsScrolled(window.scrollY > 450);
+      } else {
+        setIsScrolled(true);
+      }
+    };
+    
+    // Initial check
+    handleScroll();
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [location.pathname]);
 
   useEffect(() => {
     setIsFocused(false);
@@ -72,27 +89,14 @@ export default function Navbar() {
           </Link>
         )}
 
-        {/* RIGHT: COMPARE + SEARCH */}
+        {/* RIGHT: SEARCH + COMPARE */}
         <div className={`flex items-center gap-4 md:gap-4 ${mobileSearchActive ? "w-full" : "ml-auto"}`}>
-          {!mobileSearchActive && (
-            <Link
-              to="/compare"
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${location.pathname === "/compare"
-                ? "bg-indigo-600 text-white"
-                : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
-                }`}
-            >
-              <GitCompare className={`w-3.5 h-3.5 ${location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
-                }`} />
-              Compare Stocks
-            </Link>
-          )}
-
           {/* SEARCH BOX */}
           <div
             ref={containerRef}
-            className={`relative flex items-center transition-all duration-300 ${mobileSearchActive ? "w-full" : "w-auto md:w-[320px]"
-              }`}
+            className={`relative flex items-center transition-all duration-500 ${
+              mobileSearchActive ? "w-full" : "w-auto md:w-[320px]"
+            } ${!isScrolled && location.pathname === "/" ? "opacity-0 pointer-events-none translate-y-[-10px]" : "opacity-100 translate-y-0"}`}
           >
             {/* MOBILE TRIGGER */}
             {!mobileSearchActive && (
@@ -172,6 +176,20 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {!mobileSearchActive && (
+            <Link
+              to="/compare"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${location.pathname === "/compare"
+                ? "bg-indigo-600 text-white"
+                : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
+                }`}
+            >
+              <GitCompare className={`w-3.5 h-3.5 ${location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
+                }`} />
+              Compare Stocks
+            </Link>
+          )}
         </div>
       </div>
     </nav>

@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link, useLocation } from "react-router-dom";
 import {
   Search, TrendingUp, Banknote, Clock, Wallet,
   ChevronDown, ArrowLeft, Activity, Shield,
-  ChevronLeft, ChevronRight, Calendar, Share2, Check, ArrowUp
+  ChevronLeft, ChevronRight, Calendar, Share2, Check, ArrowUp,
+  Maximize2, Minimize2, Crown
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
@@ -11,6 +12,7 @@ import {
 } from "recharts";
 import { STOCKS_INFO } from "../constants/stocks";
 import { calculateHealthScore } from "../utils/healthScore";
+import Skeleton from "../components/Skeleton";
 
 const DEPOSIT_RATE = 0.04;
 const MONTHS = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -81,6 +83,9 @@ export default function ComparePage() {
   const [divStrategy, setDivStrategy] = useState(initialStrategy);
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(window.innerWidth < 768);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -128,6 +133,16 @@ export default function ComparePage() {
   };
 
   useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setIsPanelCollapsed(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     const handleClick = (e) => {
       if (menuARef.current && !menuARef.current.contains(e.target)) setIsMenuAOpen(false);
       if (menuBRef.current && !menuBRef.current.contains(e.target)) setIsMenuBOpen(false);
@@ -136,6 +151,21 @@ export default function ComparePage() {
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);
   }, []);
+
+  // Fullscreen Chart: Body Scroll Lock & ESC shortcut
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = 'hidden';
+      const handleEsc = (e) => {
+        if (e.key === 'Escape') setIsFullscreen(false);
+      };
+      window.addEventListener('keydown', handleEsc);
+      return () => {
+        document.body.style.overflow = 'unset';
+        window.removeEventListener('keydown', handleEsc);
+      };
+    }
+  }, [isFullscreen]);
 
   const availableStocks = useMemo(() => {
     return Object.keys(STOCKS_INFO).map(ticker => {
@@ -235,11 +265,24 @@ export default function ComparePage() {
   }, [simA, simB, stockA, stockB]);
 
   if (loading) return (
-    <div className="flex items-center justify-center py-24">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-slate-400 tracking-wide font-sans font-medium">Menganalisis duel emiten…</p>
-      </div>
+    <div className="font-sans bg-slate-50 min-h-screen">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-8">
+        <div className="space-y-6">
+          <Skeleton className="w-32 h-6 rounded-full" />
+          <div className="flex justify-between items-center">
+            <Skeleton className="w-64 h-12" />
+            <Skeleton className="w-32 h-10 rounded-xl" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Skeleton className="h-24 rounded-2xl" />
+          <Skeleton className="h-24 rounded-2xl" />
+        </div>
+
+        <Skeleton className="w-full h-48 rounded-2xl" />
+        <Skeleton className="w-full h-[400px] rounded-3xl" />
+      </main>
     </div>
   );
 
@@ -306,15 +349,32 @@ export default function ComparePage() {
         </div>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
-        <section className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-              <Activity className="w-4 h-4 text-indigo-600" />
+        <section className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
+          <button
+            onClick={() => isMobile && setIsPanelCollapsed(!isPanelCollapsed)}
+            className={`w-full flex items-center justify-between p-4 md:p-6 text-left transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi Bersama</h2>
+                {isMobile && isPanelCollapsed && (
+                  <p className="text-[10px] font-bold text-indigo-600 mt-0.5">
+                    {fmt(amount)} • {investStyle === 'lumpsum' ? 'Sekali Beli' : 'Nabung Rutin'} • {divStrategy === 'compound' ? 'Putar Dividen' : 'Cairkan'}
+                  </p>
+                )}
+              </div>
             </div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi Bersama</h2>
-          </div>
+            {isMobile && (
+              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isPanelCollapsed ? "" : "rotate-180"}`} />
+            )}
+          </button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isPanelCollapsed ? "max-h-0 opacity-0" : "max-h-[1000px] opacity-100 border-t border-slate-100"}`}>
+            <div className="p-4 md:p-6 pt-0 md:pt-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             {/* 1. Nominal Rupiah */}
             <div className="space-y-3">
               <label htmlFor="amount-input" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
@@ -444,7 +504,9 @@ export default function ComparePage() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
 
         {/* ── CHART ── */}
         <div className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-6">
@@ -453,9 +515,18 @@ export default function ComparePage() {
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">Growth Duel</h2>
               <p className="text-sm font-medium text-slate-500">Portfolio growth comparison</p>
             </div>
-            <div className="flex items-center gap-6 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
-              <LegendDot color="bg-indigo-600" label={stockA} />
-              <LegendDot color="bg-slate-400" label={stockB} />
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              <div className="flex items-center gap-4 md:gap-6 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                <LegendDot color="bg-indigo-600" label={stockA} />
+                <LegendDot color="bg-slate-400" label={stockB} />
+              </div>
+              <button
+                onClick={() => setIsFullscreen(true)}
+                className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                title="Maximize Chart"
+              >
+                <Maximize2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
           <div className="h-[360px] w-full">
@@ -503,14 +574,48 @@ export default function ComparePage() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-100 py-12 text-center">
+      {/* ── FULLSCREEN CHART OVERLAY ── */}
+      {isFullscreen && (
+        <div className="fixed inset-0 z-[200] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
+          <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
+            <div>
+              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Growth Duel: {stockA} vs {stockB}</h2>
+              <p className="text-sm font-medium text-slate-500">Perbandingan pertumbuhan nilai portfolio total</p>
+            </div>
+            <button
+              onClick={() => setIsFullscreen(false)}
+              className="p-3 rounded-full bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer"
+            >
+              <Minimize2 className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="flex-1 p-2 md:p-8">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <XAxis dataKey="id" tickFormatter={(id) => chartData[id]?.year} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+                <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="ValA" name={stockA} stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="ValB" name={stockB} stroke="#94a3b8" strokeWidth={3} dot={{ r: 6, fill: "#94a3b8", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center gap-8">
+            <LegendDot color="bg-indigo-600" label={`${stockA} Growth`} />
+            <LegendDot color="bg-slate-400" label={`${stockB} Growth`} />
+          </div>
+        </div>
+      )}
+
+      <div className="mt-12 text-center pb-12">
         <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
         {status && (
           <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
             Data terakhir diperbarui: {status.last_updated}
           </p>
         )}
-      </footer>
+      </div>
 
       {/* Scroll to Top - Subtle White */}
       <button
@@ -595,13 +700,19 @@ function ComparisonRow({ icon: Icon, label, valA, valB, winner, tickerA, tickerB
 
       {/* Values */}
       <div className="grid grid-cols-2 sm:contents">
-        <div className={`px-4 md:px-8 py-2.5 sm:py-3 text-center transition-all ${winner === 'A' ? 'text-emerald-700 bg-emerald-100/60 font-black' : 'text-slate-500 font-bold'} border-r sm:border-0 border-slate-100/50`}>
-          <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-center">{tickerA}</div>
-          <div className="text-base sm:text-sm tracking-tight text-center">{valA}</div>
+        <div className={`relative px-4 md:px-8 py-3.5 sm:py-4 text-center transition-all duration-500 ${winner === 'A' ? 'text-emerald-700 bg-emerald-50/80 font-black ring-1 ring-emerald-100/50 z-10' : 'text-slate-500 font-bold'} border-r sm:border-0 border-slate-100/50`}>
+          <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 text-center">{tickerA}</div>
+          <div className="flex flex-col items-center justify-center gap-1.5">
+            <span className="text-base sm:text-sm tracking-tight">{valA}</span>
+            {winner === 'A' && <Crown className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />}
+          </div>
         </div>
-        <div className={`px-4 md:px-8 py-2.5 sm:py-3 text-center transition-all ${winner === 'B' ? 'text-emerald-700 bg-emerald-100/60 font-black' : 'text-slate-500 font-bold'}`}>
-          <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-center">{tickerB}</div>
-          <div className="text-base sm:text-sm tracking-tight text-center">{valB}</div>
+        <div className={`relative px-4 md:px-8 py-3.5 sm:py-4 text-center transition-all duration-500 ${winner === 'B' ? 'text-emerald-700 bg-emerald-50/80 font-black ring-1 ring-emerald-100/50 z-10' : 'text-slate-500 font-bold'}`}>
+          <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 text-center">{tickerB}</div>
+          <div className="flex flex-col items-center justify-center gap-1.5">
+            <span className="text-base sm:text-sm tracking-tight">{valB}</span>
+            {winner === 'B' && <Crown className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />}
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X } from "lucide-react";
 import { calculateHealthScore } from "./utils/healthScore";
+import Skeleton from "./components/Skeleton";
 
 import { STOCKS_INFO, SECTORS } from "./constants/stocks";
 
@@ -142,11 +143,46 @@ export default function LandingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-400 tracking-wide">Memuat portal…</p>
-        </div>
+      <div className="min-h-screen bg-white">
+        <section className="py-24 px-4 md:px-6 text-center max-w-4xl mx-auto">
+          <div className="flex justify-center gap-3 mb-10">
+            <Skeleton className="w-24 h-7 rounded-full" />
+            <Skeleton className="w-24 h-7 rounded-full" />
+          </div>
+          <Skeleton className="w-3/4 h-16 md:h-24 mx-auto mb-6" />
+          <Skeleton className="w-1/2 h-6 mx-auto mb-12" />
+          <div className="flex flex-col items-center gap-6">
+            <Skeleton className="w-full max-w-2xl h-14 rounded-full" />
+            <div className="flex flex-wrap justify-center gap-2">
+              {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="w-20 h-9 rounded-full" />)}
+            </div>
+          </div>
+        </section>
+        <section className="px-4 md:px-6 pb-24 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="bg-white border border-slate-100 rounded-2xl p-6 space-y-8">
+                <div className="flex justify-between">
+                  <div className="space-y-2">
+                    <Skeleton className="w-24 h-10" />
+                    <Skeleton className="w-16 h-3" />
+                  </div>
+                  <Skeleton className="w-20 h-6 rounded-full" />
+                </div>
+                <div className="pt-6 border-t border-slate-50 flex justify-between">
+                  <div className="space-y-2">
+                    <Skeleton className="w-20 h-3" />
+                    <Skeleton className="w-16 h-6" />
+                  </div>
+                  <div className="space-y-2 items-end flex flex-col">
+                    <Skeleton className="w-16 h-3" />
+                    <Skeleton className="w-12 h-4" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     );
   }
@@ -332,7 +368,7 @@ export default function LandingPage() {
                 key={stock.ticker}
                 className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-500 flex flex-col"
               >
-                <div className="flex justify-between items-start mb-8">
+                <div className="flex justify-between items-start mb-4">
                   <div className="space-y-1.5">
                     <h3 className="text-3xl font-bold tracking-tight text-slate-900">{stock.ticker}</h3>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] leading-none">
@@ -349,7 +385,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+                <div className="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
                   <div className="flex flex-col gap-1">
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Avg. Annual Return</span>
                     <div className={`text-xl font-black tracking-tight ${stock.annualReturn >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>

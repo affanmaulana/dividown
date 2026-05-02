@@ -8,10 +8,12 @@ import {
 import {
   TrendingUp, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle,
-  Calendar, ChevronLeft, ChevronRight, Share2, Check, ArrowUp
+  Calendar, ChevronLeft, ChevronRight, Share2, Check, ArrowUp,
+  Maximize2, Minimize2, Crown
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "./utils/healthScore";
+import Skeleton from "./components/Skeleton";
 import { STOCKS_INFO } from "./constants/stocks";
 
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -111,8 +113,10 @@ export default function StockDetail() {
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [copied, setCopied] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(isMobile);
+  const [fullscreenChart, setFullscreenChart] = useState(null); // 'portfolio' or 'price'
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
@@ -144,7 +148,11 @@ export default function StockDetail() {
 
   // Responsive listener
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setIsPanelCollapsed(false);
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -160,6 +168,21 @@ export default function StockDetail() {
     }
     return () => window.removeEventListener("click", handleClick);
   }, [isYearOpen, activeMobileTooltip]);
+
+  // Fullscreen Chart: Body Scroll Lock & ESC shortcut
+  useEffect(() => {
+    if (fullscreenChart) {
+      document.body.style.overflow = 'hidden';
+      const handleEsc = (e) => {
+        if (e.key === 'Escape') setFullscreenChart(null);
+      };
+      window.addEventListener('keydown', handleEsc);
+      return () => {
+        document.body.style.overflow = 'unset';
+        window.removeEventListener('keydown', handleEsc);
+      };
+    }
+  }, [fullscreenChart]);
 
   useEffect(() => {
     Promise.all([
@@ -397,11 +420,36 @@ export default function StockDetail() {
   // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-slate-400 tracking-wide font-sans font-medium">Menganalisis data pasar…</p>
-        </div>
+      <div className="font-sans bg-slate-50 min-h-screen">
+        <main className="max-w-6xl mx-auto px-4 md:px-6 py-8 space-y-8">
+          {/* Header Skeleton */}
+          <div className="space-y-6">
+            <Skeleton className="w-32 h-6 rounded-full" />
+            <div className="flex justify-between items-end">
+              <div className="space-y-3">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="w-48 h-16" />
+                  <Skeleton className="w-24 h-8 rounded-full" />
+                </div>
+                <Skeleton className="w-32 h-4" />
+              </div>
+              <Skeleton className="w-32 h-10 rounded-xl" />
+            </div>
+          </div>
+
+          {/* Simulation Panel Skeleton */}
+          <Skeleton className="w-full h-48 rounded-2xl" />
+
+          {/* Metrics Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Skeleton className="h-32 rounded-3xl" />
+            <Skeleton className="h-32 rounded-3xl" />
+            <Skeleton className="h-32 rounded-3xl" />
+          </div>
+
+          {/* Chart Skeleton */}
+          <Skeleton className="w-full h-[400px] rounded-3xl" />
+        </main>
       </div>
     );
   }
@@ -472,15 +520,32 @@ export default function StockDetail() {
         </div>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
-        <section className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-              <Activity className="w-4 h-4 text-indigo-600" />
+        <section className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
+          <button
+            onClick={() => isMobile && setIsPanelCollapsed(!isPanelCollapsed)}
+            className={`w-full flex items-center justify-between p-4 md:p-6 text-left transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi</h2>
+                {isMobile && isPanelCollapsed && engine && (
+                  <p className="text-[10px] font-bold text-indigo-600 mt-0.5">
+                    {fmt(amount)} • {investStyle === 'lumpsum' ? 'Sekali Beli' : 'Nabung Rutin'} • {divStrategy === 'compound' ? 'Putar Dividen' : 'Cairkan'}
+                  </p>
+                )}
+              </div>
             </div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Simulasi Investasi</h2>
-          </div>
+            {isMobile && (
+              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isPanelCollapsed ? "" : "rotate-180"}`} />
+            )}
+          </button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isPanelCollapsed ? "max-h-0 opacity-0" : "max-h-[1000px] opacity-100 border-t border-slate-100"}`}>
+            <div className="p-4 md:p-6 pt-0 md:pt-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             {/* 1. Nominal Rupiah */}
             <div className="space-y-3">
               <label htmlFor="amount-input" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
@@ -620,6 +685,8 @@ export default function StockDetail() {
               </p>
             </div>
           )}
+            </div>
+          </div>
         </section>
 
         {engine && engine.isDivergent && (
@@ -670,9 +737,18 @@ export default function StockDetail() {
                   <h2 className="text-xl font-bold text-slate-900 tracking-tight">Portfolio Performance</h2>
                   <p className="text-sm font-medium text-slate-500">Perbandingan nilai vs Deposito Bank (4% p.a)</p>
                 </div>
-                <div className="flex items-center gap-6 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
-                  <LegendDot color="bg-indigo-500" label="Portfolio" />
-                  <LegendDot color="bg-slate-300" label="Deposito Bank" />
+                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                  <div className="flex items-center gap-4 md:gap-6 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                    <LegendDot color="bg-indigo-500" label="Portfolio" />
+                    <LegendDot color="bg-slate-300" label="Deposito Bank" />
+                  </div>
+                  <button
+                    onClick={() => setFullscreenChart('portfolio')}
+                    className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                    title="Maximize Chart"
+                  >
+                    <Maximize2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
               <div className="h-[360px] w-full">
@@ -737,8 +813,17 @@ export default function StockDetail() {
                     <h2 className="text-xl font-bold text-slate-900 tracking-tight">Market Price History</h2>
                     <p className="text-sm font-medium text-slate-500">Monthly closing price verification</p>
                   </div>
-                  <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
-                    <LegendDot color="bg-slate-400" label="Price (IDR)" />
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
+                      <LegendDot color="bg-slate-400" label="Price (IDR)" />
+                    </div>
+                    <button
+                      onClick={() => setFullscreenChart('price')}
+                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                      title="Maximize Chart"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
                 <div className="h-[280px] w-full">
@@ -1053,6 +1138,72 @@ export default function StockDetail() {
           </p>
         )}
       </footer>
+
+      {/* ── FULLSCREEN CHART OVERLAY ── */}
+      {fullscreenChart && (
+        <div className="fixed inset-0 z-[200] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
+          <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
+            <div>
+              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                {fullscreenChart === 'portfolio' ? 'Portfolio Performance' : 'Market Price History'} - {ticker}
+              </h2>
+              <p className="text-sm font-medium text-slate-500">
+                {fullscreenChart === 'portfolio' ? 'Simulasi nilai total investasi' : 'Verifikasi harga pasar bulanan'}
+              </p>
+            </div>
+            <button
+              onClick={() => setFullscreenChart(null)}
+              className="p-3 rounded-full bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer"
+            >
+              <Minimize2 className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="flex-1 p-2 md:p-8">
+            <ResponsiveContainer width="100%" height="100%">
+              {fullscreenChart === 'portfolio' ? (
+                <AreaChart data={engine.chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
+                  <defs>
+                    <linearGradient id="gPortfolioFull" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="id" tickFormatter={(id) => engine.chartData[id]?.year} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+                  <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area type="monotone" dataKey="Portfolio" stroke="#4f46e5" strokeWidth={4} fill="url(#gPortfolioFull)" dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} />
+                  <Area type="monotone" dataKey="Deposito" stroke="#94a3b8" strokeWidth={2} strokeDasharray="6 4" fill="transparent" dot={false} />
+                </AreaChart>
+              ) : (
+                <AreaChart data={filteredPrices} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
+                  <defs>
+                    <linearGradient id="gPriceFull" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#cbd5e1" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#f8fafc" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="Date" tickFormatter={(val) => { const d = new Date(val); return `${MONTHS[d.getMonth()].substring(0, 3)} ${d.getFullYear().toString().slice(-2)}`; }} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+                  <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("id-ID")} width={45} />
+                  <Tooltip content={<CustomPriceTooltip />} />
+                  <Area type="monotone" dataKey="Price" stroke="#94a3b8" strokeWidth={3} fill="url(#gPriceFull)" activeDot={{ r: 8, fill: "#fff", stroke: "#94a3b8", strokeWidth: 3 }} />
+                </AreaChart>
+              )}
+            </ResponsiveContainer>
+          </div>
+          <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center gap-8">
+            {fullscreenChart === 'portfolio' ? (
+              <>
+                <LegendDot color="bg-indigo-500" label="Portfolio Value" />
+                <LegendDot color="bg-slate-400" label="Bank Deposit (4%)" />
+              </>
+            ) : (
+              <LegendDot color="bg-slate-400" label="Market Price (IDR)" />
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Scroll to Top - Subtle White */}
       <button
