@@ -288,25 +288,26 @@ export default function ComparePage() {
 
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-3 md:space-y-4">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-4 space-y-3 md:space-y-4">
 
         {/* ── HEADER ── */}
         <div className="flex flex-col gap-6  mb-6 md:mb-8">
-          <button onClick={() => navigate('/')} className="group inline-flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors cursor-pointer w-fit">
-            <div className="p-1.5 rounded-full bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-            </div>
+          <button 
+            onClick={() => navigate('/')} 
+            className="btn-secondary w-fit"
+          >
+            <ArrowLeft className="w-4 h-4" />
             Back to Discovery
           </button>
 
-          <div className="flex flex-row items-center justify-between gap-4">
+          <div className="flex flex-row items-start md:items-end justify-between gap-4">
             <div className="space-y-1">
               <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Stock <span className="text-indigo-600">Comparison.</span></h1>
             </div>
 
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all active:scale-95 group h-fit shrink-0"
+              className="btn-secondary"
             >
               {copied ? (
                 <Check className="w-3.5 h-3.5 text-emerald-500" />
@@ -349,10 +350,10 @@ export default function ComparePage() {
         </div>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
-        <section className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
+        <section className="bg-white border border-slate-200/60 rounded-2xl relative z-20">
           <button
             onClick={() => isMobile && setIsPanelCollapsed(!isPanelCollapsed)}
-            className={`w-full flex items-center justify-between p-4 md:p-6 text-left transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
+            className={`w-full flex items-center justify-between p-4 md:p-6 text-left rounded-t-2xl transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
           >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
@@ -372,7 +373,7 @@ export default function ComparePage() {
             )}
           </button>
 
-          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isPanelCollapsed ? "max-h-0 opacity-0" : "max-h-[1000px] opacity-100 border-t border-slate-100"}`}>
+          <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? "max-h-0 opacity-0 overflow-hidden" : "max-h-[1000px] opacity-100 border-t border-slate-100 overflow-visible"}`}>
             <div className="p-4 md:p-6 pt-0 md:pt-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             {/* 1. Nominal Rupiah */}
@@ -406,7 +407,7 @@ export default function ComparePage() {
                   <button
                     key={s.key}
                     onClick={() => setInvestStyle(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${investStyle === s.key
                       ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
                       : "text-slate-500 hover:text-slate-900"
                       }`}
@@ -493,8 +494,8 @@ export default function ComparePage() {
                   <button
                     key={s.key}
                     onClick={() => setDivStrategy(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key
-                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${divStrategy === s.key
+                      ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
                       : "text-slate-500 hover:text-slate-900"
                       }`}
                   >
@@ -515,14 +516,14 @@ export default function ComparePage() {
               <h2 className="text-xl font-bold text-slate-900 tracking-tight">Growth Duel</h2>
               <p className="text-sm font-medium text-slate-500">Portfolio growth comparison</p>
             </div>
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <div className="flex flex-wrap items-center justify-end gap-4 sm:gap-6">
               <div className="flex items-center gap-4 md:gap-6 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
                 <LegendDot color="bg-indigo-600" label={stockA} />
                 <LegendDot color="bg-slate-400" label={stockB} />
               </div>
               <button
                 onClick={() => setIsFullscreen(true)}
-                className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                className="btn-icon"
                 title="Maximize Chart"
               >
                 <Maximize2 className="w-4 h-4" />
@@ -584,7 +585,7 @@ export default function ComparePage() {
             </div>
             <button
               onClick={() => setIsFullscreen(false)}
-              className="p-3 rounded-full bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer"
+              className="btn-icon text-slate-600 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100"
             >
               <Minimize2 className="w-6 h-6" />
             </button>
@@ -593,11 +594,11 @@ export default function ComparePage() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                <XAxis dataKey="id" tickFormatter={(id) => chartData[id]?.year} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} dy={10} />
                 <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="ValA" name={stockA} stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey="ValB" name={stockB} stroke="#94a3b8" strokeWidth={3} dot={{ r: 6, fill: "#94a3b8", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey={stockA} name={stockA} stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey={stockB} name={stockB} stroke="#94a3b8" strokeWidth={3} dot={{ r: 6, fill: "#94a3b8", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -704,14 +705,12 @@ function ComparisonRow({ icon: Icon, label, valA, valB, winner, tickerA, tickerB
           <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 text-center">{tickerA}</div>
           <div className="flex flex-col items-center justify-center gap-1.5">
             <span className="text-base sm:text-sm tracking-tight">{valA}</span>
-            {winner === 'A' && <Crown className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />}
           </div>
         </div>
         <div className={`relative px-4 md:px-8 py-3.5 sm:py-4 text-center transition-all duration-500 ${winner === 'B' ? 'text-emerald-700 bg-emerald-50/80 font-black ring-1 ring-emerald-100/50 z-10' : 'text-slate-500 font-bold'}`}>
           <div className="sm:hidden text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 text-center">{tickerB}</div>
           <div className="flex flex-col items-center justify-center gap-1.5">
             <span className="text-base sm:text-sm tracking-tight">{valB}</span>
-            {winner === 'B' && <Crown className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />}
           </div>
         </div>
       </div>

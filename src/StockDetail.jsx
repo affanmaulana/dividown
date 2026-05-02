@@ -462,11 +462,9 @@ export default function StockDetail() {
         <div className="flex flex-col gap-6 mb-6 md:mb-8">
           <button
             onClick={() => navigate('/')}
-            className="group inline-flex items-center gap-2 text-sm font-bold text-indigo-600 transition-colors cursor-pointer w-fit"
+            className="btn-secondary w-fit"
           >
-            <div className="p-1.5 rounded-full bg-indigo-50 group-hover:bg-indigo-100 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-            </div>
+            <ArrowLeft className="w-4 h-4" />
             Back to Discovery
           </button>
 
@@ -505,7 +503,7 @@ export default function StockDetail() {
 
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all active:scale-95 group h-fit shrink-0 mt-1 md:mt-0"
+              className="btn-secondary"
             >
               {copied ? (
                 <Check className="w-3.5 h-3.5 text-emerald-500" />
@@ -520,10 +518,10 @@ export default function StockDetail() {
         </div>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
-        <section className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
+        <section className="bg-white border border-slate-200/60 rounded-2xl relative z-20">
           <button
             onClick={() => isMobile && setIsPanelCollapsed(!isPanelCollapsed)}
-            className={`w-full flex items-center justify-between p-4 md:p-6 text-left transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
+            className={`w-full flex items-center justify-between p-4 md:p-6 text-left rounded-t-2xl transition-colors ${isMobile ? "cursor-pointer hover:bg-slate-50" : "cursor-default"}`}
           >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
@@ -543,7 +541,7 @@ export default function StockDetail() {
             )}
           </button>
 
-          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isPanelCollapsed ? "max-h-0 opacity-0" : "max-h-[1000px] opacity-100 border-t border-slate-100"}`}>
+          <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? "max-h-0 opacity-0 overflow-hidden" : "max-h-[1000px] opacity-100 border-t border-slate-100 overflow-visible"}`}>
             <div className="p-4 md:p-6 pt-0 md:pt-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             {/* 1. Nominal Rupiah */}
@@ -577,8 +575,8 @@ export default function StockDetail() {
                   <button
                     key={s.key}
                     onClick={() => setInvestStyle(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${investStyle === s.key
-                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${investStyle === s.key
+                      ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
                       : "text-slate-500 hover:text-slate-900"
                       }`}
                   >
@@ -666,8 +664,8 @@ export default function StockDetail() {
                   <button
                     key={s.key}
                     onClick={() => setDivStrategy(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${divStrategy === s.key
-                      ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/40"
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${divStrategy === s.key
+                      ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
                       : "text-slate-500 hover:text-slate-900"
                       }`}
                   >
@@ -744,7 +742,7 @@ export default function StockDetail() {
                   </div>
                   <button
                     onClick={() => setFullscreenChart('portfolio')}
-                    className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                    className="btn-icon"
                     title="Maximize Chart"
                   >
                     <Maximize2 className="w-4 h-4" />
@@ -813,13 +811,13 @@ export default function StockDetail() {
                     <h2 className="text-xl font-bold text-slate-900 tracking-tight">Market Price History</h2>
                     <p className="text-sm font-medium text-slate-500">Monthly closing price verification</p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-end gap-4">
                     <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
                       <LegendDot color="bg-slate-400" label="Price (IDR)" />
                     </div>
                     <button
                       onClick={() => setFullscreenChart('price')}
-                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer"
+                      className="btn-icon"
                       title="Maximize Chart"
                     >
                       <Maximize2 className="w-4 h-4" />
@@ -1153,7 +1151,7 @@ export default function StockDetail() {
             </div>
             <button
               onClick={() => setFullscreenChart(null)}
-              className="p-3 rounded-full bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all cursor-pointer"
+              className="btn-icon text-slate-600 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100"
             >
               <Minimize2 className="w-6 h-6" />
             </button>
@@ -1223,7 +1221,7 @@ export default function StockDetail() {
 
 function MetricCard({ icon: Icon, label, value, sub, positive }) {
   return (
-    <div className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-5 transition-all hover:-translate-y-1 group">
+    <div className="bg-white border border-slate-200/60 rounded-2xl p-4 md:p-5 hover-lift group">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">{label}</span>
         <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-colors ${positive ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-rose-50 group-hover:bg-rose-100"}`}>
@@ -1238,7 +1236,7 @@ function MetricCard({ icon: Icon, label, value, sub, positive }) {
 
 function MiniStat({ icon: Icon, label, value }) {
   return (
-    <div className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-5 flex items-center gap-4 transition-all">
+    <div className="bg-white border border-slate-200/60 rounded-3xl p-4 md:p-5 flex items-center gap-4 hover-lift">
       <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
         <Icon className="w-6 h-6 text-indigo-600" />
       </div>
@@ -1261,7 +1259,7 @@ function LegendDot({ color, label }) {
 
 function InterpretationGuide() {
   return (
-    <section className="max-w-6xl mx-auto px-4 md:px-6 pb-12 pt-8 border-t border-slate-200/60">
+    <section className="max-w-6xl mx-auto px-4 md:px-6 pb-20 pt-12 border-t border-slate-200/60 mt-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div className="space-y-3">
           <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Metrik Utama</h4>

@@ -83,9 +83,9 @@ export default function Navbar() {
 
         {/* LEFT: LOGO */}
         {!mobileSearchActive && (
-          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity shrink-0">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 active:scale-95 transition-all duration-300 shrink-0">
             <img src="/favicon.svg" alt="Dividown Logo" className="w-9 h-9" />
-            <span className="text-xl font-bold tracking-tight text-slate-950 font-sans">Dividown</span>
+            <span className="text-xl font-bold tracking-tight text-slate-950 font-sans hidden md:inline">Dividown</span>
           </Link>
         )}
 
@@ -180,13 +180,9 @@ export default function Navbar() {
           {!mobileSearchActive && (
             <Link
               to="/compare"
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${location.pathname === "/compare"
-                ? "bg-indigo-600 text-white"
-                : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
-                }`}
+              className={location.pathname === "/compare" ? "btn-primary h-10" : "btn-secondary h-10"}
             >
-              <GitCompare className={`w-3.5 h-3.5 ${location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
-                }`} />
+              <GitCompare className="w-4 h-4" />
               Compare Stocks
             </Link>
           )}

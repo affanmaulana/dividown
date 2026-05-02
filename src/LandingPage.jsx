@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X, Check } from "lucide-react";
 import { calculateHealthScore } from "./utils/healthScore";
 import Skeleton from "./components/Skeleton";
 
@@ -194,10 +194,10 @@ export default function LandingPage() {
       {/* HERO */}
       <section className="py-24 px-4 md:px-6 text-center max-w-4xl mx-auto">
         <div className="flex flex-wrap justify-center gap-3 mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-[0.1em] ring-1 ring-indigo-500/10">
+          <div className="inline-flex items-center px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-indigo-50/80 text-indigo-600">
             Dividend Trap
           </div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold uppercase tracking-[0.1em] ring-1 ring-rose-500/10">
+          <div className="inline-flex items-center px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-rose-50/80 text-rose-600">
             Dividend Capital Loss
           </div>
         </div>
@@ -279,9 +279,9 @@ export default function LandingPage() {
               <button
                 key={s}
                 onClick={() => setSectorFilter(s)}
-                className={`px-6 py-2 rounded-full text-sm font-medium border cursor-pointer transition-all duration-300 ${sectorFilter === s
-                  ? "bg-indigo-600 text-white border-indigo-600 shadow-none"
-                  : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                className={`btn-pill flex items-center gap-1.5 ${sectorFilter === s
+                  ? "!bg-indigo-600 !text-white !border-indigo-600 hover:!bg-indigo-700"
+                  : ""
                   }`}
               >
                 {s}
@@ -304,13 +304,13 @@ export default function LandingPage() {
             <div className="relative" ref={sortRef} onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center gap-3 px-5 py-3 bg-white border border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all cursor-pointer"
+                className="btn-secondary pr-4"
               >
                 <div className="flex items-center gap-2 pr-2 border-r border-slate-100">
                   <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
                   <span className="text-[10px] text-slate-400 uppercase tracking-widest">Sort:</span>
                 </div>
-                {SORT_OPTIONS.find(o => o.key === sortBy)?.label}
+                <span className="text-xs">{SORT_OPTIONS.find(o => o.key === sortBy)?.label}</span>
                 <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isSortOpen ? "rotate-180" : ""}`} />
               </button>
 
@@ -340,17 +340,17 @@ export default function LandingPage() {
             {/* Sort Order Toggle */}
             <button
               onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
-              className="flex items-center gap-2 px-5 py-3 bg-white border border-slate-200/60 rounded-xl text-[10px] font-bold text-indigo-600 hover:text-indigo-700 hover:border-indigo-300 transition-all cursor-pointer group"
+              className="btn-secondary px-5 py-3 text-indigo-600 hover:text-indigo-700 group"
             >
               {sortOrder === "asc" ? (
                 <>
                   <ChevronUp className="w-3.5 h-3.5" />
-                  ASCENDING
+                  <span className="text-xs">ASCENDING</span>
                 </>
               ) : (
                 <>
                   <ChevronDown className="w-3.5 h-3.5" />
-                  DESCENDING
+                  <span className="text-xs">DESCENDING</span>
                 </>
               )}
             </button>
@@ -366,7 +366,7 @@ export default function LandingPage() {
               <Link
                 to={`/stock/${stock.ticker.toLowerCase()}`}
                 key={stock.ticker}
-                className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:shadow-2xl hover:shadow-slate-200/50 hover:border-indigo-200 transition-all duration-500 flex flex-col"
+                className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover-lift hover:border-indigo-200 flex flex-col"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="space-y-1.5">
