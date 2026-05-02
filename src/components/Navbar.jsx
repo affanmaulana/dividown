@@ -41,7 +41,7 @@ export default function Navbar() {
 
   const stocks = useMemo(() => {
     if (!data.length) return [];
-    
+
     let result = Object.keys(STOCKS_INFO).map(ticker => {
       const tickerData = data.filter(d => d.Ticker === ticker);
       const health = calculateHealthScore(tickerData);
@@ -56,14 +56,14 @@ export default function Navbar() {
       const q = query.toLowerCase();
       result = result.filter(s => s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q));
     }
-    
+
     return result;
   }, [data, query]);
 
   return (
     <nav className="sticky top-0 z-[100] bg-white/80 backdrop-blur-md border-b border-slate-100 h-16">
       <div className="max-w-6xl mx-auto px-4 md:px-6 h-full flex items-center justify-between">
-        
+
         {/* LEFT: LOGO */}
         {!mobileSearchActive && (
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity shrink-0">
@@ -73,33 +73,30 @@ export default function Navbar() {
         )}
 
         {/* RIGHT: COMPARE + SEARCH */}
-        <div className={`flex items-center gap-4 md:gap-6 ${mobileSearchActive ? "w-full" : "ml-auto"}`}>
+        <div className={`flex items-center gap-4 md:gap-4 ${mobileSearchActive ? "w-full" : "ml-auto"}`}>
           {!mobileSearchActive && (
-            <Link 
-              to="/compare" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${
-                location.pathname === "/compare" 
-                  ? "bg-indigo-600 text-white" 
-                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
-              }`}
+            <Link
+              to="/compare"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold tracking-tight transition-all duration-300 shrink-0 active:scale-95 group ${location.pathname === "/compare"
+                ? "bg-indigo-600 text-white"
+                : "bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-100"
+                }`}
             >
-              <GitCompare className={`w-3.5 h-3.5 ${
-                location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
-              }`} />
+              <GitCompare className={`w-3.5 h-3.5 ${location.pathname === "/compare" ? "text-indigo-200" : "text-slate-400"
+                }`} />
               Compare Stocks
             </Link>
           )}
 
           {/* SEARCH BOX */}
-          <div 
+          <div
             ref={containerRef}
-            className={`relative flex items-center transition-all duration-300 ${
-              mobileSearchActive ? "w-full" : "w-auto md:w-[320px]"
-            }`}
+            className={`relative flex items-center transition-all duration-300 ${mobileSearchActive ? "w-full" : "w-auto md:w-[320px]"
+              }`}
           >
             {/* MOBILE TRIGGER */}
             {!mobileSearchActive && (
-              <button 
+              <button
                 onClick={() => {
                   setMobileSearchActive(true);
                   setIsFocused(true);
@@ -124,7 +121,7 @@ export default function Navbar() {
                 className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-10 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow font-sans"
               />
               {mobileSearchActive && (
-                <button 
+                <button
                   onClick={() => {
                     setMobileSearchActive(false);
                     setIsFocused(false);

@@ -408,7 +408,7 @@ export default function StockDetail() {
 
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 space-y-3 md:space-y-4">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-4 space-y-3 md:space-y-4">
 
         {/* ── HEADER ── */}
         <div className="flex flex-col gap-6 mb-6 md:mb-8">
@@ -465,7 +465,7 @@ export default function StockDetail() {
                 <Share2 className="w-3.5 h-3.5" />
               )}
               <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                {copied ? "Copied!" : "Share Link"}
+                {copied ? "Copied!" : "Copy Link"}
               </span>
             </button>
           </div>
@@ -1041,29 +1041,29 @@ export default function StockDetail() {
           </div>
         )}
 
-        </main>
-        
-        <InterpretationGuide />
-        
-        <footer className="border-t border-slate-100 py-12 text-center">
-          <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
-          {status && (
-            <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
-              Data terakhir diperbarui: {status.last_updated}
-            </p>
-          )}
-        </footer>
+      </main>
 
-        {/* Scroll to Top - Subtle White */}
-        <button
-          onClick={scrollToTop}
-          className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white shadow-lg border border-slate-100 text-slate-400 hover:text-indigo-600 transition-all duration-300 transform md:hidden ${showScrollTop ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
-          aria-label="Scroll to top"
-        >
-          <ArrowUp className="w-5 h-5" />
-        </button>
-        
-        <Analytics />
+      <InterpretationGuide />
+
+      <footer className="border-t border-slate-100 py-12 text-center">
+        <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>
+        {status && (
+          <p className="text-slate-300 text-[10px] mt-2 font-medium uppercase tracking-widest">
+            Data terakhir diperbarui: {status.last_updated}
+          </p>
+        )}
+      </footer>
+
+      {/* Scroll to Top - Subtle White */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white shadow-lg border border-slate-100 text-slate-400 hover:text-indigo-600 transition-all duration-300 transform md:hidden ${showScrollTop ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp className="w-5 h-5" />
+      </button>
+
+      <Analytics />
     </div>
   );
 }
@@ -1179,7 +1179,7 @@ function InterpretationGuide() {
           </p>
         </div>
       </div>
-      
+
 
     </section>
   );

@@ -53,7 +53,7 @@ export default function ComparePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [status, setStatus] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  
+
   // Initial values from URL or defaults
   const initialA = searchParams.get("a") || "BBRI";
   const initialB = searchParams.get("b") || "BBCA";
@@ -98,7 +98,7 @@ export default function ComparePage() {
     params.set("start_month", startMonth.toString());
     params.set("style", investStyle);
     params.set("strategy", divStrategy);
-    
+
     setSearchParams(params, { replace: true });
   }, [stockA, stockB, amount, startYear, startMonth, investStyle, divStrategy, setSearchParams]);
 
@@ -271,7 +271,7 @@ export default function ComparePage() {
                 <Share2 className="w-3.5 h-3.5" />
               )}
               <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                {copied ? "Copied!" : "Share Link"}
+                {copied ? "Copied!" : "Copy Link"}
               </span>
             </button>
           </div>
