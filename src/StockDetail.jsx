@@ -50,7 +50,25 @@ const CustomTooltip = ({ active, payload }) => {
       {dividendType && (
         <p className={`text-[10px] uppercase tracking-wider font-bold ${typeClass} mb-3`}>{dividendType}</p>
       )}
-      <div className="space-y-2">
+      <div className="grid grid-cols-2 gap-4 py-2 border-y border-slate-50">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cum Price</span>
+          <span className="font-bold text-slate-700">{dataPoint.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
+        </div>
+        <div className="flex flex-col items-end">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ex Price</span>
+          <span className="font-bold text-slate-700">{dataPoint.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</span>
+        </div>
+      </div>
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dividend Drop</span>
+          <span className={`font-bold ${(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) && (((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100) < -3 ? "text-rose-600" : "text-slate-500"}`}>
+            {(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) ? `${(((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100)?.toFixed(1)}%` : "-"}
+          </span>
+        </div>
+      </div>
+      <div className="space-y-2 mt-3">
         {payload.map((p) => (
           <div key={p.name} className="flex justify-between items-center text-sm min-w-[160px] gap-4">
             <span className="flex items-center gap-2">
@@ -204,7 +222,22 @@ export default function StockDetail() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [ticker]); // Re-fetch or re-check when ticker changes
+
+  // Data Integrity Check for StockDetail
+  const isDataIncomplete = useMemo(() => {
+    if (loading) return false;
+    const tickerExists = Object.keys(STOCKS_INFO).includes(ticker);
+    const hasDivData = data.some(d => d.Ticker === ticker);
+    const hasPriceData = priceData.some(p => p.Ticker === ticker);
+    
+    // If the ticker is known but has no data, it's incomplete
+    if (tickerExists && (!hasDivData || !hasPriceData)) return true;
+    // If the ticker is completely unknown, also show error/not found
+    if (!tickerExists) return true;
+    
+    return false;
+  }, [loading, ticker, data, priceData]);
 
 
 
@@ -454,6 +487,30 @@ export default function StockDetail() {
       </div>
     );
   }
+
+  if (isDataIncomplete) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 font-sans bg-slate-50">
+        <div className="w-24 h-24 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mb-6">
+          <AlertTriangle className="w-12 h-12" />
+        </div>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900">
+          Data Saham Tidak Ditemukan
+        </h1>
+        <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 leading-relaxed">
+          Maaf, data untuk saham <span className="font-bold text-slate-900">{ticker}</span> sedang tidak tersedia atau dalam proses pembaruan.
+        </p>
+        <button 
+          onClick={() => navigate('/')} 
+          className="btn-primary"
+        >
+          Kembali ke Beranda
+        </button>
+      </div>
+    );
+  }
+
+  if (!engine) return null; // Fallback for edge cases where data exists but engine fails
 
   return (
     <div className="font-sans bg-slate-50 min-h-screen">
@@ -906,15 +963,15 @@ export default function StockDetail() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {engine.yearly.map((row) => {
-                      const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
+                      const drop = row.Ex_Price_1day ? ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100 : null;
                       return (
                         <tr key={`${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="group hover:bg-slate-50/80 transition-colors">
                           <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
                           <td className="px-4 md:px-8 py-5 text-slate-500 font-semibold">{row.Cum_Date}</td>
-                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price.toLocaleString("id-ID")}</td>
-                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Ex_Price_1day.toLocaleString("id-ID")}</td>
-                          <td className={`px-4 md:px-8 py-5 text-right font-bold ${drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
-                            {drop.toFixed(1)}%
+                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price?.toLocaleString("id-ID") || "-"}</td>
+                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</td>
+                          <td className={`px-4 md:px-8 py-5 text-right font-bold ${drop !== null && drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
+                            {drop !== null ? `${drop.toFixed(1)}%` : "-"}
                           </td>
                           <td className={`px-4 md:px-8 py-5 text-right font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-400"}`}>
                             {row.recoveryDisplay}
@@ -1011,7 +1068,7 @@ export default function StockDetail() {
               {/* Mobile cards */}
               <div className="sm:hidden divide-y divide-slate-100 bg-white">
                 {engine.yearly.map((row) => {
-                  const drop = ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100;
+                  const drop = row.Ex_Price_1day ? ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100 : null;
                   return (
                     <div key={`m-${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="px-4 py-4 flex flex-col gap-3">
                       <div className="flex items-center justify-between">
@@ -1105,12 +1162,14 @@ export default function StockDetail() {
                       <div className="flex items-center justify-between bg-slate-50/50 rounded-xl px-4 py-2.5 border border-slate-100/50">
                         <div className="flex flex-col">
                           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Cum Price</span>
-                          <span className="text-xs font-bold text-slate-900">{row.Cum_Price.toLocaleString("id-ID")}</span>
+                          <span className="text-xs font-bold text-slate-900">{row.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
                         </div>
                         <div className="w-px h-6 bg-slate-200" />
                         <div className="flex flex-col items-center">
                           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Drop</span>
-                          <span className={`text-xs font-bold ${drop < -3 ? "text-rose-600" : "text-slate-900"}`}>{drop.toFixed(1)}%</span>
+                          <span className={`text-xs font-bold ${drop !== null && drop < -3 ? "text-rose-600" : "text-slate-900"}`}>
+                            {drop !== null ? `${drop.toFixed(1)}%` : "-"}
+                          </span>
                         </div>
                         <div className="w-px h-6 bg-slate-200" />
                         <div className="flex flex-col items-end">
