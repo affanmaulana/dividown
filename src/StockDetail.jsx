@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import {
@@ -772,11 +773,12 @@ export default function StockDetail() {
                       dy={10}
                     />
                     <YAxis
+                      domain={[0, 'auto']}
                       tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
                       axisLine={false}
                       tickLine={false}
-                      tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`}
-                      width={45}
+                      tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")}
+                      width={50}
                     />
                     <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
                     <Area
@@ -849,12 +851,12 @@ export default function StockDetail() {
                         dy={10}
                       />
                       <YAxis
-                        domain={['auto', 'auto']}
+                        domain={['dataMin * 0.98', 'dataMax * 1.02']}
                         tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
                         axisLine={false}
                         tickLine={false}
                         tickFormatter={(v) => v.toLocaleString("id-ID")}
-                        width={55}
+                        width={60}
                       />
                       <Tooltip content={<CustomPriceTooltip />} cursor={{ stroke: '#e2e8f0', strokeWidth: 1.5 }} />
                       <Area
@@ -1138,8 +1140,8 @@ export default function StockDetail() {
       </footer>
 
       {/* ── FULLSCREEN CHART OVERLAY ── */}
-      {fullscreenChart && (
-        <div className="fixed inset-0 z-[200] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
+      {fullscreenChart && createPortal(
+        <div className="fixed inset-0 z-[10000] bg-white flex flex-col animate-in fade-in zoom-in-95 duration-300">
           <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
             <div>
               <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
@@ -1156,7 +1158,7 @@ export default function StockDetail() {
               <Minimize2 className="w-6 h-6" />
             </button>
           </div>
-          <div className="flex-1 p-2 md:p-8">
+          <div className="flex-1 min-h-0 p-2 md:p-8">
             <ResponsiveContainer width="100%" height="100%">
               {fullscreenChart === 'portfolio' ? (
                 <AreaChart data={engine.chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
@@ -1168,7 +1170,14 @@ export default function StockDetail() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                   <XAxis dataKey="id" tickFormatter={(id) => engine.chartData[id]?.year} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
+                  <YAxis 
+                    domain={[0, 'auto']}
+                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")} 
+                    width={60} 
+                  />
                   <Tooltip content={<CustomTooltip />} />
                   <Area type="monotone" dataKey="Portfolio" stroke="#4f46e5" strokeWidth={4} fill="url(#gPortfolioFull)" dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} />
                   <Area type="monotone" dataKey="Deposito" stroke="#94a3b8" strokeWidth={2} strokeDasharray="6 4" fill="transparent" dot={false} />
@@ -1183,7 +1192,14 @@ export default function StockDetail() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                   <XAxis dataKey="Date" tickFormatter={(val) => { const d = new Date(val); return `${MONTHS[d.getMonth()].substring(0, 3)} ${d.getFullYear().toString().slice(-2)}`; }} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis domain={['auto', 'auto']} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.toLocaleString("id-ID")} width={45} />
+                  <YAxis 
+                    domain={['dataMin * 0.98', 'dataMax * 1.02']} 
+                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tickFormatter={(v) => v.toLocaleString("id-ID")} 
+                    width={70} 
+                  />
                   <Tooltip content={<CustomPriceTooltip />} />
                   <Area type="monotone" dataKey="Price" stroke="#94a3b8" strokeWidth={3} fill="url(#gPriceFull)" activeDot={{ r: 8, fill: "#fff", stroke: "#94a3b8", strokeWidth: 3 }} />
                 </AreaChart>
@@ -1200,7 +1216,8 @@ export default function StockDetail() {
               <LegendDot color="bg-slate-400" label="Market Price (IDR)" />
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Scroll to Top - Subtle White */}
