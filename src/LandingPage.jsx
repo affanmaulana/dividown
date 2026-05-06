@@ -50,12 +50,28 @@ export default function LandingPage() {
       fetch("/data/status.json").then((r) => r.ok ? r.json() : null).catch(() => null)
     ])
       .then(([dDiv, dPrice, dStatus]) => {
-        setData(dDiv);
-        setPriceData(dPrice);
+        // Data Integrity Check: Ensure all expected tickers have data
+        const expectedTickers = Object.keys(STOCKS_INFO);
+        const divTickers = new Set(dDiv.map(d => d.Ticker));
+        const priceTickers = new Set(dPrice.map(p => p.Ticker));
+        
+        const isIncomplete = expectedTickers.some(t => !divTickers.has(t) || !priceTickers.has(t));
+        
+        if (isIncomplete) {
+          console.error("Data integrity check failed: Some tickers are missing data.");
+          setData([]); // This will trigger the maintenance view below
+        } else {
+          setData(dDiv);
+          setPriceData(dPrice);
+        }
+        
         setStatus(dStatus);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        setData([]);
+        setLoading(false);
+      });
   }, []);
 
   const stocks = useMemo(() => {
