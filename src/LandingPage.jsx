@@ -187,6 +187,37 @@ export default function LandingPage() {
     );
   }
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const isPreviewError = searchParams.get("preview_error") === "true";
+
+  if (data.length === 0 || isPreviewError) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 font-sans">
+        <div className="w-24 h-24 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900">
+          Sistem Sedang Maintenance
+        </h1>
+        <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 leading-relaxed">
+          Kami sedang melakukan pembaruan data sistem. Mohon maaf atas ketidaknyamanan ini, silakan kembali beberapa saat lagi.
+        </p>
+        <button 
+          onClick={() => {
+            if (isPreviewError) {
+              window.location.href = '/';
+            } else {
+              window.location.reload();
+            }
+          }} 
+          className="btn-primary"
+        >
+          {isPreviewError ? 'Kembali ke Beranda' : 'Coba Muat Ulang'}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="font-sans">
       {/* HEADER REMOVED - NOW IN LAYOUT */}
