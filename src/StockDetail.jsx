@@ -7,8 +7,8 @@ import {
   Tooltip, ResponsiveContainer,
 } from "recharts";
 import {
-  TrendingUp, Banknote, Clock, Wallet, BarChart3,
-  Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle,
+  TrendingUp, TrendingDown, Banknote, Clock, Wallet, BarChart3,
+  Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle, TriangleAlert,
   Calendar, ChevronLeft, ChevronRight, Share2, Check, ArrowUp,
   Maximize2, Minimize2, Crown
 } from "lucide-react";
@@ -30,6 +30,16 @@ const fmt = (n) =>
   }).format(n);
 
 const pct = (n) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+
+const getMedian = (values) => {
+  if (!values || values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 0) {
+    return (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  return sorted[mid];
+};
 
 const MONTHS = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -393,7 +403,13 @@ export default function StockDetail() {
     const netProfit = portfolioValue - totalInvested;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
 
-    const avgRecovery = filtered.length > 0 ? filtered.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / filtered.length : 0;
+    const recoveryDays = filtered.map(r => r.Recovery_Days || 0);
+    const medianRecovery = getMedian(recoveryDays);
+    const drops = filtered.map(r => {
+      const cp = r.Cum_Price || 1;
+      return Math.abs((((r.Ex_Price_1day || cp) - cp) / cp) * 100);
+    });
+    const meanDrop = drops.length > 0 ? drops.reduce((s, d) => s + d, 0) / drops.length : 0;
     const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
     const years = filtered.length;
     const isCapitalGainOnly = filtered.length === 0;
@@ -414,11 +430,11 @@ export default function StockDetail() {
     return {
       shares: investStyle === "lumpsum" ? Math.floor(amount / (monthlyForTicker[0]?.Price || 1)) : currentShares,
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
-      totalReturn, netProfit, avgRecovery, notRecovered, yearly, chartData, years, avgYield, isDivergent, isCapitalGainOnly
+      totalReturn, netProfit, medianRecovery, meanDrop, notRecovered, yearly, chartData, years, avgYield, isDivergent, isCapitalGainOnly
     };
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear, startMonth]);
 
-  const health = useMemo(() => calculateHealthScore(filtered), [filtered]);
+  const health = useMemo(() => calculateHealthScore(filtered, latestPrice), [filtered, latestPrice]);
 
   // ── SEO Dynamic Title & Meta ──────────────────────────────────────────────
   useEffect(() => {
@@ -437,7 +453,7 @@ export default function StockDetail() {
 
       const returnText = engine.totalReturn !== undefined ? `Total return: ${pct(engine.totalReturn)}.` : "";
       const healthText = health ? `Health Score: ${health.score}/100.` : "";
-      const recoveryText = engine.avgRecovery ? `Rata-rata recovery: ${Math.round(engine.avgRecovery)} hari.` : "";
+      const recoveryText = engine.medianRecovery ? `Median recovery: ${Math.round(engine.medianRecovery)} hari.` : "";
 
       metaDescription.content = `Analisis mendalam saham ${ticker} (${stockName}). ${healthText} ${recoveryText} ${returnText} Cek apakah ${ticker} layak investasi atau hanya jebakan dividen (Dividend Trap) di Dividown.`;
     }
@@ -532,24 +548,49 @@ export default function StockDetail() {
                 <div className="flex items-center gap-3 md:gap-4 flex-wrap">
                   <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-none shrink-0">{ticker}</h1>
                   {health && (
-                    <div className="relative shrink-0">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
-                        }}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold ring-1 cursor-pointer transition-all hover:scale-105 ${health.badgeClass}`}
-                      >
-                        <health.Icon className="w-3.5 h-3.5" />
-                        {health.label}
-                      </button>
-                      {activeMobileTooltip === 'health-info' && (
-                        <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl shadow-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
-                          <div className="absolute top-0 left-6 -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
-                          <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Status Reason</p>
-                          <p className="leading-relaxed">{health.reason}</p>
+                    <div className="flex items-center gap-2 relative">
+                      {health.isBearish && (
+                        <div className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMobileTooltip(activeMobileTooltip === 'bearish-info' ? null : 'bearish-info');
+                            }}
+                            className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center ring-1 ring-amber-200/50 cursor-pointer transition-all"
+                          >
+                            <TrendingDown className="w-5 h-5" />
+                          </button>
+                          {activeMobileTooltip === 'bearish-info' && (
+                            <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                              <div className="absolute top-0 left-6 -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
+                              <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Bearish Signal</p>
+                              <p className="leading-relaxed">
+                                Emiten sedang dalam fase bearish. Saat ini, {health.dropAgainCount} histori dividen ({(health.dropAgainCount / Math.max(1, filtered.filter(r => r.Status_Recovery === "Pulih").length) * 100).toFixed(0)}%) kembali jatuh di bawah harga modal (Drop Again).
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
+                      
+                      <div className="relative shrink-0">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
+                          }}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-black ring-1 cursor-pointer transition-all h-10 md:h-11 ${health.badgeClass}`}
+                        >
+                          <health.Icon className="w-4 h-4" />
+                          {health.score}/10
+                        </button>
+                        {activeMobileTooltip === 'health-info' && (
+                          <div className="absolute top-full right-0 md:left-0 md:right-auto mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                            <div className="absolute top-0 right-6 md:left-6 md:right-auto -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
+                            <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Safety Score Reason</p>
+                            <p className="leading-relaxed">{health.reason}</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -779,10 +820,10 @@ export default function StockDetail() {
               />
               <MetricCard
                 icon={Clock}
-                label="Avg Recovery"
-                value={`${Math.round(engine.avgRecovery)} hari`}
-                sub={`${engine.notRecovered} traps detected`}
-                positive={engine.avgRecovery <= 30}
+                label="Safety Metric"
+                value={`${Math.round(engine.medianRecovery)}d / ${engine.meanDrop.toFixed(1)}%`}
+                sub={`Recovery Median vs Mean Drop`}
+                positive={engine.medianRecovery <= 30 && engine.meanDrop < (engine.avgYield || 5)}
               />
             </div>
 

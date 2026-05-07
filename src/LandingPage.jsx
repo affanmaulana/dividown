@@ -1,8 +1,18 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X, Check } from "lucide-react";
+import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X, Check, TriangleAlert } from "lucide-react";
 import { calculateHealthScore } from "./utils/healthScore";
 import Skeleton from "./components/Skeleton";
+
+const getMedian = (values) => {
+  if (!values || values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 0) {
+    return (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  return sorted[mid];
+};
 
 import { STOCKS_INFO, SECTORS } from "./constants/stocks";
 
@@ -37,8 +47,8 @@ export default function LandingPage() {
   const SORT_OPTIONS = [
     { key: "ticker", label: "Abjad (Ticker)" },
     { key: "health", label: "Health Score" },
-    { key: "yield", label: "Div. Yield" },
-    { key: "return", label: "Annual Return" }
+    { key: "recovery", label: "Median Recovery" },
+    { key: "drop", label: "Mean Drop" },
   ];
 
   const [priceData, setPriceData] = useState([]);
@@ -81,7 +91,8 @@ export default function LandingPage() {
     let result = tickers.map(ticker => {
       const tickerData = data.filter(d => d.Ticker === ticker);
       const tickerPrices = priceData.filter(p => p.Ticker === ticker);
-      const health = calculateHealthScore(tickerData);
+      const latestPrice = tickerPrices.length > 0 ? tickerPrices[tickerPrices.length - 1].Price : null;
+      const health = calculateHealthScore(tickerData, latestPrice);
 
       // Calculate Avg Annual Dividend %
       const years = [...new Set(tickerData.map(d => d.Year))];
@@ -108,13 +119,24 @@ export default function LandingPage() {
         annualReturn = (totalReturn / Math.max(0.5, numYears)) * 100;
       }
 
+      const recoveryDays = tickerData.map(r => r.Recovery_Days || 0);
+      const medianRecovery = getMedian(recoveryDays);
+
+      const drops = tickerData.map(r => {
+        const cp = r.Cum_Price || 1;
+        return Math.abs((((r.Ex_Price_1day || cp) - cp) / cp) * 100);
+      });
+      const meanDrop = drops.length > 0 ? drops.reduce((s, d) => s + d, 0) / drops.length : 0;
+
       return {
         ticker,
         name: STOCKS_INFO[ticker]?.name || ticker,
         sector: STOCKS_INFO[ticker]?.sector || tickerData[0]?.Sector || "Other",
         health,
         avgAnnualYield,
-        annualReturn
+        annualReturn,
+        medianRecovery,
+        meanDrop
       };
     });
 
@@ -136,13 +158,13 @@ export default function LandingPage() {
           valA = a.health?.score || 0;
           valB = b.health?.score || 0;
           break;
-        case "yield":
-          valA = a.avgAnnualYield;
-          valB = b.avgAnnualYield;
+        case "recovery":
+          valA = a.medianRecovery;
+          valB = b.medianRecovery;
           break;
-        case "return":
-          valA = a.annualReturn;
-          valB = b.annualReturn;
+        case "drop":
+          valA = a.meanDrop;
+          valB = b.meanDrop;
           break;
         default:
           valA = a.ticker;
@@ -416,32 +438,40 @@ export default function LandingPage() {
                 className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover-lift hover:border-indigo-200 flex flex-col"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <div className="space-y-1.5">
-                    <h3 className="text-3xl font-bold tracking-tight text-slate-900">{stock.ticker}</h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] leading-none">
+                  <div className="space-y-1">
+                    <h3 className="text-3xl font-black tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">{stock.ticker}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
                       {stock.sector}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="flex items-center gap-2">
+                    {stock.health?.isBearish && (
+                      <div className="h-8 w-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center ring-1 ring-amber-200/50" title="Bearish: Harga saat ini di bawah modal histori">
+                        <TrendingDown className="w-4 h-4" />
+                      </div>
+                    )}
                     {stock.health && (
-                      <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ring-1 ${stock.health.badgeClass}`}>
+                      <div className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-xl text-xs font-black ring-1 ${stock.health.badgeClass}`}>
                         <HIcon className="w-3.5 h-3.5" />
-                        {stock.health.label}
+                        {stock.health.score}/10
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Avg. Annual Return</span>
-                    <div className={`text-xl font-black tracking-tight ${stock.annualReturn >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
-                      {stock.annualReturn >= 0 ? '+' : ''}{stock.annualReturn.toFixed(1)}%
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Median Recovery</span>
+                    <div className="text-xl font-extrabold text-slate-600 tracking-tight">
+                      {Math.round(stock.medianRecovery)} <span className="text-[10px] font-bold text-slate-400">Hari</span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-1.5 items-end">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Avg. Div Yield</span>
-                    <span className="text-xs font-bold text-slate-900">{stock.avgAnnualYield.toFixed(1)}%</span>
+
+                  <div className="flex flex-col gap-1 items-end text-right">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mean Drop</span>
+                    <div className={`text-xl font-extrabold tracking-tight ${stock.meanDrop > stock.avgAnnualYield ? "text-rose-400" : "text-slate-600"}`}>
+                      {stock.meanDrop.toFixed(1)}%
+                    </div>
                   </div>
                 </div>
               </Link>
