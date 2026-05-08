@@ -13,9 +13,9 @@ import {
   Maximize2, Minimize2, Crown
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
-import { calculateHealthScore } from "./utils/healthScore";
-import Skeleton from "./components/Skeleton";
-import { STOCKS_INFO } from "./constants/stocks";
+import { calculateHealthScore } from "../utils/healthScore";
+import Skeleton from "../components/Skeleton";
+import { STOCKS_INFO } from "../constants/stocks";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const DEPOSIT_RATE = 0.04;
@@ -820,9 +820,9 @@ export default function StockDetail() {
               />
               <MetricCard
                 icon={Clock}
-                label="Safety Metric"
-                value={`${Math.round(engine.medianRecovery)}d / ${engine.meanDrop.toFixed(1)}%`}
-                sub={`Recovery Median vs Mean Drop`}
+                label="Recovery vs Drop"
+                value={`${Math.round(engine.medianRecovery)}d / -${engine.meanDrop.toFixed(1)}%`}
+                sub={`Median Recovery vs Avg Ex-date Drop`}
                 positive={engine.medianRecovery <= 30 && engine.meanDrop < (engine.avgYield || 5)}
               />
             </div>

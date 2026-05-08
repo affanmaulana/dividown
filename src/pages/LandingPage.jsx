@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, TrendingDown, ChevronRight, BarChart3, Banknote, Shield, ArrowUpDown, ChevronDown, ChevronUp, X, Check, TriangleAlert } from "lucide-react";
-import { calculateHealthScore } from "./utils/healthScore";
-import Skeleton from "./components/Skeleton";
+import { calculateHealthScore } from "../utils/healthScore";
+import Skeleton from "../components/Skeleton";
+import { STOCKS_INFO, SECTORS } from "../constants/stocks";
 
 const getMedian = (values) => {
   if (!values || values.length === 0) return 0;
@@ -13,8 +14,6 @@ const getMedian = (values) => {
   }
   return sorted[mid];
 };
-
-import { STOCKS_INFO, SECTORS } from "./constants/stocks";
 
 export default function LandingPage() {
   const [data, setData] = useState([]);
@@ -48,7 +47,7 @@ export default function LandingPage() {
     { key: "ticker", label: "Abjad (Ticker)" },
     { key: "health", label: "Health Score" },
     { key: "recovery", label: "Median Recovery" },
-    { key: "drop", label: "Mean Drop" },
+    { key: "drop", label: "Avg Ex-date Drop" },
   ];
 
   const [priceData, setPriceData] = useState([]);
@@ -257,7 +256,17 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="font-sans">
+    <div className="font-sans relative">
+      {isSearchFocused && (
+        <div 
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[998] animate-in fade-in duration-300"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsSearchFocused(false);
+          }}
+        />
+      )}
       {/* HEADER REMOVED - NOW IN LAYOUT */}
 
       {/* HERO */}
@@ -280,7 +289,7 @@ export default function LandingPage() {
         {/* DISCOVERY CONTROLS */}
         <div className="flex flex-col items-center gap-6">
           {/* SEARCH BAR */}
-          <div className="w-full max-w-2xl md:max-w-3xl relative" ref={searchRef}>
+          <div className={`w-full max-w-2xl md:max-w-3xl relative ${isSearchFocused ? 'z-[999]' : 'z-10'}`} ref={searchRef}>
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
@@ -361,30 +370,29 @@ export default function LandingPage() {
       </section>
 
       {/* STOCK GRID */}
-      <section className="px-4 md:px-6 pb-24 max-w-6xl mx-auto">
+      <section className={`px-4 md:px-6 pb-24 max-w-6xl mx-auto ${isSearchFocused ? "pointer-events-none" : ""}`}>
         {/* SORT CONTROLS */}
         <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-6 gap-4">
           <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">
             {stocks.length} Emiten Ditemukan
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             {/* Custom Sort Dropdown */}
-            <div className="relative" ref={sortRef} onClick={(e) => e.stopPropagation()}>
+            <div className="relative flex-1 sm:flex-initial" ref={sortRef} onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="btn-secondary pr-4"
+                className="btn-secondary w-full sm:w-[220px] justify-between px-4 py-3 text-indigo-600 hover:text-indigo-700 gap-2"
               >
-                <div className="flex items-center gap-2 pr-2 border-r border-slate-100">
-                  <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="text-[10px] text-slate-400 uppercase tracking-widest">Sort:</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <ArrowUpDown className="w-3.5 h-3.5 shrink-0" />
+                  <span className="text-xs font-bold truncate">{SORT_OPTIONS.find(o => o.key === sortBy)?.label}</span>
                 </div>
-                <span className="text-xs">{SORT_OPTIONS.find(o => o.key === sortBy)?.label}</span>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isSortOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform shrink-0 ${isSortOpen ? "rotate-180" : ""}`} />
               </button>
 
               {isSortOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full right-0 mt-2 w-full bg-white border border-slate-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="py-1">
                     {SORT_OPTIONS.map((opt) => (
                       <button
@@ -409,19 +417,14 @@ export default function LandingPage() {
             {/* Sort Order Toggle */}
             <button
               onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
-              className="btn-secondary px-5 py-3 text-indigo-600 hover:text-indigo-700 group"
+              className="btn-secondary w-[140px] sm:w-[160px] justify-center px-4 py-3 text-indigo-600 hover:text-indigo-700 group gap-2 shrink-0"
             >
               {sortOrder === "asc" ? (
-                <>
-                  <ChevronUp className="w-3.5 h-3.5" />
-                  <span className="text-xs">ASCENDING</span>
-                </>
+                <ChevronUp className="w-3.5 h-3.5 transition-transform" />
               ) : (
-                <>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                  <span className="text-xs">DESCENDING</span>
-                </>
+                <ChevronDown className="w-3.5 h-3.5 transition-transform" />
               )}
+              <span className="text-xs font-bold">{sortOrder === "asc" ? "ASCENDING" : "DESCENDING"}</span>
             </button>
           </div>
         </div>
@@ -468,9 +471,9 @@ export default function LandingPage() {
                   </div>
 
                   <div className="flex flex-col gap-1 items-end text-right">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mean Drop</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg Ex-date Drop</span>
                     <div className={`text-xl font-extrabold tracking-tight ${stock.meanDrop > stock.avgAnnualYield ? "text-rose-400" : "text-slate-600"}`}>
-                      {stock.meanDrop.toFixed(1)}%
+                      -{stock.meanDrop.toFixed(1)}%
                     </div>
                   </div>
                 </div>

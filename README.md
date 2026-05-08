@@ -1,16 +1,30 @@
-# React + Vite
+# Dividown
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dividown adalah platform analisis saham untuk mendeteksi **Dividend Trap** dan menghitung **Total Return** (termasuk dividen) secara historis untuk saham-saham di IHSG.
 
-Currently, two official plugins are available:
+## Fitur Utama
+- **Deteksi Dividend Trap**: Menganalisis seberapa cepat harga saham pulih setelah *Ex-Date*.
+- **Simulasi Investasi**: Kalkulator investasi (Lumpsum & DCA) dengan opsi strategi dividen (*Compound* atau *Passive*).
+- **Safety Score**: Penilaian risiko saham berdasarkan data historis pemulihan dan volatilitas harga.
+- **Head-to-Head Comparison**: Bandingkan performa dua saham secara langsung.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Struktur Proyek
+- `src/pages/`: Halaman utama aplikasi (Landing, Detail, Compare).
+- `src/components/`: Komponen UI yang dapat digunakan kembali.
+- `src/constants/`: Data statis dan konfigurasi saham.
+- `src/utils/`: Logika perhitungan (misal: Health Score).
+- `public/data/`: Data JSON hasil scraping (Dividend & Price).
+- `scripts/`: Skrip pemeliharaan data dan scraping.
+  - `fetch_data.py`: Skrip utama untuk mengambil data terbaru.
+  - `scratch/`: Koleksi skrip pengujian dan audit.
 
-## React Compiler
+## Teknologi
+- **Frontend**: React + Vite + Tailwind CSS
+- **Visualisasi**: Recharts
+- **Icons**: Lucide React
+- **Data Scraping**: Python
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Menjalankan Proyek
+1. Instalasi dependensi: `npm install`
+2. Jalankan mode pengembangan: `npm run dev`
+3. Bangun untuk produksi: `npm run build`

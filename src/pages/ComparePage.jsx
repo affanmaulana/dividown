@@ -243,12 +243,17 @@ export default function ComparePage() {
     const portfolioValue = currentShares * latestPrice + (divStrategy === "passive" ? totalDiv : 0) + leftover;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
 
-    // Calculate actual historical yields
+    // Calculate actual historical yields and drops
     const yields = tickerDivs.map(r => (r.Dividend || 0) / (r.Cum_Price || 1));
     const avgYield = yields.length > 0 ? (yields.reduce((s, y) => s + y, 0) / yields.length) * 100 : 0;
     const avgRecovery = tickerDivs.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / tickerDivs.length;
+    const drops = tickerDivs.map(r => {
+      const cp = r.Cum_Price || 1;
+      return Math.abs((((r.Ex_Price_1day || cp) - cp) / cp) * 100);
+    });
+    const avgDrop = drops.length > 0 ? drops.reduce((s, d) => s + d, 0) / drops.length : 0;
 
-    return { totalReturn, avgYield, avgRecovery, portfolioValue, yearly };
+    return { totalReturn, avgYield, avgRecovery, avgDrop, portfolioValue, yearly };
   };
 
   const simA = useMemo(() => runSim(stockA), [stockA, data, priceData, startYear, investStyle, amount, divStrategy]);
@@ -570,6 +575,7 @@ export default function ComparePage() {
             <ComparisonRow icon={TrendingUp} label="Total Return" valA={pct(simA?.totalReturn || 0)} valB={pct(simB?.totalReturn || 0)} winner={simA?.totalReturn > simB?.totalReturn ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
             <ComparisonRow icon={Banknote} label="Avg Yield" valA={pct(simA?.avgYield || 0)} valB={pct(simB?.avgYield || 0)} winner={simA?.avgYield > simB?.avgYield ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
             <ComparisonRow icon={Clock} label="Avg Recovery" valA={`${Math.round(simA?.avgRecovery || 0)}d`} valB={`${Math.round(simB?.avgRecovery || 0)}d`} winner={simA?.avgRecovery < simB?.avgRecovery ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
+            <ComparisonRow icon={TrendingDown} label="Avg Ex-date Drop" valA={`-${(simA?.avgDrop || 0).toFixed(1)}%`} valB={`-${(simB?.avgDrop || 0).toFixed(1)}%`} winner={simA?.avgDrop < simB?.avgDrop ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
             <ComparisonRow icon={Wallet} label="Final Portfolio" valA={fmt(simA?.portfolioValue || 0)} valB={fmt(simB?.portfolioValue || 0)} winner={simA?.portfolioValue > simB?.portfolioValue ? 'A' : 'B'} tickerA={stockA} tickerB={stockB} />
           </div>
         </section>
