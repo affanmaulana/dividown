@@ -538,12 +538,12 @@ export default function ComparePage() {
           <div className="h-[360px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={45} />
-                <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
-                <Line type="monotone" dataKey={stockA} stroke="#4f46e5" strokeWidth={4} dot={{ r: 5, fill: "#4f46e5", stroke: "#fff", strokeWidth: 2.5 }} activeDot={{ r: 7, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} />
-                <Line type="monotone" dataKey={stockB} stroke="#94a3b8" strokeWidth={3} dot={{ r: 4, fill: "#94a3b8", stroke: "#fff", strokeWidth: 2 }} activeDot={{ r: 6, fill: "#94a3b8", stroke: "#fff", strokeWidth: 3 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
+                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "var(--color-slate-500)", fontWeight: 600 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={45} />
+                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-slate-200)', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
+                <Line type="monotone" dataKey={stockA} stroke="var(--color-indigo-600)" strokeWidth={4} dot={{ r: 5, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 2.5 }} activeDot={{ r: 7, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 3 }} />
+                <Line type="monotone" dataKey={stockB} stroke="var(--color-slate-400)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 2 }} activeDot={{ r: 6, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -599,12 +599,12 @@ export default function ComparePage() {
           <div className="flex-1 p-2 md:p-8">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} dy={10} />
-                <YAxis tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
+                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }} dy={10} />
+                <YAxis tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey={stockA} name={stockA} stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey={stockB} name={stockB} stroke="#94a3b8" strokeWidth={3} dot={{ r: 6, fill: "#94a3b8", stroke: "#fff", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey={stockA} name={stockA} stroke="var(--color-indigo-600)" strokeWidth={4} dot={{ r: 6, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 3 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey={stockB} name={stockB} stroke="var(--color-slate-400)" strokeWidth={3} dot={{ r: 6, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 3 }} activeDot={{ r: 8 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>

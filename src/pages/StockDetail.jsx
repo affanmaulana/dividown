@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -51,7 +51,10 @@ const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const dataPoint = payload[0]?.payload || {};
   const dividendType = dataPoint.dividendType || "";
-  const displayDate = dataPoint.displayDate || dataPoint.year || "";
+  const rawDate = dataPoint.displayDate || dataPoint.year || "";
+  const displayDate = (rawDate === "Hari Ini" || !rawDate) 
+    ? rawDate 
+    : new Date(rawDate).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
   const typeClass = dividendType === "Final Dividend" ? "text-emerald-700" : "text-indigo-700";
   const hasDividend = dataPoint.hasDividend;
 
@@ -106,7 +109,10 @@ const CustomTooltip = ({ active, payload }) => {
 const CustomPriceTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   const dataPoint = payload[0]?.payload || {};
-  const displayDate = dataPoint.displayDate || label;
+  const rawDate = dataPoint.Date || label || "";
+  const displayDate = !rawDate 
+    ? rawDate 
+    : new Date(rawDate).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
   return (
     <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-4 font-sans ring-1 ring-slate-900/5">
@@ -148,6 +154,28 @@ export default function StockDetail() {
   const [investStyle, setInvestStyle] = useState(initialStyle);
   const [amount, setAmount] = useState(initialAmount);
   const [divStrategy, setDivStrategy] = useState(initialStrategy);
+
+  // Stable dot renderers to prevent chart re-render lag
+  const renderDividendDot = useCallback((props) => {
+    if (props.payload.hasDividend) {
+      return <circle key={`dot-${props.index}`} cx={props.cx} cy={props.cy} r={5} fill="var(--color-emerald-500)" stroke="white" strokeWidth={2.5} />;
+    }
+    return null;
+  }, []);
+  const renderDividendDotFull = useCallback((props) => {
+    if (props.payload.hasDividend) {
+      return <circle key={`dot-f-${props.index}`} cx={props.cx} cy={props.cy} r={6} fill="var(--color-emerald-500)" stroke="white" strokeWidth={3} />;
+    }
+    return null;
+  }, []);
+
+  // Stable formatters to prevent re-renders
+  const xAxisFormatter = useCallback((val) => {
+    const d = new Date(val);
+    return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
+  }, []);
+  const yAxisPortfolioFormatter = useCallback((v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID"), []);
+  const yAxisPriceFormatter = useCallback((v) => v.toLocaleString("id-ID"), []);
   const [loading, setLoading] = useState(true);
   const [isYearOpen, setIsYearOpen] = useState(false);
   const [activeMobileTooltip, setActiveMobileTooltip] = useState(null);
@@ -280,13 +308,8 @@ export default function StockDetail() {
         const pDate = new Date(p.Date);
         const pYear = pDate.getFullYear();
         const pMonth = pDate.getMonth() + 1;
-        const isAfterStart = pYear > startYear || (pYear === startYear && pMonth >= startMonth);
-        return p.Ticker === ticker && isAfterStart;
-      })
-      .map((p) => ({
-        ...p,
-        displayDate: new Date(p.Date).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
-      })),
+        return p.Ticker === ticker && (pYear > startYear || (pYear === startYear && pMonth >= startMonth));
+      }),
     [priceData, ticker, startYear, startMonth]
   );
 
@@ -301,17 +324,28 @@ export default function StockDetail() {
     let currentShares = 0;
     let totalDiv = 0;
     let totalInvested = 0;
-    let currentCash = 0;
+    let investCash = 0;      // Cash available for buying shares (DCA leftovers, compound reinvest leftovers)
+    let dividendCash = 0;    // Cash from passive dividends (never used to buy shares)
     const today = new Date();
 
-    // Get monthly prices for this ticker filtered by start date
-    const monthlyForTicker = priceData
+    // 1. Pre-filter and optimize lookup data
+    const tickerPrices = priceData.filter(p => p.Ticker === ticker);
+    
+    // Group dividends by "YYYY-MM" for O(1) lookup during simulation
+    const divLookup = new Map();
+    filtered.forEach(d => {
+      const dDate = new Date(d.Cum_Date);
+      const key = `${dDate.getFullYear()}-${dDate.getMonth()}`;
+      if (!divLookup.has(key)) divLookup.set(key, []);
+      divLookup.get(key).push(d);
+    });
+
+    const monthlyForTicker = tickerPrices
       .filter(p => {
         const pDate = new Date(p.Date);
         const pYear = pDate.getFullYear();
         const pMonth = pDate.getMonth() + 1;
-        const isAfterStart = pYear > startYear || (pYear === startYear && pMonth >= startMonth);
-        return p.Ticker === ticker && isAfterStart;
+        return pYear > startYear || (pYear === startYear && pMonth >= startMonth);
       })
       .sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
@@ -325,27 +359,25 @@ export default function StockDetail() {
     if (investStyle === "lumpsum") {
       const startPrice = monthlyForTicker[0]?.Price;
       currentShares = Math.floor(amount / startPrice);
-      currentCash = amount - (currentShares * startPrice);
+      investCash = amount - (currentShares * startPrice);
       totalInvested = amount;
     }
 
     monthlyForTicker.forEach((mp, index) => {
       const monthDate = new Date(mp.Date);
       
-      // 1. DCA Contribution (happens at the start of each monthly price point)
+      // 1. DCA Contribution — only investCash is used to buy shares
       if (investStyle === "dca") {
-        currentCash += amount;
+        investCash += amount;
         totalInvested += amount;
-        const newShares = Math.floor(currentCash / mp.Price);
+        const newShares = Math.floor(investCash / mp.Price);
         currentShares += newShares;
-        currentCash -= (newShares * mp.Price);
+        investCash -= (newShares * mp.Price);
       }
 
-      // 2. Find and process dividends in this month
-      const monthDivs = filtered.filter(d => {
-        const dDate = new Date(d.Cum_Date);
-        return dDate.getFullYear() === monthDate.getFullYear() && dDate.getMonth() === monthDate.getMonth();
-      });
+      // 2. Find and process dividends in this month (O(1) lookup)
+      const monthKey = `${monthDate.getFullYear()}-${monthDate.getMonth()}`;
+      const monthDivs = divLookup.get(monthKey) || [];
 
       monthDivs.forEach(row => {
         const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
@@ -354,11 +386,13 @@ export default function StockDetail() {
         totalDiv += divPayout;
 
         if (divStrategy === "compound") {
+          // Reinvest: buy more shares, leftover stays in investCash
           const reinvestShares = Math.floor(divPayout / row.Cum_Price);
           currentShares += reinvestShares;
-          currentCash += (divPayout - (reinvestShares * row.Cum_Price));
+          investCash += (divPayout - (reinvestShares * row.Cum_Price));
         } else {
-          currentCash += divPayout;
+          // Passive: dividends go to separate cash pool, NEVER used to buy shares
+          dividendCash += divPayout;
         }
 
         // Status logic for the table
@@ -382,14 +416,14 @@ export default function StockDetail() {
       });
 
       // 3. Record month-end portfolio value
-      const portfolioValue = Math.round(currentShares * mp.Price + currentCash);
+      const portfolioValue = Math.round(currentShares * mp.Price + investCash + dividendCash);
       const monthsSinceStart = index;
       const depositValue = Math.round(totalInvested * Math.pow(1 + (DEPOSIT_RATE / 12), monthsSinceStart));
 
       chartData.push({
         id: index,
         Date: mp.Date,
-        displayDate: new Date(mp.Date).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
+        displayDate: mp.Date, // Keep raw date, format in UI to save CPU
         year: monthDate.getFullYear(),
         Portfolio: portfolioValue,
         Deposito: depositValue,
@@ -412,7 +446,7 @@ export default function StockDetail() {
         Date: todayStr,
         displayDate: 'Hari Ini',
         year: today.getFullYear(),
-        Portfolio: Math.round(currentShares * latestPrice + currentCash),
+        Portfolio: Math.round(currentShares * latestPrice + investCash + dividendCash),
         Deposito: Math.round(totalInvested * Math.pow(1 + (DEPOSIT_RATE / 12), chartData.length)),
         hasDividend: false,
         isToday: true
@@ -869,69 +903,53 @@ export default function StockDetail() {
                   <AreaChart data={engine.chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="gPortfolio" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15} />
-                        <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+                        <stop offset="5%" stopColor="var(--color-indigo-600)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="var(--color-indigo-600)" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="gDeposit" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.05} />
-                        <stop offset="95%" stopColor="#94a3b8" stopOpacity={0} />
+                        <stop offset="5%" stopColor="var(--color-slate-400)" stopOpacity={0.05} />
+                        <stop offset="95%" stopColor="var(--color-slate-400)" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
                     <XAxis
                       dataKey="Date"
-                      tickFormatter={(val) => {
-                        const d = new Date(val);
-                        return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
-                      }}
-                      tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                      tickFormatter={xAxisFormatter}
+                      tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }}
                       interval={isMobile ? 11 : 2}
                       axisLine={false}
                       tickLine={false}
                       dy={10}
                     />
                     <YAxis
-                      domain={[0, 'auto']}
-                      tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
+                      domain={['dataMin * 0.95', 'dataMax * 1.05']}
+                      tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }}
                       axisLine={false}
                       tickLine={false}
-                      tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")}
+                      tickFormatter={yAxisPortfolioFormatter}
                       width={50}
                     />
-                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
+                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-slate-200)', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
                     <Area
                       type="monotone"
                       dataKey="Portfolio"
-                      stroke="#4f46e5"
+                      stroke="var(--color-indigo-600)"
                       strokeWidth={3.5}
                       fill="url(#gPortfolio)"
-                      dot={(props) => {
-                        if (props.payload.hasDividend) {
-                          return (
-                            <circle
-                              key={`dot-${props.payload.Date}`}
-                              cx={props.cx}
-                              cy={props.cy}
-                              r={5}
-                              fill="#10b981"
-                              stroke="#fff"
-                              strokeWidth={2.5}
-                            />
-                          );
-                        }
-                        return null;
-                      }}
+                      dot={renderDividendDot}
                       activeDot={{ r: 7, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }}
+                      isAnimationActive={false}
                     />
                     <Area
                       type="monotone"
                       dataKey="Deposito"
-                      stroke="#94a3b8"
+                      stroke="var(--color-slate-400)"
                       strokeWidth={2}
                       strokeDasharray="6 4"
                       fill="url(#gDeposit)"
                       dot={false}
                       activeDot={false}
+                      isAnimationActive={false}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -964,18 +982,15 @@ export default function StockDetail() {
                     <AreaChart data={filteredPrices} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="gPrice" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#cbd5e1" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#f8fafc" stopOpacity={0} />
+                          <stop offset="5%" stopColor="var(--color-slate-200)" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="var(--color-slate-50)" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
                       <XAxis
                         dataKey="Date"
-                        tickFormatter={(val) => {
-                          const d = new Date(val);
-                          return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
-                        }}
-                        tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                        tickFormatter={xAxisFormatter}
+                        tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }}
                         interval={isMobile ? 11 : 2}
                         axisLine={false}
                         tickLine={false}
@@ -983,21 +998,22 @@ export default function StockDetail() {
                       />
                       <YAxis
                         domain={['dataMin * 0.98', 'dataMax * 1.02']}
-                        tick={{ fontSize: 11, fill: "#64748b", fontWeight: 600 }}
+                        tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }}
                         axisLine={false}
                         tickLine={false}
-                        tickFormatter={(v) => v.toLocaleString("id-ID")}
+                        tickFormatter={yAxisPriceFormatter}
                         width={60}
                       />
-                      <Tooltip content={<CustomPriceTooltip />} cursor={{ stroke: '#e2e8f0', strokeWidth: 1.5 }} />
+                      <Tooltip content={<CustomPriceTooltip />} cursor={{ stroke: 'var(--color-slate-300)', strokeWidth: 1.5 }} />
                       <Area
                         type="monotone"
                         dataKey="Price"
                         name="Market Price"
-                        stroke="#94a3b8"
+                        stroke="var(--color-slate-400)"
                         strokeWidth={2.5}
                         fill="url(#gPrice)"
                         activeDot={{ r: 6, fill: "#fff", stroke: "#94a3b8", strokeWidth: 2.5 }}
+                        isAnimationActive={false}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -1297,77 +1313,69 @@ export default function StockDetail() {
                 <AreaChart data={engine.chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
                   <defs>
                     <linearGradient id="gPortfolioFull" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--color-indigo-600)" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="var(--color-indigo-600)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
                   <XAxis
                     dataKey="Date"
-                    tickFormatter={(val) => {
-                      const d = new Date(val);
-                      return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
-                    }}
-                    tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                    tickFormatter={xAxisFormatter}
+                    tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }}
                     interval={isMobile ? 11 : 2}
                     axisLine={false}
                     tickLine={false}
                     dy={10}
                   />
                   <YAxis
-                    domain={[0, 'auto']}
-                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                    domain={['dataMin * 0.95', 'dataMax * 1.05']}
+                    tick={{ fontSize: 12, fill: "var(--color-slate-500)", fontWeight: 600 }}
                     axisLine={false}
                     tickLine={false}
-                    tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")}
+                    tickFormatter={yAxisPortfolioFormatter}
                     width={60}
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <Area
                     type="monotone"
                     dataKey="Portfolio"
-                    stroke="#4f46e5"
+                    stroke="var(--color-indigo-600)"
                     strokeWidth={4}
                     fill="url(#gPortfolioFull)"
-                    dot={(props) => {
-                      if (props.payload.hasDividend) {
-                        return (
-                          <circle
-                            key={`dot-full-${props.payload.Date}`}
-                            cx={props.cx}
-                            cy={props.cy}
-                            r={6}
-                            fill="#10b981"
-                            stroke="#fff"
-                            strokeWidth={3}
-                          />
-                        );
-                      }
-                      return null;
-                    }}
+                    dot={renderDividendDotFull}
+                    activeDot={{ r: 8, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }}
+                    isAnimationActive={false}
                   />
-                  <Area type="monotone" dataKey="Deposito" stroke="#94a3b8" strokeWidth={2} strokeDasharray="6 4" fill="transparent" dot={false} />
+                  <Area type="monotone" dataKey="Deposito" stroke="var(--color-slate-400)" strokeWidth={2} strokeDasharray="6 4" fill="transparent" dot={false} isAnimationActive={false} />
                 </AreaChart>
               ) : (
                 <AreaChart data={filteredPrices} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
                   <defs>
                     <linearGradient id="gPriceFull" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#cbd5e1" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#f8fafc" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--color-slate-200)" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="var(--color-slate-50)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="Date" tickFormatter={(val) => { const d = new Date(val); return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`; }} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis
-                    domain={['dataMin * 0.98', 'dataMax * 1.02']}
-                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
+                  <XAxis
+                    dataKey="Date"
+                    tickFormatter={xAxisFormatter}
+                    tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }}
+                    interval={isMobile ? 11 : 2}
                     axisLine={false}
                     tickLine={false}
-                    tickFormatter={(v) => v.toLocaleString("id-ID")}
+                    dy={10}
+                  />
+                  <YAxis
+                    domain={['dataMin * 0.98', 'dataMax * 1.02']}
+                    tick={{ fontSize: 12, fill: "var(--color-slate-500)", fontWeight: 600 }}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={yAxisPriceFormatter}
                     width={70}
                   />
                   <Tooltip content={<CustomPriceTooltip />} />
-                  <Area type="monotone" dataKey="Price" stroke="#94a3b8" strokeWidth={3} fill="url(#gPriceFull)" activeDot={{ r: 8, fill: "#fff", stroke: "#94a3b8", strokeWidth: 3 }} />
+                  <Area type="monotone" dataKey="Price" stroke="var(--color-slate-400)" strokeWidth={3} fill="url(#gPriceFull)" activeDot={{ r: 8, fill: "#fff", stroke: "#94a3b8", strokeWidth: 3 }} isAnimationActive={false} />
                 </AreaChart>
               )}
             </ResponsiveContainer>
