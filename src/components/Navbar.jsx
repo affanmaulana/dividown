@@ -161,7 +161,7 @@ export default function Navbar() {
                             <p className="text-xs text-slate-500 truncate">{stock.name}</p>
                           </div>
                           {stock.health && (
-                            <div className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold ring-1 ${stock.health.badgeClass}`}>
+                            <div className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold ${stock.health.badgeClass}`}>
                               <HIcon className="w-3 h-3" />
                               {stock.health.label}
                             </div>

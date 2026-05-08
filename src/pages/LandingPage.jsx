@@ -449,13 +449,13 @@ export default function LandingPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {stock.health?.isBearish && (
-                      <div className="h-8 w-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center ring-1 ring-amber-200/50" title="Bearish: Harga saat ini di bawah modal histori">
-                        <TrendingDown className="w-4 h-4" />
+                      <div className="h-8 w-8 rounded-xl bg-rose-600 text-white flex items-center justify-center" title="Bearish: Harga saat ini di bawah modal histori">
+                        <TrendingDown className="w-5 h-5" />
                       </div>
                     )}
                     {stock.health && (
-                      <div className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-xl text-xs font-black ring-1 ${stock.health.badgeClass}`}>
-                        <HIcon className="w-3.5 h-3.5" />
+                      <div className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-xl text-sm font-black ${stock.health.badgeClass}`}>
+                        <HIcon className="w-4.5 h-4.5" />
                         {stock.health.score}/10
                       </div>
                     )}

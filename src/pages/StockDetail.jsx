@@ -51,34 +51,44 @@ const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const dataPoint = payload[0]?.payload || {};
   const dividendType = dataPoint.dividendType || "";
-  const displayYear = dataPoint.year || "";
+  const displayDate = dataPoint.displayDate || dataPoint.year || "";
   const typeClass = dividendType === "Final Dividend" ? "text-emerald-700" : "text-indigo-700";
+  const hasDividend = dataPoint.hasDividend;
 
   return (
     <div className="bg-white border border-slate-100 rounded-2xl shadow-xl p-4 font-sans ring-1 ring-slate-900/5">
-      <p className="font-semibold text-slate-900 mb-1">{displayYear}</p>
-      {dividendType && (
-        <p className={`text-[10px] uppercase tracking-wider font-bold ${typeClass} mb-3`}>{dividendType}</p>
+      <div className="flex justify-between items-center mb-1">
+        <p className="font-semibold text-slate-900">{displayDate}</p>
+        {dataPoint.isToday && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 uppercase tracking-widest">Today</span>}
+      </div>
+      
+      {hasDividend && (
+        <>
+          {dividendType && (
+            <p className={`text-[10px] uppercase tracking-wider font-bold ${typeClass} mb-3`}>{dividendType}</p>
+          )}
+          <div className="grid grid-cols-2 gap-4 py-2 border-y border-slate-50 mb-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cum Price</span>
+              <span className="font-bold text-slate-700">{dataPoint.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ex Price</span>
+              <span className="font-bold text-slate-700">{dataPoint.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dividend Drop</span>
+              <span className={`font-bold ${(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) && (((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100) < -3 ? "text-rose-600" : "text-slate-500"}`}>
+                {(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) ? `${(((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100)?.toFixed(1)}%` : "-"}
+              </span>
+            </div>
+          </div>
+        </>
       )}
-      <div className="grid grid-cols-2 gap-4 py-2 border-y border-slate-50">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cum Price</span>
-          <span className="font-bold text-slate-700">{dataPoint.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
-        </div>
-        <div className="flex flex-col items-end">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ex Price</span>
-          <span className="font-bold text-slate-700">{dataPoint.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</span>
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dividend Drop</span>
-          <span className={`font-bold ${(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) && (((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100) < -3 ? "text-rose-600" : "text-slate-500"}`}>
-            {(dataPoint.Cum_Price && dataPoint.Ex_Price_1day) ? `${(((dataPoint.Ex_Price_1day - dataPoint.Cum_Price) / dataPoint.Cum_Price) * 100)?.toFixed(1)}%` : "-"}
-          </span>
-        </div>
-      </div>
-      <div className="space-y-2 mt-3">
+
+      <div className="space-y-2 mt-1">
         {payload.map((p) => (
           <div key={p.name} className="flex justify-between items-center text-sm min-w-[160px] gap-4">
             <span className="flex items-center gap-2">
@@ -240,12 +250,12 @@ export default function StockDetail() {
     const tickerExists = Object.keys(STOCKS_INFO).includes(ticker);
     const hasDivData = data.some(d => d.Ticker === ticker);
     const hasPriceData = priceData.some(p => p.Ticker === ticker);
-    
+
     // If the ticker is known but has no data, it's incomplete
     if (tickerExists && (!hasDivData || !hasPriceData)) return true;
     // If the ticker is completely unknown, also show error/not found
     if (!tickerExists) return true;
-    
+
     return false;
   }, [loading, ticker, data, priceData]);
 
@@ -291,7 +301,8 @@ export default function StockDetail() {
     let currentShares = 0;
     let totalDiv = 0;
     let totalInvested = 0;
-    let leftover = 0;
+    let currentCash = 0;
+    const today = new Date();
 
     // Get monthly prices for this ticker filtered by start date
     const monthlyForTicker = priceData
@@ -306,100 +317,111 @@ export default function StockDetail() {
 
     if (monthlyForTicker.length === 0) return null;
 
+    // Simulation logic
+    const processedYearly = [];
+    const chartData = [];
+    
+    // Initial setup
     if (investStyle === "lumpsum") {
-      // Buy all shares at the first available monthly price (the start date price)
       const startPrice = monthlyForTicker[0]?.Price;
-      if (!startPrice) return null;
       currentShares = Math.floor(amount / startPrice);
-      leftover = amount - currentShares * startPrice;
+      currentCash = amount - (currentShares * startPrice);
       totalInvested = amount;
-    } else {
-      // DCA: buy shares each month using monthly prices
-      const monthlyAmount = amount;
-      let dcaLeftover = 0;
-      for (const mp of monthlyForTicker) {
-        const available = monthlyAmount + dcaLeftover;
-        const newShares = Math.floor(available / mp.Price);
-        dcaLeftover = available - newShares * mp.Price;
-        currentShares += newShares;
-        totalInvested += monthlyAmount;
-      }
-      leftover = dcaLeftover;
     }
 
-    const today = new Date();
-    const yearly = filtered.map((row) => {
-      // 10% Tax applies if not reinvested (Passive strategy)
-      const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
-      const divPerShare = (row.Dividend || (row.Cum_Price * 0.05)) * taxFactor;
-      const divPayout = Math.round(currentShares * divPerShare);
-
-      totalDiv += divPayout;
-      if (divStrategy === "compound") {
-        currentShares += Math.floor(divPayout / row.Cum_Price);
+    monthlyForTicker.forEach((mp, index) => {
+      const monthDate = new Date(mp.Date);
+      
+      // 1. DCA Contribution (happens at the start of each monthly price point)
+      if (investStyle === "dca") {
+        currentCash += amount;
+        totalInvested += amount;
+        const newShares = Math.floor(currentCash / mp.Price);
+        currentShares += newShares;
+        currentCash -= (newShares * mp.Price);
       }
 
-      // New Status Logic
-      const cumDate = new Date(row.Cum_Date);
-      const ageInDays = Math.floor((today - cumDate) / (1000 * 60 * 60 * 24));
-      const hasRecoveredOnce = row.Status_Recovery === "Pulih";
-      const isDroppedNow = latestPrice < (row.Cum_Price * 0.95);
+      // 2. Find and process dividends in this month
+      const monthDivs = filtered.filter(d => {
+        const dDate = new Date(d.Cum_Date);
+        return dDate.getFullYear() === monthDate.getFullYear() && dDate.getMonth() === monthDate.getMonth();
+      });
 
-      let newStatus = "";
-      if (hasRecoveredOnce) {
-        newStatus = isDroppedNow ? "DROP AGAIN" : "RECOVERED";
-      } else {
-        newStatus = ageInDays > 60 ? "DIVIDEND TRAP" : "BERPROSES";
-      }
+      monthDivs.forEach(row => {
+        const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
+        const divPerShare = (row.Dividend || (row.Cum_Price * 0.05)) * taxFactor;
+        const divPayout = Math.round(currentShares * divPerShare);
+        totalDiv += divPayout;
 
-      const recoveryDisplay = hasRecoveredOnce
-        ? `${row.Recovery_Days || 0}d`
-        : `${ageInDays}d++`;
+        if (divStrategy === "compound") {
+          const reinvestShares = Math.floor(divPayout / row.Cum_Price);
+          currentShares += reinvestShares;
+          currentCash += (divPayout - (reinvestShares * row.Cum_Price));
+        } else {
+          currentCash += divPayout;
+        }
 
-      return {
-        ...row,
-        divPerShare,
-        divPayout,
-        sharesAfter: currentShares,
-        totalDivSoFar: totalDiv,
-        newStatus,
-        recoveryDisplay,
-        hasRecoveredOnce
-      };
+        // Status logic for the table
+        const cumDate = new Date(row.Cum_Date);
+        const ageInDays = Math.floor((today - cumDate) / (1000 * 60 * 60 * 24));
+        const hasRecoveredOnce = row.Status_Recovery === "Pulih";
+        const isDroppedNow = latestPrice < (row.Cum_Price * 0.95);
+        let newStatus = hasRecoveredOnce ? (isDroppedNow ? "DROP AGAIN" : "RECOVERED") : (ageInDays > 60 ? "DIVIDEND TRAP" : "BERPROSES");
+        const recoveryDisplay = hasRecoveredOnce ? `${row.Recovery_Days || 0}d` : `${ageInDays}d++`;
+
+        processedYearly.push({
+          ...row,
+          divPerShare,
+          divPayout,
+          sharesAfter: currentShares,
+          totalDivSoFar: totalDiv,
+          newStatus,
+          recoveryDisplay,
+          hasRecoveredOnce
+        });
+      });
+
+      // 3. Record month-end portfolio value
+      const portfolioValue = Math.round(currentShares * mp.Price + currentCash);
+      const monthsSinceStart = index;
+      const depositValue = Math.round(totalInvested * Math.pow(1 + (DEPOSIT_RATE / 12), monthsSinceStart));
+
+      chartData.push({
+        id: index,
+        Date: mp.Date,
+        displayDate: new Date(mp.Date).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
+        year: monthDate.getFullYear(),
+        Portfolio: portfolioValue,
+        Deposito: depositValue,
+        hasDividend: monthDivs.length > 0,
+        // Carry over details from the first dividend in month for the tooltip
+        ...(monthDivs.length > 0 ? {
+          dividendType: monthDivs[0].dividendType,
+          Cum_Price: monthDivs[0].Cum_Price,
+          Ex_Price_1day: monthDivs[0].Ex_Price_1day
+        } : {})
+      });
     });
 
-    let chartData = yearly.map((r, i) => ({
-      id: i,
-      year: r.Year,
-      dividendType: r.dividendType,
-      Portfolio: Math.round(
-        r.sharesAfter * r.Cum_Price + (divStrategy === "passive" ? r.totalDivSoFar : 0) + leftover
-      ),
-      Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, i + 1)),
-    }));
-
-    // FALLBACK: If no dividends happened, show start vs end price
-    if (chartData.length === 0) {
-      chartData = [
-        {
-          id: 0,
-          year: startYear,
-          Portfolio: totalInvested,
-          Deposito: totalInvested
-        },
-        {
-          id: 1,
-          year: new Date().getFullYear(),
-          Portfolio: Math.round(currentShares * latestPrice + leftover),
-          Deposito: Math.round(totalInvested * Math.pow(1 + DEPOSIT_RATE, (new Date().getFullYear() - startYear) || 1))
-        }
-      ];
+    // 4. Add "Today" point (if different from last monthly point)
+    const lastPoint = chartData[chartData.length - 1];
+    const todayStr = today.toISOString().split('T')[0];
+    if (lastPoint && lastPoint.Date !== todayStr) {
+      chartData.push({
+        id: 'today',
+        Date: todayStr,
+        displayDate: 'Hari Ini',
+        year: today.getFullYear(),
+        Portfolio: Math.round(currentShares * latestPrice + currentCash),
+        Deposito: Math.round(totalInvested * Math.pow(1 + (DEPOSIT_RATE / 12), chartData.length)),
+        hasDividend: false,
+        isToday: true
+      });
     }
 
-    // Source of Truth: Derived from chartData to avoid visual discrepancy
-    const lastPoint = chartData[chartData.length - 1];
-    const portfolioValue = lastPoint ? lastPoint.Portfolio : 0;
-    const depositValue = lastPoint ? lastPoint.Deposito : totalInvested;
+    const finalPoint = chartData[chartData.length - 1];
+    const portfolioValue = finalPoint.Portfolio;
+    const depositValue = finalPoint.Deposito;
     const netProfit = portfolioValue - totalInvested;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
 
@@ -411,26 +433,20 @@ export default function StockDetail() {
     });
     const meanDrop = drops.length > 0 ? drops.reduce((s, d) => s + d, 0) / drops.length : 0;
     const notRecovered = filtered.filter((r) => r.Status_Recovery === "Trap").length;
-    const years = filtered.length;
     const isCapitalGainOnly = filtered.length === 0;
 
     // Divergence Warning logic
-    const portfolioTrend = chartData.length >= 2
-      ? chartData[chartData.length - 1].Portfolio > chartData[0].Portfolio
-      : false;
-    const priceTrend = filteredPrices.length >= 2
-      ? filteredPrices[filteredPrices.length - 1].Price < filteredPrices[0].Price
-      : false;
+    const portfolioTrend = chartData.length >= 2 ? chartData[chartData.length - 1].Portfolio > chartData[0].Portfolio : false;
+    const priceTrend = filteredPrices.length >= 2 ? filteredPrices[filteredPrices.length - 1].Price < filteredPrices[0].Price : false;
     const isDivergent = portfolioTrend && priceTrend;
 
-    // Real Yield Calculation
     const yields = filtered.map(r => ((r.Dividend || 0) / (r.Cum_Price || 1)));
     const avgYield = (yields.reduce((s, y) => s + y, 0) / (yields.length || 1)) * 100;
 
     return {
-      shares: investStyle === "lumpsum" ? Math.floor(amount / (monthlyForTicker[0]?.Price || 1)) : currentShares,
+      shares: currentShares,
       currentShares, totalDiv, portfolioValue, depositValue, totalInvested,
-      totalReturn, netProfit, medianRecovery, meanDrop, notRecovered, yearly, chartData, years, avgYield, isDivergent, isCapitalGainOnly
+      totalReturn, netProfit, medianRecovery, meanDrop, notRecovered, yearly: processedYearly, chartData, avgYield, isDivergent, isCapitalGainOnly
     };
   }, [filtered, amount, investStyle, divStrategy, latestPrice, priceData, ticker, startYear, startMonth]);
 
@@ -516,8 +532,8 @@ export default function StockDetail() {
         <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 leading-relaxed">
           Maaf, data untuk saham <span className="font-bold text-slate-900">{ticker}</span> sedang tidak tersedia atau dalam proses pembaruan.
         </p>
-        <button 
-          onClick={() => navigate('/')} 
+        <button
+          onClick={() => navigate('/')}
           className="btn-primary"
         >
           Kembali ke Beranda
@@ -556,9 +572,9 @@ export default function StockDetail() {
                               e.stopPropagation();
                               setActiveMobileTooltip(activeMobileTooltip === 'bearish-info' ? null : 'bearish-info');
                             }}
-                            className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center ring-1 ring-amber-200/50 cursor-pointer transition-all"
+                            className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-rose-600 text-white flex items-center justify-center cursor-pointer transition-all active:scale-95"
                           >
-                            <TrendingDown className="w-5 h-5" />
+                            <TrendingDown className="w-6 h-6" />
                           </button>
                           {activeMobileTooltip === 'bearish-info' && (
                             <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
@@ -571,21 +587,21 @@ export default function StockDetail() {
                           )}
                         </div>
                       )}
-                      
+
                       <div className="relative shrink-0">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
                           }}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-black ring-1 cursor-pointer transition-all h-10 md:h-11 ${health.badgeClass}`}
+                          className={`flex items-center gap-2 px-3 md:px-4 rounded-xl text-sm md:text-base font-black cursor-pointer transition-all active:scale-95 h-10 md:h-11 ${health.badgeClass}`}
                         >
-                          <health.Icon className="w-4 h-4" />
+                          <health.Icon className="w-5 h-5" />
                           {health.score}/10
                         </button>
                         {activeMobileTooltip === 'health-info' && (
-                          <div className="absolute top-full right-0 md:left-0 md:right-auto mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
-                            <div className="absolute top-0 right-6 md:left-6 md:right-auto -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
+                          <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                            <div className="absolute top-0 left-6 -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
                             <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Safety Score Reason</p>
                             <p className="leading-relaxed">{health.reason}</p>
                           </div>
@@ -643,145 +659,145 @@ export default function StockDetail() {
           <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? "max-h-0 opacity-0 overflow-hidden" : "max-h-[1000px] opacity-100 border-t border-slate-100 overflow-visible"}`}>
             <div className="p-4 md:p-6 pt-0 md:pt-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-            {/* 1. Nominal Rupiah */}
-            <div className="space-y-3">
-              <label htmlFor="amount-input" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
-                {investStyle === "lumpsum" ? "Modal Awal" : "Setoran Bulanan"}
-              </label>
-              <div className="relative">
-                <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  id="amount-input"
-                  type="text"
-                  inputMode="numeric"
-                  value={amount.toLocaleString("id-ID")}
-                  onChange={(e) => {
-                    const raw = e.target.value.replace(/\./g, "");
-                    if (/^\d*$/.test(raw)) setAmount(Number(raw) || 0);
-                  }}
-                  className="w-full bg-slate-50 border border-slate-200/60 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-bold text-slate-900 placeholder:text-slate-400 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
-                />
-              </div>
-            </div>
-
-            {/* 2. Metode Investasi */}
-            <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Metode Investasi
-              </label>
-              <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
-                {[{ key: "lumpsum", label: "Sekali Beli" }, { key: "dca", label: "Nabung Rutin" }].map((s) => (
-                  <button
-                    key={s.key}
-                    onClick={() => setInvestStyle(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${investStyle === s.key
-                      ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
-                      : "text-slate-500 hover:text-slate-900"
-                      }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. Waktu Mulai */}
-            <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Waktu Mulai
-              </label>
-              <div className="relative" onClick={(e) => e.stopPropagation()}>
-                <button
-                  onClick={() => setIsYearOpen(!isYearOpen)}
-                  className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-indigo-500" />
-                    <span>{MONTHS[startMonth - 1]} {startYear}</span>
+                {/* 1. Nominal Rupiah */}
+                <div className="space-y-3">
+                  <label htmlFor="amount-input" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    {investStyle === "lumpsum" ? "Modal Awal" : "Setoran Bulanan"}
+                  </label>
+                  <div className="relative">
+                    <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      id="amount-input"
+                      type="text"
+                      inputMode="numeric"
+                      value={amount.toLocaleString("id-ID")}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/\./g, "");
+                        if (/^\d*$/.test(raw)) setAmount(Number(raw) || 0);
+                      }}
+                      className="w-full bg-slate-50 border border-slate-200/60 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-bold text-slate-900 placeholder:text-slate-400 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    />
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
-                </button>
+                </div>
 
-                {isYearOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="p-2">
-                      <div className="flex items-center justify-between mb-2 bg-slate-50 p-1.5 rounded-xl">
-                        <button
-                          onClick={() => setStartYear(prev => Math.max(2021, prev - 1))}
-                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
-                          disabled={startYear <= 2021}
-                        >
-                          <ChevronLeft className="w-3.5 h-3.5 text-slate-600" />
-                        </button>
-                        <span className="text-xs font-bold text-slate-900">{startYear}</span>
-                        <button
-                          onClick={() => setStartYear(prev => Math.min(2026, prev + 1))}
-                          className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
-                          disabled={startYear >= 2026}
-                        >
-                          <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-                        </button>
+                {/* 2. Metode Investasi */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Metode Investasi
+                  </label>
+                  <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
+                    {[{ key: "lumpsum", label: "Sekali Beli" }, { key: "dca", label: "Nabung Rutin" }].map((s) => (
+                      <button
+                        key={s.key}
+                        onClick={() => setInvestStyle(s.key)}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${investStyle === s.key
+                          ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
+                          : "text-slate-500 hover:text-slate-900"
+                          }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Waktu Mulai */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Waktu Mulai
+                  </label>
+                  <div className="relative" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => setIsYearOpen(!isYearOpen)}
+                      className="w-full flex items-center justify-between bg-slate-50 border border-slate-200/60 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-900 hover:border-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-indigo-500" />
+                        <span>{MONTHS[startMonth - 1]} {startYear}</span>
                       </div>
+                      <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isYearOpen ? "rotate-180" : ""}`} />
+                    </button>
 
-                      <div className="grid grid-cols-3 gap-1">
-                        {MONTHS.map((m, idx) => {
-                          const mIdx = idx + 1;
-                          const isSelected = startMonth === mIdx;
-                          return (
+                    {isYearOpen && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="p-2">
+                          <div className="flex items-center justify-between mb-2 bg-slate-50 p-1.5 rounded-xl">
                             <button
-                              key={m}
-                              onClick={() => {
-                                setStartMonth(mIdx);
-                                setIsYearOpen(false);
-                              }}
-                              className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
-                                ? "bg-indigo-600 text-white"
-                                : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
-                                }`}
+                              onClick={() => setStartYear(prev => Math.max(2021, prev - 1))}
+                              className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                              disabled={startYear <= 2021}
                             >
-                              {m.substring(0, 3)}
+                              <ChevronLeft className="w-3.5 h-3.5 text-slate-600" />
                             </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+                            <span className="text-xs font-bold text-slate-900">{startYear}</span>
+                            <button
+                              onClick={() => setStartYear(prev => Math.min(2026, prev + 1))}
+                              className="p-1 hover:bg-white rounded-lg transition-colors cursor-pointer disabled:opacity-30"
+                              disabled={startYear >= 2026}
+                            >
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+                            </button>
+                          </div>
 
-            {/* 4. Strategi Dividen */}
-            <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
-                Strategi Dividen
-                {divStrategy === "passive" && (
-                  <span className="text-[10px] text-rose-500 font-bold normal-case tracking-normal animate-pulse">Potong Pajak 10%</span>
-                )}
-              </label>
-              <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
-                {[{ key: "compound", label: "Putar Kembali" }, { key: "passive", label: "Cairkan" }].map((s) => (
-                  <button
-                    key={s.key}
-                    onClick={() => setDivStrategy(s.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${divStrategy === s.key
-                      ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
-                      : "text-slate-500 hover:text-slate-900"
-                      }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
+                          <div className="grid grid-cols-3 gap-1">
+                            {MONTHS.map((m, idx) => {
+                              const mIdx = idx + 1;
+                              const isSelected = startMonth === mIdx;
+                              return (
+                                <button
+                                  key={m}
+                                  onClick={() => {
+                                    setStartMonth(mIdx);
+                                    setIsYearOpen(false);
+                                  }}
+                                  className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
+                                    ? "bg-indigo-600 text-white"
+                                    : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                                    }`}
+                                >
+                                  {m.substring(0, 3)}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. Strategi Dividen */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                    Strategi Dividen
+                    {divStrategy === "passive" && (
+                      <span className="text-[10px] text-rose-500 font-bold normal-case tracking-normal animate-pulse">Potong Pajak 10%</span>
+                    )}
+                  </label>
+                  <div className="flex rounded-2xl border border-slate-200/60 overflow-hidden bg-slate-50 p-1">
+                    {[{ key: "compound", label: "Putar Kembali" }, { key: "passive", label: "Cairkan" }].map((s) => (
+                      <button
+                        key={s.key}
+                        onClick={() => setDivStrategy(s.key)}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${divStrategy === s.key
+                          ? "bg-white text-indigo-600 ring-1 ring-slate-200/40"
+                          : "text-slate-500 hover:text-slate-900"
+                          }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          {engine && engine.isCapitalGainOnly && (
-            <div className="mt-4 pt-4 border-t border-slate-100">
-              <p className="text-[10px] md:text-xs text-slate-400 font-medium italic flex items-center gap-1.5">
-                <AlertTriangle className="w-3 h-3" />
-                Simulasi saat ini hanya mencakup Capital Gain karena belum ada pembagian dividen di periode terpilih.
-              </p>
-            </div>
-          )}
+              {engine && engine.isCapitalGainOnly && (
+                <div className="mt-4 pt-4 border-t border-slate-100">
+                  <p className="text-[10px] md:text-xs text-slate-400 font-medium italic flex items-center gap-1.5">
+                    <AlertTriangle className="w-3 h-3" />
+                    Simulasi saat ini hanya mencakup Capital Gain karena belum ada pembagian dividen di periode terpilih.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -834,8 +850,8 @@ export default function StockDetail() {
                   <h2 className="text-xl font-bold text-slate-900 tracking-tight">Portfolio Performance</h2>
                   <p className="text-sm font-medium text-slate-500">Perbandingan nilai vs Deposito Bank (4% p.a)</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-                  <div className="flex items-center gap-4 md:gap-6 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                <div className="flex items-center justify-end gap-4 sm:gap-6">
+                  <div className="flex items-center gap-4 md:gap-6">
                     <LegendDot color="bg-indigo-500" label="Portfolio" />
                     <LegendDot color="bg-slate-300" label="Deposito Bank" />
                   </div>
@@ -863,9 +879,13 @@ export default function StockDetail() {
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
                     <XAxis
-                      dataKey="id"
-                      tickFormatter={(id) => engine.chartData[id]?.year}
-                      tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                      dataKey="Date"
+                      tickFormatter={(val) => {
+                        const d = new Date(val);
+                        return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
+                      }}
+                      tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                      interval={isMobile ? 11 : 2}
                       axisLine={false}
                       tickLine={false}
                       dy={10}
@@ -885,8 +905,23 @@ export default function StockDetail() {
                       stroke="#4f46e5"
                       strokeWidth={3.5}
                       fill="url(#gPortfolio)"
-                      dot={{ r: 5, fill: "#4f46e5", stroke: "#fff", strokeWidth: 2.5 }}
-                      activeDot={{ r: 7, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }}
+                      dot={(props) => {
+                        if (props.payload.hasDividend) {
+                          return (
+                            <circle
+                              key={`dot-${props.payload.Date}`}
+                              cx={props.cx}
+                              cy={props.cy}
+                              r={5}
+                              fill="#10b981"
+                              stroke="#fff"
+                              strokeWidth={2.5}
+                            />
+                          );
+                        }
+                        return null;
+                      }}
+                      activeDot={{ r: 7, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }}
                     />
                     <Area
                       type="monotone"
@@ -912,7 +947,7 @@ export default function StockDetail() {
                     <p className="text-sm font-medium text-slate-500">Monthly closing price verification</p>
                   </div>
                   <div className="flex items-center justify-end gap-4">
-                    <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100">
+                    <div className="flex items-center gap-4">
                       <LegendDot color="bg-slate-400" label="Price (IDR)" />
                     </div>
                     <button
@@ -938,9 +973,7 @@ export default function StockDetail() {
                         dataKey="Date"
                         tickFormatter={(val) => {
                           const d = new Date(val);
-                          const m = MONTHS[d.getMonth()].substring(0, 3);
-                          const y = d.getFullYear().toString().slice(-2);
-                          return `${m} ${y}`;
+                          return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
                         }}
                         tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
                         interval={isMobile ? 11 : 2}
@@ -1269,17 +1302,50 @@ export default function StockDetail() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="id" tickFormatter={(id) => engine.chartData[id]?.year} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis 
+                  <XAxis
+                    dataKey="Date"
+                    tickFormatter={(val) => {
+                      const d = new Date(val);
+                      return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`;
+                    }}
+                    tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }}
+                    interval={isMobile ? 11 : 2}
+                    axisLine={false}
+                    tickLine={false}
+                    dy={10}
+                  />
+                  <YAxis
                     domain={[0, 'auto']}
-                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")} 
-                    width={60} 
+                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(v) => v >= 1e6 ? `${(v / 1e6).toFixed(1)}jt` : v.toLocaleString("id-ID")}
+                    width={60}
                   />
                   <Tooltip content={<CustomTooltip />} />
-                  <Area type="monotone" dataKey="Portfolio" stroke="#4f46e5" strokeWidth={4} fill="url(#gPortfolioFull)" dot={{ r: 6, fill: "#4f46e5", stroke: "#fff", strokeWidth: 3 }} />
+                  <Area
+                    type="monotone"
+                    dataKey="Portfolio"
+                    stroke="#4f46e5"
+                    strokeWidth={4}
+                    fill="url(#gPortfolioFull)"
+                    dot={(props) => {
+                      if (props.payload.hasDividend) {
+                        return (
+                          <circle
+                            key={`dot-full-${props.payload.Date}`}
+                            cx={props.cx}
+                            cy={props.cy}
+                            r={6}
+                            fill="#10b981"
+                            stroke="#fff"
+                            strokeWidth={3}
+                          />
+                        );
+                      }
+                      return null;
+                    }}
+                  />
                   <Area type="monotone" dataKey="Deposito" stroke="#94a3b8" strokeWidth={2} strokeDasharray="6 4" fill="transparent" dot={false} />
                 </AreaChart>
               ) : (
@@ -1291,14 +1357,14 @@ export default function StockDetail() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="Date" tickFormatter={(val) => { const d = new Date(val); return `${MONTHS[d.getMonth()].substring(0, 3)} ${d.getFullYear().toString().slice(-2)}`; }} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis 
-                    domain={['dataMin * 0.98', 'dataMax * 1.02']} 
-                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tickFormatter={(v) => v.toLocaleString("id-ID")} 
-                    width={70} 
+                  <XAxis dataKey="Date" tickFormatter={(val) => { const d = new Date(val); return `${d.getMonth() + 1}/${d.getFullYear().toString().slice(-2)}`; }} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} dy={10} />
+                  <YAxis
+                    domain={['dataMin * 0.98', 'dataMax * 1.02']}
+                    tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(v) => v.toLocaleString("id-ID")}
+                    width={70}
                   />
                   <Tooltip content={<CustomPriceTooltip />} />
                   <Area type="monotone" dataKey="Price" stroke="#94a3b8" strokeWidth={3} fill="url(#gPriceFull)" activeDot={{ r: 8, fill: "#fff", stroke: "#94a3b8", strokeWidth: 3 }} />

@@ -65,21 +65,21 @@ export function calculateHealthScore(events, latestPrice = null) {
   
   if (score >= 8.0) {
     label = "Safe";
-    badgeClass = "bg-emerald-50 text-emerald-700 ring-emerald-200/50";
+    badgeClass = "bg-emerald-600 text-white";
     bgClass = "bg-emerald-500";
     textClass = "text-emerald-700";
     Icon = Shield;
     reason = "Emiten ini sangat aman. Harga cenderung pulih seketika dan penurunan saat ex-date sangat kecil dibanding dividen yang dibagikan.";
   } else if (score >= 5.0) {
     label = "Caution";
-    badgeClass = "bg-amber-50 text-amber-700 ring-amber-200/50";
+    badgeClass = "bg-amber-500 text-white";
     bgClass = "bg-amber-500";
     textClass = "text-amber-700";
     Icon = TriangleAlert;
     reason = "Emiten ini memiliki risiko moderat. Pemulihan harga mungkin memakan waktu beberapa minggu, atau terjadi penurunan yang cukup dalam.";
   } else {
     label = "Danger";
-    badgeClass = "bg-rose-50 text-rose-700 ring-rose-200/50";
+    badgeClass = "bg-rose-600 text-white";
     bgClass = "bg-rose-500";
     textClass = "text-rose-700";
     Icon = OctagonAlert;
