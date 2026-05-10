@@ -407,6 +407,7 @@ export default function StockDetail() {
           ...row,
           divPerShare,
           divPayout,
+          divYield: (row.Dividend / (row.Cum_Price || 1)) * 100,
           sharesAfter: currentShares,
           totalDivSoFar: totalDiv,
           newStatus,
@@ -673,7 +674,6 @@ export default function StockDetail() {
                 {health.reason}
                 {health.isBearish && (
                   <span className="block mt-2 font-bold text-rose-600 flex items-center gap-1.5">
-                    <TriangleAlert className="w-3.5 h-3.5" />
                     Waspada: Tren harga saat ini sedang dalam fase bearish.
                   </span>
                 )}
@@ -853,10 +853,7 @@ export default function StockDetail() {
         </section>
 
         {engine && engine.isDivergent && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
-            </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
             <div className="space-y-1">
               <p className="text-sm font-bold text-amber-900">Portfolio Divergence Warning</p>
               <p className="text-xs font-medium text-amber-700 leading-relaxed">
@@ -1057,10 +1054,10 @@ export default function StockDetail() {
                 <table className="w-full text-sm">
                   <thead className="bg-white border-b border-slate-100">
                     <tr>
-                      {["Year", "Cum Date", "Cum Price", "Ex Price", "Drop", "Recovery", "Status"].map((h, i) => (
+                      {["Date", "Cum & Ex Price", "Dividend", "Drop", "Recovery", "Status"].map((h, i) => (
                         <th
                           key={h}
-                          className={`px-4 md:px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${i >= 2 ? "text-right" : "text-left"} ${i === 6 ? "text-center" : ""}`}
+                          className={`px-4 md:px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest ${i >= 1 ? "text-right" : "text-left"} ${i === 5 ? "text-center" : ""}`}
                         >
                           {h}
                         </th>
@@ -1072,17 +1069,22 @@ export default function StockDetail() {
                       const drop = row.Ex_Price_1day ? ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100 : null;
                       return (
                         <tr key={`${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="group hover:bg-slate-50/80 transition-colors">
-                          <td className="px-4 md:px-8 py-5 font-bold text-slate-900">{row.Year}</td>
-                          <td className="px-4 md:px-8 py-5 text-slate-500 font-semibold">{row.Cum_Date}</td>
-                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Cum_Price?.toLocaleString("id-ID") || "-"}</td>
-                          <td className="px-4 md:px-8 py-5 text-right text-slate-700 font-bold">{row.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</td>
+                          <td className="px-4 md:px-8 py-5 text-slate-500 font-bold">{row.Cum_Date}</td>
+                          <td className="px-4 md:px-8 py-5 text-right">
+                            <div className="font-bold text-slate-900">{row.Cum_Price?.toLocaleString("id-ID")}</div>
+                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Ex-date: {row.Ex_Price_1day?.toLocaleString("id-ID") || "-"}</div>
+                          </td>
+                          <td className="px-4 md:px-8 py-5 text-right">
+                            <div className="font-bold text-slate-900">Rp {row.Dividend?.toLocaleString("id-ID")}</div>
+                            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-tight">Yield {row.divYield.toFixed(1)}%</div>
+                          </td>
                           <td className={`px-4 md:px-8 py-5 text-right font-bold ${drop !== null && drop < -3 ? "text-rose-600" : "text-slate-500"}`}>
                             {drop !== null ? `${drop.toFixed(1)}%` : "-"}
                           </td>
                           <td className={`px-4 md:px-8 py-5 text-right font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-400"}`}>
                             {row.recoveryDisplay}
                           </td>
-                          <td className="px-4 md:px-8 py-5 text-center">
+                          <td className="px-4 md:px-8 py-5 text-right">
                             {row.newStatus === "RECOVERED" && (
                               <div className="relative inline-block">
                                 <button
@@ -1176,11 +1178,10 @@ export default function StockDetail() {
                 {engine.yearly.map((row) => {
                   const drop = row.Ex_Price_1day ? ((row.Ex_Price_1day - row.Cum_Price) / row.Cum_Price) * 100 : null;
                   return (
-                    <div key={`m-${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="px-4 py-4 flex flex-col gap-3">
+                    <div key={`m-${row.Ticker}-${row.Year}-${row.Cum_Date}`} className="px-4 py-4 flex flex-col gap-6">
                       <div className="flex items-center justify-between">
                         <div className="flex flex-col">
-                          <span className="font-bold text-slate-900 text-lg leading-tight">{row.Year}</span>
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{row.Cum_Date}</span>
+                          <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-tight">{row.Cum_Date}</span>
                         </div>
                         {row.newStatus === "RECOVERED" && (
                           <div className="relative">
@@ -1265,22 +1266,27 @@ export default function StockDetail() {
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between bg-slate-50/50 rounded-xl px-4 py-2.5 border border-slate-100/50">
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-4 px-1">
                         <div className="flex flex-col">
-                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Cum Price</span>
-                          <span className="text-xs font-bold text-slate-900">{row.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Cum Price</span>
+                          <span className="text-sm font-bold text-slate-900">Rp {row.Cum_Price?.toLocaleString("id-ID") || "-"}</span>
                         </div>
-                        <div className="w-px h-6 bg-slate-200" />
-                        <div className="flex flex-col items-center">
-                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Drop</span>
-                          <span className={`text-xs font-bold ${drop !== null && drop < -3 ? "text-rose-600" : "text-slate-900"}`}>
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Dividend (Yield)</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-bold text-slate-900">{row.Dividend?.toLocaleString("id-ID")}</span>
+                            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">{row.divYield.toFixed(1)}%</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Ex-date Drop</span>
+                          <span className={`text-sm font-bold ${drop !== null && drop < -3 ? "text-rose-600" : "text-slate-900"}`}>
                             {drop !== null ? `${drop.toFixed(1)}%` : "-"}
                           </span>
                         </div>
-                        <div className="w-px h-6 bg-slate-200" />
-                        <div className="flex flex-col items-end">
-                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight mb-0.5">Recovery</span>
-                          <span className={`text-xs font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-900"}`}>{row.recoveryDisplay}</span>
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Recovery</span>
+                          <span className={`text-sm font-extrabold ${row.hasRecoveredOnce ? (row.Recovery_Days > 40 ? "text-rose-600" : "text-emerald-500") : "text-slate-900"}`}>{row.recoveryDisplay}</span>
                         </div>
                       </div>
                     </div>
