@@ -9,6 +9,9 @@ export const STOCKS_INFO = {
   PNBN: { name: "Bank Pan Indonesia Tbk.", sector: "Banks" },
   BJTM: { name: "Bank Pembangunan Daerah Jawa Timur Tbk.", sector: "Banks" },
   BJBR: { name: "Bank Pembangunan Daerah Jawa Barat Tbk.", sector: "Banks" },
+  BNGA: { name: "Bank CIMB Niaga Tbk.", sector: "Banks" },
+  AMAG: { name: "Asuransi Multi Artha Guna Tbk.", sector: "Banks" },
+  TUGU: { name: "Asuransi Tugu Pratama Indonesia Tbk.", sector: "Banks" },
 
   // Energy
   ADRO: { name: "Adaro Energy Indonesia Tbk.", sector: "Energy" },
@@ -21,6 +24,8 @@ export const STOCKS_INFO = {
   MBAP: { name: "Mitrabara Adiperdana Tbk.", sector: "Energy" },
   PGAS: { name: "Perusahaan Gas Negara Tbk.", sector: "Energy" },
   POWR: { name: "Cikarang Listrindo Tbk.", sector: "Energy" },
+  CTBN: { name: "Citra Tubindo Tbk.", sector: "Energy" },
+  GEMS: { name: "Golden Energy Mines Tbk.", sector: "Energy" },
 
   // Consumer
   UNVR: { name: "Unilever Indonesia Tbk.", sector: "Consumer" },
@@ -36,6 +41,17 @@ export const STOCKS_INFO = {
   LPPF: { name: "Matahari Department Store Tbk.", sector: "Consumer" },
   MPMX: { name: "Mitra Pinasthika Mustika Tbk.", sector: "Consumer" },
   SMSM: { name: "Selamat Sempurna Tbk.", sector: "Consumer" },
+  AUTO: { name: "Astra Otoparts Tbk.", sector: "Consumer" },
+  TSPC: { name: "Tempo Scan Pacific Tbk.", sector: "Consumer" },
+  PNGO: { name: "Pinago Utama Tbk.", sector: "Consumer" },
+  ACES: { name: "Aspirasi Hidup Indonesia Tbk.", sector: "Consumer" },
+  JPFA: { name: "Japfa Comfeed Indonesia Tbk.", sector: "Consumer" },
+  WIIM: { name: "Wismilak Inti Makmur Tbk.", sector: "Consumer" },
+  RALS: { name: "Ramayana Lestari Sentosa Tbk.", sector: "Consumer" },
+  MAIN: { name: "Malindo Feedmill Tbk.", sector: "Consumer" },
+  MLBI: { name: "Multi Bintang Indonesia Tbk.", sector: "Consumer" },
+  SGRO: { name: "Sampoerna Agro Tbk.", sector: "Consumer" },
+  LSIP: { name: "Perusahaan Perkebunan London Sumatra Indonesia Tbk.", sector: "Consumer" },
 
   // Telecommunication
   TLKM: { name: "Telkom Indonesia Tbk.", sector: "Telecommunication" },
@@ -48,6 +64,7 @@ export const STOCKS_INFO = {
   TINS: { name: "Timah Tbk.", sector: "Basic Materials" },
   SMGR: { name: "Semen Indonesia Tbk.", sector: "Basic Materials" },
   INTP: { name: "Indocement Tunggal Prakarsa Tbk.", sector: "Basic Materials" },
+  AVIA: { name: "Avia Avian Tbk.", sector: "Basic Materials" },
 
   // Infrastructure
   ASII: { name: "Astra International Tbk.", sector: "Infrastructure" },
@@ -56,11 +73,20 @@ export const STOCKS_INFO = {
   SMDR: { name: "Samudera Indonesia Tbk.", sector: "Infrastructure" },
   TMAS: { name: "Temas Tbk.", sector: "Infrastructure" },
   HEXA: { name: "Hexindo Adiperkasa Tbk.", sector: "Infrastructure" },
+  TOTO: { name: "Surya Toto Indonesia Tbk.", sector: "Infrastructure" },
+  BIRD: { name: "Blue Bird Tbk.", sector: "Infrastructure" },
+  JTPE: { name: "Jasuindo Tiga Perkasa Tbk.", sector: "Infrastructure" },
+  IPCC: { name: "Indonesia Kendaraan Terminal Tbk.", sector: "Infrastructure" },
+  ASGR: { name: "Astra Graphia Tbk.", sector: "Infrastructure" },
+  SCCO: { name: "Supreme Cable Manufacturing & Commerce Tbk.", sector: "Infrastructure" },
+  IPCM: { name: "Jasa Armada Indonesia Tbk.", sector: "Infrastructure" },
+  TOTL: { name: "Total Bangun Persada Tbk.", sector: "Infrastructure" },
 
   // Real Estate/Misc
   PWON: { name: "Pakuwon Jati Tbk.", sector: "Real Estate/Misc" },
   CTRA: { name: "Ciputra Development Tbk.", sector: "Real Estate/Misc" },
   DMAS: { name: "Puradelta Lestari Tbk.", sector: "Real Estate/Misc" },
+  PLIN: { name: "Plaza Indonesia Realty Tbk.", sector: "Real Estate/Misc" },
 };
 
 export const SECTORS = ["Semua", "Banks", "Energy", "Consumer", "Telecommunication", "Basic Materials", "Infrastructure", "Real Estate/Misc"];
