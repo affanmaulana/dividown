@@ -19,6 +19,9 @@ TICKER_SECTOR_MAP = {
     "PNBN.JK": "Banks",
     "BJTM.JK": "Banks",
     "BJBR.JK": "Banks",
+    "BNGA.JK": "Banks",
+    "AMAG.JK": "Banks",
+    "TUGU.JK": "Banks",
     
     # Energy
     "ADRO.JK": "Energy",
@@ -31,6 +34,8 @@ TICKER_SECTOR_MAP = {
     "MBAP.JK": "Energy",
     "PGAS.JK": "Energy",
     "POWR.JK": "Energy",
+    "CTBN.JK": "Energy",
+    "GEMS.JK": "Energy",
     
     # Consumer (Stable & Defensive)
     "UNVR.JK": "Consumer",
@@ -46,6 +51,17 @@ TICKER_SECTOR_MAP = {
     "LPPF.JK": "Consumer",
     "MPMX.JK": "Consumer",
     "SMSM.JK": "Consumer",
+    "AUTO.JK": "Consumer",
+    "TSPC.JK": "Consumer",
+    "PNGO.JK": "Consumer",
+    "ACES.JK": "Consumer",
+    "JPFA.JK": "Consumer",
+    "WIIM.JK": "Consumer",
+    "RALS.JK": "Consumer",
+    "MAIN.JK": "Consumer",
+    "MLBI.JK": "Consumer",
+    "SGRO.JK": "Consumer",
+    "LSIP.JK": "Consumer",
     
     # Telecommunication
     "TLKM.JK": "Telecommunication",
@@ -58,6 +74,7 @@ TICKER_SECTOR_MAP = {
     "TINS.JK": "Basic Materials",
     "SMGR.JK": "Basic Materials",
     "INTP.JK": "Basic Materials",
+    "AVIA.JK": "Basic Materials",
     
     # Infrastructure & Industrial
     "ASII.JK": "Infrastructure",
@@ -66,11 +83,20 @@ TICKER_SECTOR_MAP = {
     "SMDR.JK": "Infrastructure",
     "TMAS.JK": "Infrastructure",
     "HEXA.JK": "Infrastructure",
+    "TOTO.JK": "Infrastructure",
+    "BIRD.JK": "Infrastructure",
+    "JTPE.JK": "Infrastructure",
+    "IPCC.JK": "Infrastructure",
+    "ASGR.JK": "Infrastructure",
+    "SCCO.JK": "Infrastructure",
+    "IPCM.JK": "Infrastructure",
+    "TOTL.JK": "Infrastructure",
     
     # Real Estate & Misc
     "PWON.JK": "Real Estate/Misc",
     "CTRA.JK": "Real Estate/Misc",
     "DMAS.JK": "Real Estate/Misc",
+    "PLIN.JK": "Real Estate/Misc",
 }
 
 TICKERS = list(TICKER_SECTOR_MAP.keys())
@@ -181,8 +207,8 @@ for i, ticker_str in enumerate(TICKERS, 1):
                 # Tentukan tahun dari cum_date
                 year = cum_date.year
                 
-                # Status recovery (Rule update 2026-04-27)
-                today = pd.Timestamp('2026-04-27')
+                # Status recovery
+                today = pd.Timestamp.now().normalize()
                 # Ensure ex_date is timezone-naive for comparison if needed, or keep both naive
                 ex_date_naive = ex_date.replace(tzinfo=None) if ex_date.tzinfo else ex_date
                 
