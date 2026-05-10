@@ -257,16 +257,7 @@ export default function LandingPage() {
 
   return (
     <div className="font-sans relative">
-      {isSearchFocused && (
-        <div 
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[998] animate-in fade-in duration-300"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsSearchFocused(false);
-          }}
-        />
-      )}
+      {/* Search Overlay Removed */}
       {/* HEADER REMOVED - NOW IN LAYOUT */}
 
       {/* HERO */}

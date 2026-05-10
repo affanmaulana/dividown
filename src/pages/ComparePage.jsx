@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams, Link, useLocation } from "react-router-dom";
 import {
-  Search, TrendingUp, Banknote, Clock, Wallet,
+  Search, TrendingUp, TrendingDown, Banknote, Clock, Wallet,
   ChevronDown, ArrowLeft, Activity, Shield,
   ChevronLeft, ChevronRight, Calendar, Share2, Check, ArrowUp,
   Maximize2, Minimize2, Crown
 } from "lucide-react";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer
 } from "recharts";
 import { STOCKS_INFO } from "../constants/stocks";
@@ -170,7 +170,9 @@ export default function ComparePage() {
   const availableStocks = useMemo(() => {
     return Object.keys(STOCKS_INFO).map(ticker => {
       const tickerData = data.filter(d => d.Ticker === ticker);
-      const health = calculateHealthScore(tickerData);
+      const tickerPrices = priceData.filter(p => p.Ticker === ticker);
+      const latestPrice = tickerPrices.length > 0 ? tickerPrices[tickerPrices.length - 1].Price : null;
+      const health = calculateHealthScore(tickerData, latestPrice);
       return {
         ticker,
         ...STOCKS_INFO[ticker],
@@ -189,85 +191,139 @@ export default function ComparePage() {
       return d.Ticker === ticker && (dYear > startYear || (dYear === startYear && dMonth >= startMonth));
     }).sort((a, b) => new Date(a.Cum_Date) - new Date(b.Cum_Date));
 
-    const tickerPrices = priceData.filter(p => p.Ticker === ticker);
-    const latestPrice = tickerPrices.length ? tickerPrices[tickerPrices.length - 1].Price : 5000;
+    const tickerPrices = priceData.filter(p => p.Ticker === ticker).sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    if (!tickerPrices.length) return null;
+    const latestPrice = tickerPrices[tickerPrices.length - 1].Price;
 
-    if (!tickerDivs.length) return null;
+    const monthlyForTicker = tickerPrices.filter(p => {
+      const pDate = new Date(p.Date);
+      const pYear = pDate.getFullYear();
+      const pMonth = pDate.getMonth() + 1;
+      return (pYear > startYear || (pYear === startYear && pMonth >= startMonth));
+    });
+
+    if (!monthlyForTicker.length) return null;
 
     let currentShares = 0;
     let totalDiv = 0;
     let totalInvested = 0;
     let leftover = 0;
 
-    const monthlyForTicker = priceData
-      .filter(p => {
-        const pDate = new Date(p.Date);
-        const pYear = pDate.getFullYear();
-        const pMonth = pDate.getMonth() + 1;
-        return p.Ticker === ticker && (pYear > startYear || (pYear === startYear && pMonth >= startMonth));
-      })
-      .sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
+    const monthly = [];
 
+    // Initial State
     if (investStyle === "lumpsum") {
-      const cumPrice0 = tickerDivs[0].Cum_Price;
-      currentShares = Math.floor(amount / cumPrice0);
-      leftover = amount - currentShares * cumPrice0;
+      const startPrice = monthlyForTicker[0].Price;
+      currentShares = Math.floor(amount / startPrice);
+      leftover = amount - currentShares * startPrice;
       totalInvested = amount;
-    } else {
-      const monthlyAmount = amount;
-      let dcaLeftover = 0;
-      for (const mp of monthlyForTicker) {
-        const mpYear = new Date(mp.Date).getFullYear();
-        if (mpYear > tickerDivs[tickerDivs.length - 1].Year) break;
-        const available = monthlyAmount + dcaLeftover;
-        const newShares = Math.floor(available / mp.Price);
-        dcaLeftover = available - newShares * mp.Price;
-        currentShares += newShares;
-        totalInvested += monthlyAmount;
-      }
-      leftover = dcaLeftover;
     }
 
-    const taxFactor = divStrategy === "passive" ? 0.9 : 1.0;
+    // Monthly Simulation (DCA + Dividend Events)
+    const startDate = new Date(monthlyForTicker[0].Date);
+    const endDate = new Date(monthlyForTicker[monthlyForTicker.length - 1].Date);
 
-    const yearly = tickerDivs.map((row) => {
-      const divPerShare = (row.Dividend || (row.Cum_Price * 0.05)) * taxFactor;
-      const divPayout = Math.round(currentShares * divPerShare);
-      totalDiv += divPayout;
-      if (divStrategy === "compound") {
-        currentShares += Math.floor(divPayout / row.Cum_Price);
+    // Filter relevant dividends
+    const relevantDivs = tickerDivs.filter(d => {
+      const dDate = new Date(d.Cum_Date);
+      return dDate >= startDate && dDate <= endDate;
+    }).sort((a, b) => new Date(a.Cum_Date) - new Date(b.Cum_Date));
+
+    monthlyForTicker.forEach(mp => {
+      if (investStyle === "dca") {
+        totalInvested += amount;
+        const available = amount + leftover;
+        const newShares = Math.floor(available / mp.Price);
+        leftover = available - (newShares * mp.Price);
+        currentShares += newShares;
       }
-      return { year: row.Year, portfolio: Math.round(currentShares * row.Cum_Price + (divStrategy === "passive" ? totalDiv : 0) + leftover) };
+
+      // Check for dividends in this month
+      const mpDate = new Date(mp.Date);
+      let monthDividend = 0;
+      relevantDivs.filter(d => {
+        const dDate = new Date(d.Cum_Date);
+        return dDate.getFullYear() === mpDate.getFullYear() && dDate.getMonth() === mpDate.getMonth();
+      }).forEach(div => {
+        const payout = Math.floor(currentShares * (div.Dividend || 0) * taxFactor);
+        totalDiv += payout;
+        monthDividend += payout;
+        if (divStrategy === "compound") {
+          const added = Math.floor(payout / div.Cum_Price);
+          currentShares += added;
+          leftover += (payout - added * div.Cum_Price);
+        }
+      });
+
+      monthly.push({
+        date: mp.Date,
+        portfolio: Math.round(currentShares * mp.Price + (divStrategy === "passive" ? totalDiv : 0) + leftover),
+        isDiv: monthDividend > 0
+      });
     });
 
     const portfolioValue = currentShares * latestPrice + (divStrategy === "passive" ? totalDiv : 0) + leftover;
     const totalReturn = totalInvested > 0 ? ((portfolioValue - totalInvested) / totalInvested) * 100 : 0;
 
-    // Calculate actual historical yields and drops
+    // Metrics based on full data
     const yields = tickerDivs.map(r => (r.Dividend || 0) / (r.Cum_Price || 1));
     const avgYield = yields.length > 0 ? (yields.reduce((s, y) => s + y, 0) / yields.length) * 100 : 0;
-    const avgRecovery = tickerDivs.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / tickerDivs.length;
+    const avgRecovery = tickerDivs.reduce((s, r) => s + (r.Recovery_Days || 0), 0) / (tickerDivs.length || 1);
     const drops = tickerDivs.map(r => {
       const cp = r.Cum_Price || 1;
       return Math.abs((((r.Ex_Price_1day || cp) - cp) / cp) * 100);
     });
     const avgDrop = drops.length > 0 ? drops.reduce((s, d) => s + d, 0) / drops.length : 0;
 
-    return { totalReturn, avgYield, avgRecovery, avgDrop, portfolioValue, yearly };
+    return { totalReturn, avgYield, avgRecovery, avgDrop, portfolioValue, monthly };
   };
 
-  const simA = useMemo(() => runSim(stockA), [stockA, data, priceData, startYear, investStyle, amount, divStrategy]);
-  const simB = useMemo(() => runSim(stockB), [stockB, data, priceData, startYear, investStyle, amount, divStrategy]);
+  const simA = useMemo(() => runSim(stockA), [stockA, data, priceData, startYear, startMonth, investStyle, amount, divStrategy]);
+  const simB = useMemo(() => runSim(stockB), [stockB, data, priceData, startYear, startMonth, investStyle, amount, divStrategy]);
 
   const chartData = useMemo(() => {
     if (!simA || !simB) return [];
-    const years = Array.from(new Set([...simA.yearly.map(d => d.year), ...simB.yearly.map(d => d.year)])).sort();
-    return years.map(y => {
-      const valA = simA.yearly.find(d => d.year === y)?.portfolio;
-      const valB = simB.yearly.find(d => d.year === y)?.portfolio;
-      return { year: y, [stockA]: valA, [stockB]: valB };
+    
+    // We merge them by mapping Stock A's monthly data and finding the closest match in B
+    return simA.monthly.map(ma => {
+      const mb = simB.monthly.find(m => m.date === ma.date);
+      return {
+        date: ma.date,
+        [stockA]: ma.portfolio,
+        [stockB]: mb?.portfolio,
+        isDivA: ma.isDiv,
+        isDivB: mb?.isDiv
+      };
     });
   }, [simA, simB, stockA, stockB]);
+
+  const xAxisFormatter = (val) => {
+    if (!val) return "";
+    const d = new Date(val);
+    const month = d.toLocaleString("id-ID", { month: "short" });
+    const year = d.getFullYear().toString().substring(2);
+    return `${month} '${year}`;
+  };
+
+  const renderDividendDot = (props) => {
+    const { cx, cy, payload, dataKey } = props;
+    const isDiv = dataKey === stockA ? payload.isDivA : payload.isDivB;
+    if (isDiv) {
+      return (
+        <circle
+          key={`${dataKey}-${payload.date}`}
+          cx={cx}
+          cy={cy}
+          r={4}
+          fill={dataKey === stockA ? "#10b981" : "#64748b"}
+          stroke="#fff"
+          strokeWidth={2}
+        />
+      );
+    }
+    return null;
+  };
 
   if (loading) return (
     <div className="font-sans bg-slate-50 min-h-screen">
@@ -537,14 +593,56 @@ export default function ComparePage() {
           </div>
           <div className="h-[360px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="gA" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-indigo-600)" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="var(--color-indigo-600)" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-slate-400)" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="var(--color-slate-400)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
-                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "var(--color-slate-500)", fontWeight: 600 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={45} />
+                <XAxis 
+                  dataKey="date" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }} 
+                  dy={10} 
+                  tickFormatter={xAxisFormatter}
+                  interval={isMobile ? 12 : 3}
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }} 
+                  tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} 
+                  width={45} 
+                />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-slate-200)', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
-                <Line type="monotone" dataKey={stockA} stroke="var(--color-indigo-600)" strokeWidth={4} dot={{ r: 5, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 2.5 }} activeDot={{ r: 7, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 3 }} />
-                <Line type="monotone" dataKey={stockB} stroke="var(--color-slate-400)" strokeWidth={3} dot={{ r: 4, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 2 }} activeDot={{ r: 6, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 3 }} />
-              </LineChart>
+                <Area 
+                  type="monotone" 
+                  dataKey={stockA} 
+                  stroke="var(--color-indigo-600)" 
+                  strokeWidth={3.5} 
+                  fill="url(#gA)"
+                  dot={renderDividendDot}
+                  activeDot={{ r: 6, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }}
+                  isAnimationActive={false}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey={stockB} 
+                  stroke="var(--color-slate-400)" 
+                  strokeWidth={2.5} 
+                  fill="url(#gB)"
+                  dot={renderDividendDot}
+                  activeDot={{ r: 5, fill: "#64748b", stroke: "#fff", strokeWidth: 2 }}
+                  isAnimationActive={false}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -598,14 +696,57 @@ export default function ComparePage() {
           </div>
           <div className="flex-1 p-2 md:p-8">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
+              <AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 20 }}>
+                <defs>
+                  <linearGradient id="gAFull" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-indigo-600)" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="var(--color-indigo-600)" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="gBFull" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-slate-400)" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="var(--color-slate-400)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-slate-100)" vertical={false} />
-                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }} dy={10} />
-                <YAxis tick={{ fontSize: 10, fill: "var(--color-slate-500)", fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} width={35} />
+                <XAxis 
+                  dataKey="date" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }} 
+                  dy={12} 
+                  tickFormatter={xAxisFormatter}
+                />
+                <YAxis 
+                  tick={{ fontSize: 11, fill: "var(--color-slate-500)", fontWeight: 600 }} 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tickFormatter={(v) => `${(v / 1e6).toFixed(0)}jt`} 
+                  width={50} 
+                />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey={stockA} name={stockA} stroke="var(--color-indigo-600)" strokeWidth={4} dot={{ r: 6, fill: "var(--color-indigo-600)", stroke: "white", strokeWidth: 3 }} activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey={stockB} name={stockB} stroke="var(--color-slate-400)" strokeWidth={3} dot={{ r: 6, fill: "var(--color-slate-400)", stroke: "white", strokeWidth: 3 }} activeDot={{ r: 8 }} />
-              </LineChart>
+                <Area 
+                  type="monotone" 
+                  dataKey={stockA} 
+                  name={stockA} 
+                  stroke="var(--color-indigo-600)" 
+                  strokeWidth={4} 
+                  fill="url(#gAFull)"
+                  dot={renderDividendDot} 
+                  activeDot={{ r: 8, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }} 
+                  isAnimationActive={false}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey={stockB} 
+                  name={stockB} 
+                  stroke="var(--color-slate-400)" 
+                  strokeWidth={3} 
+                  fill="url(#gBFull)"
+                  dot={renderDividendDot} 
+                  activeDot={{ r: 7, fill: "#64748b", stroke: "#fff", strokeWidth: 2 }} 
+                  isAnimationActive={false}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
           <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-center gap-8">
