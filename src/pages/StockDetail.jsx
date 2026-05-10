@@ -10,7 +10,7 @@ import {
   TrendingUp, TrendingDown, Banknote, Clock, Wallet, BarChart3,
   Activity, CheckCircle2, XCircle, ChevronDown, AlertTriangle, TriangleAlert,
   Calendar, ChevronLeft, ChevronRight, Share2, Check, ArrowUp,
-  Maximize2, Minimize2, Crown
+  Maximize2, Minimize2, Crown, Sparkles
 } from "lucide-react";
 import { Analytics } from "@vercel/analytics/react";
 import { calculateHealthScore } from "../utils/healthScore";
@@ -623,23 +623,12 @@ export default function StockDetail() {
                       )}
 
                       <div className="relative shrink-0">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveMobileTooltip(activeMobileTooltip === 'health-info' ? null : 'health-info');
-                          }}
-                          className={`flex items-center gap-2 px-3 md:px-4 rounded-xl text-sm md:text-base font-black cursor-pointer transition-all active:scale-95 h-10 md:h-11 ${health.badgeClass}`}
+                        <div
+                          className={`flex items-center gap-2 px-3 md:px-4 rounded-xl text-sm md:text-base font-black h-10 md:h-11 ${health.badgeClass}`}
                         >
                           <health.Icon className="w-5 h-5" />
                           {health.score}/10
-                        </button>
-                        {activeMobileTooltip === 'health-info' && (
-                          <div className="absolute top-full left-0 mt-3 w-72 bg-slate-900 text-white text-xs p-4 rounded-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
-                            <div className="absolute top-0 left-6 -translate-y-1/2 rotate-45 w-2.5 h-2.5 bg-slate-900" />
-                            <p className="font-bold mb-1 text-slate-300 uppercase tracking-widest text-[9px]">Safety Score Reason</p>
-                            <p className="leading-relaxed">{health.reason}</p>
-                          </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -665,6 +654,33 @@ export default function StockDetail() {
             </button>
           </div>
         </div>
+
+        {/* ── DYNAMIC SUBTLE SUMMARY ── */}
+        <section className="animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className={`p-[1px] bg-gradient-to-r ${
+            health.label === 'Safe' ? 'from-emerald-500 via-teal-400 to-emerald-600' :
+            health.label === 'Caution' ? 'from-amber-500 via-orange-400 to-amber-600' :
+            'from-rose-500 via-red-400 to-rose-600'
+          } rounded-2xl shadow-sm`}>
+            <div className="bg-white rounded-[15px] p-4 md:p-5 relative overflow-hidden">
+              <div className={`absolute -top-10 -right-10 w-24 h-24 ${health.label === 'Safe' ? 'bg-emerald-50/40' : health.label === 'Caution' ? 'bg-amber-50/40' : 'bg-rose-50/40'} blur-[30px] rounded-full`} />
+              
+              <div className="relative flex items-center gap-2 mb-2">
+                <Sparkles className={`w-3.5 h-3.5 ${health.label === 'Safe' ? 'text-emerald-500' : health.label === 'Caution' ? 'text-amber-500' : 'text-rose-500'}`} />
+                <h2 className={`text-[9px] font-black ${health.label === 'Safe' ? 'text-emerald-600' : health.label === 'Caution' ? 'text-amber-600' : 'text-rose-600'} uppercase tracking-[0.2em]`}>Summary</h2>
+              </div>
+              <p className="relative text-xs md:text-sm text-slate-600 leading-relaxed font-medium">
+                {health.reason}
+                {health.isBearish && (
+                  <span className="block mt-2 font-bold text-rose-600 flex items-center gap-1.5">
+                    <TriangleAlert className="w-3.5 h-3.5" />
+                    Waspada: Tren harga saat ini sedang dalam fase bearish.
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* ── SIMULATION CONTROL PANEL ── */}
         <section className="bg-white border border-slate-200/60 rounded-2xl relative z-20">
