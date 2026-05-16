@@ -24,7 +24,7 @@ jobs:
           pip install yfinance pandas numpy
 
       - name: Run scraping script
-        run: python fetch_data.py
+        run: python scripts/fetch_data.py
 
       - name: Commit and push if data changed
         run: |
