@@ -479,6 +479,65 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ & EDUCATION SECTION */}
+      <section className="px-4 md:px-6 pb-24 max-w-6xl mx-auto border-t border-slate-200/60 pt-16">
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-4 font-sans">
+            Edukasi &amp; Kalkulator Dividen Saham IHSG
+          </h2>
+          <p className="text-slate-500 text-sm md:text-base leading-relaxed">
+            Panduan lengkap memahami cara menghitung dividend trap dan menggunakan kalkulator dividen saham gratis untuk mengoptimalkan investasi Anda.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Cara Menghitung Dividen Trap */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover-lift transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+              <TrendingDown className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">
+              Cara Menghitung Dividen Trap
+            </h3>
+            <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+              Dividend trap terjadi ketika harga saham turun tajam setelah tanggal ex-date melebihi nilai dividen yang dibagikan. 
+              <strong> Cara menghitung dividen trap</strong> secara sederhana adalah dengan mengukur persentase kejatuhan harga saham pada hari pertama ex-date dibandingkan yield dividen. 
+              Gunakan data Dividown secara gratis untuk mendeteksi rata-rata hari pemulihan harga historis emiten sebelum terjebak.
+            </p>
+          </div>
+
+          {/* Card 2: Kalkulator Dividen Saham IHSG Gratis */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover-lift transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+              <BarChart3 className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">
+              Kalkulator Dividen Saham IHSG Gratis
+            </h3>
+            <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+              Dengan <strong>kalkulator dividen saham IHSG gratis</strong> di Dividown, Anda dapat mensimulasikan hasil investasi nyata. 
+              Cukup pilih emiten favorit Anda, masukkan nominal modal awal atau setoran rutin bulanan (DCA), serta pilih metode reinvestasi (compound) atau cairkan pasif. 
+              Sistem akan menghitung return historis komprehensif Anda sejak 2021 secara real-time.
+            </p>
+          </div>
+
+          {/* Card 3: Cara Hitung Yield Dividen BBRI BMRI */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover-lift transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+              <Banknote className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">
+              Cara Hitung Yield Dividen BBRI BMRI
+            </h3>
+            <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+              Ketahui <strong>cara hitung yield dividen BBRI BMRI</strong> secara tepat: bagi total nilai dividen per lembar dengan harga beli saham (atau harga cum-date), lalu kalikan 100%. 
+              Contohnya, jika BBRI membagikan dividen Rp319 per lembar dengan harga cum-date Rp5.000, yield dividennya mencapai 6,38%. 
+              Gunakan Dividown untuk memantau yield historis dan track record kestabilan pembayaran dividen emiten perbankan raksasa.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="border-t border-slate-100 py-12 text-center">
         <p className="text-slate-400 text-sm">© 2026 Dividown Portal. Data historis, bukan rekomendasi investasi.</p>

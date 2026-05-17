@@ -510,10 +510,10 @@ export default function StockDetail() {
     }
 
     return () => {
-      document.title = "Dividown — Deteksi Dividend Trap & Hitung Total Return Saham IHSG";
+      document.title = "Dividown | Kalkulator Dividen Saham IHSG & Deteksi Dividend Trap";
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
-        metaDescription.content = "Validasi apakah saham dividenmu benar-benar untung atau justru jebakan harga (Trap). Analisis recovery harga 50 emiten unggulan.";
+        metaDescription.content = "Kalkulator dividen saham IHSG gratis untuk mendeteksi dividend trap. Temukan cara menghitung dividen trap & cara hitung yield dividen BBRI BMRI secara cepat & akurat!";
       }
     };
   }, [ticker, engine, health]);
