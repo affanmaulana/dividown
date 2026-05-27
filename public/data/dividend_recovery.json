@@ -161,7 +161,7 @@
         "Year": 2022,
         "Dividend": 174.25,
         "Cum_Date": "2022-03-10",
-        "Cum_Price": 3250.93,
+        "Cum_Price": 3250.94,
         "Ex_Price_1day": 3342.83,
         "Lowest_After_Ex": 2874.68,
         "Recovery_Date": "2022-03-14",
@@ -671,9 +671,9 @@
         "Cum_Price": 523.38,
         "Ex_Price_1day": 510.0,
         "Lowest_After_Ex": 510.0,
-        "Recovery_Date": null,
-        "Recovery_Days": null,
-        "Status_Recovery": "Berproses"
+        "Recovery_Date": "2026-05-25",
+        "Recovery_Days": 5,
+        "Status_Recovery": "Pulih"
     },
     {
         "Ticker": "BJBR",
@@ -826,7 +826,7 @@
         "Cum_Date": "2026-04-27",
         "Cum_Price": 1698.23,
         "Ex_Price_1day": 1695.0,
-        "Lowest_After_Ex": 1645.0,
+        "Lowest_After_Ex": 1610.0,
         "Recovery_Date": "2026-05-07",
         "Recovery_Days": 8,
         "Status_Recovery": "Pulih"
@@ -1059,7 +1059,7 @@
         "Dividend": 240.78,
         "Cum_Date": "2023-05-22",
         "Cum_Price": 930.59,
-        "Ex_Price_1day": 943.49,
+        "Ex_Price_1day": 943.5,
         "Lowest_After_Ex": 855.44,
         "Recovery_Date": "2023-05-24",
         "Recovery_Days": null,
@@ -1164,7 +1164,7 @@
         "Cum_Date": "2021-04-14",
         "Cum_Price": 5259.98,
         "Ex_Price_1day": 5267.49,
-        "Lowest_After_Ex": 5201.23,
+        "Lowest_After_Ex": 5201.24,
         "Recovery_Date": "2021-04-16",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -1254,7 +1254,7 @@
         "Dividend": 1228.0,
         "Cum_Date": "2024-09-09",
         "Cum_Price": 21996.13,
-        "Ex_Price_1day": 21998.66,
+        "Ex_Price_1day": 21998.67,
         "Lowest_After_Ex": 18466.19,
         "Recovery_Date": "2024-09-11",
         "Recovery_Days": null,
@@ -1446,7 +1446,7 @@
         "Ticker": "INDY",
         "Sector": "Energy",
         "Year": 2025,
-        "Dividend": 17.2,
+        "Dividend": 17.25,
         "Cum_Date": "2025-05-15",
         "Cum_Price": 1465.0,
         "Ex_Price_1day": 1485.0,
@@ -1710,7 +1710,7 @@
         "Cum_Date": "2026-05-06",
         "Cum_Price": 1510.0,
         "Ex_Price_1day": 1500.0,
-        "Lowest_After_Ex": 1340.0,
+        "Lowest_After_Ex": 1290.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -1748,7 +1748,7 @@
         "Dividend": 523.0,
         "Cum_Date": "2022-06-15",
         "Cum_Price": 4850.7,
-        "Ex_Price_1day": 4849.18,
+        "Ex_Price_1day": 4849.19,
         "Lowest_After_Ex": 1345.31,
         "Recovery_Date": "2022-06-21",
         "Recovery_Days": 4,
@@ -1814,7 +1814,7 @@
         "Cum_Date": "2025-06-10",
         "Cum_Price": 1722.0,
         "Ex_Price_1day": 1730.0,
-        "Lowest_After_Ex": 1550.0,
+        "Lowest_After_Ex": 1540.0,
         "Recovery_Date": "2025-06-12",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -2072,7 +2072,7 @@
         "Year": 2021,
         "Dividend": 145.28,
         "Cum_Date": "2021-11-24",
-        "Cum_Price": 2363.16,
+        "Cum_Price": 2363.17,
         "Ex_Price_1day": 2343.27,
         "Lowest_After_Ex": 2343.27,
         "Recovery_Date": "2021-11-29",
@@ -2087,7 +2087,7 @@
         "Cum_Date": "2022-01-06",
         "Cum_Price": 4554.77,
         "Ex_Price_1day": 4149.27,
-        "Lowest_After_Ex": 2578.48,
+        "Lowest_After_Ex": 2578.47,
         "Recovery_Date": "2022-01-21",
         "Recovery_Days": 13,
         "Status_Recovery": "Pulih"
@@ -2139,7 +2139,7 @@
         "Cum_Date": "2023-08-31",
         "Cum_Price": 4992.93,
         "Ex_Price_1day": 5068.22,
-        "Lowest_After_Ex": 4388.58,
+        "Lowest_After_Ex": 4388.57,
         "Recovery_Date": "2023-09-04",
         "Recovery_Days": 2,
         "Status_Recovery": "Pulih"
@@ -2581,7 +2581,7 @@
         "Cum_Date": "2022-06-06",
         "Cum_Price": 1744.61,
         "Ex_Price_1day": 1791.86,
-        "Lowest_After_Ex": 1320.0,
+        "Lowest_After_Ex": 1190.0,
         "Recovery_Date": "2022-06-08",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -2594,7 +2594,7 @@
         "Cum_Date": "2023-05-26",
         "Cum_Price": 2653.89,
         "Ex_Price_1day": 2609.0,
-        "Lowest_After_Ex": 1320.0,
+        "Lowest_After_Ex": 1190.0,
         "Recovery_Date": "2023-06-05",
         "Recovery_Days": 6,
         "Status_Recovery": "Pulih"
@@ -2607,7 +2607,7 @@
         "Cum_Date": "2024-05-28",
         "Cum_Price": 2814.2,
         "Ex_Price_1day": 2724.07,
-        "Lowest_After_Ex": 1320.0,
+        "Lowest_After_Ex": 1190.0,
         "Recovery_Date": "2024-07-09",
         "Recovery_Days": 40,
         "Status_Recovery": "Pulih"
@@ -2620,7 +2620,7 @@
         "Cum_Date": "2025-06-03",
         "Cum_Price": 2585.89,
         "Ex_Price_1day": 2540.0,
-        "Lowest_After_Ex": 1320.0,
+        "Lowest_After_Ex": 1190.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Trap"
@@ -2828,7 +2828,7 @@
         "Cum_Date": "2021-06-07",
         "Cum_Price": 1349.6,
         "Ex_Price_1day": 1324.76,
-        "Lowest_After_Ex": 800.0,
+        "Lowest_After_Ex": 795.0,
         "Recovery_Date": "2021-06-21",
         "Recovery_Days": 12,
         "Status_Recovery": "Pulih"
@@ -2841,7 +2841,7 @@
         "Cum_Date": "2022-05-30",
         "Cum_Price": 1499.56,
         "Ex_Price_1day": 1508.96,
-        "Lowest_After_Ex": 800.0,
+        "Lowest_After_Ex": 795.0,
         "Recovery_Date": "2022-06-02",
         "Recovery_Days": 1,
         "Status_Recovery": "Pulih"
@@ -2854,7 +2854,7 @@
         "Cum_Date": "2023-05-11",
         "Cum_Price": 2002.54,
         "Ex_Price_1day": 2048.49,
-        "Lowest_After_Ex": 800.0,
+        "Lowest_After_Ex": 795.0,
         "Recovery_Date": "2023-05-15",
         "Recovery_Days": 2,
         "Status_Recovery": "Pulih"
@@ -2867,7 +2867,7 @@
         "Cum_Date": "2024-05-28",
         "Cum_Price": 1483.72,
         "Ex_Price_1day": 1484.7,
-        "Lowest_After_Ex": 800.0,
+        "Lowest_After_Ex": 795.0,
         "Recovery_Date": "2024-05-30",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -2880,7 +2880,7 @@
         "Cum_Date": "2025-06-03",
         "Cum_Price": 1514.0,
         "Ex_Price_1day": 1600.0,
-        "Lowest_After_Ex": 800.0,
+        "Lowest_After_Ex": 795.0,
         "Recovery_Date": "2025-06-05",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -3023,7 +3023,7 @@
         "Cum_Date": "2026-04-23",
         "Cum_Price": 1690.0,
         "Ex_Price_1day": 1610.0,
-        "Lowest_After_Ex": 1595.0,
+        "Lowest_After_Ex": 1590.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -3180,8 +3180,8 @@
         "Cum_Price": 1006.89,
         "Ex_Price_1day": 998.97,
         "Lowest_After_Ex": 998.97,
-        "Recovery_Date": "2022-09-09",
-        "Recovery_Days": 1,
+        "Recovery_Date": "2022-09-13",
+        "Recovery_Days": 5,
         "Status_Recovery": "Pulih"
     },
     {
@@ -3349,8 +3349,8 @@
         "Cum_Price": 1854.39,
         "Ex_Price_1day": 1834.66,
         "Lowest_After_Ex": 1632.45,
-        "Recovery_Date": "2026-05-11",
-        "Recovery_Days": 181,
+        "Recovery_Date": "2026-05-07",
+        "Recovery_Days": 177,
         "Status_Recovery": "Pulih"
     },
     {
@@ -3504,7 +3504,7 @@
         "Cum_Date": "2026-04-27",
         "Cum_Price": 2580.0,
         "Ex_Price_1day": 2630.0,
-        "Lowest_After_Ex": 2540.0,
+        "Lowest_After_Ex": 2500.0,
         "Recovery_Date": "2026-04-29",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -3544,8 +3544,8 @@
         "Cum_Price": 1112.3,
         "Ex_Price_1day": 1112.3,
         "Lowest_After_Ex": 1060.84,
-        "Recovery_Date": "2022-06-13",
-        "Recovery_Days": 2,
+        "Recovery_Date": "2022-06-15",
+        "Recovery_Days": 4,
         "Status_Recovery": "Pulih"
     },
     {
@@ -3557,8 +3557,8 @@
         "Cum_Price": 1108.34,
         "Ex_Price_1day": 1108.34,
         "Lowest_After_Ex": 1096.25,
-        "Recovery_Date": "2022-12-20",
-        "Recovery_Days": null,
+        "Recovery_Date": "2022-12-21",
+        "Recovery_Days": 1,
         "Status_Recovery": "Pulih"
     },
     {
@@ -4023,8 +4023,8 @@
         "Dividend": 50.0,
         "Cum_Date": "2026-05-21",
         "Cum_Price": 400.0,
-        "Ex_Price_1day": null,
-        "Lowest_After_Ex": null,
+        "Ex_Price_1day": 392.0,
+        "Lowest_After_Ex": 390.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -4648,7 +4648,7 @@
         "Cum_Date": "2021-04-07",
         "Cum_Price": 8805.65,
         "Ex_Price_1day": 8990.49,
-        "Lowest_After_Ex": 1765.0,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2021-04-09",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -4661,7 +4661,7 @@
         "Cum_Date": "2022-04-08",
         "Cum_Price": 5784.24,
         "Ex_Price_1day": 5604.23,
-        "Lowest_After_Ex": 1765.0,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2022-05-24",
         "Recovery_Days": 42,
         "Status_Recovery": "Pulih"
@@ -4673,8 +4673,8 @@
         "Dividend": 245.19,
         "Cum_Date": "2023-05-03",
         "Cum_Price": 5218.41,
-        "Ex_Price_1day": 5307.03,
-        "Lowest_After_Ex": 1765.0,
+        "Ex_Price_1day": 5307.04,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2023-05-05",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -4687,7 +4687,7 @@
         "Cum_Date": "2024-05-15",
         "Cum_Price": 3835.96,
         "Ex_Price_1day": 3859.47,
-        "Lowest_After_Ex": 1765.0,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2024-05-17",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -4700,7 +4700,7 @@
         "Cum_Date": "2025-06-04",
         "Cum_Price": 2652.2,
         "Ex_Price_1day": 2825.69,
-        "Lowest_After_Ex": 1765.0,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": "2025-06-10",
         "Recovery_Days": 4,
         "Status_Recovery": "Pulih"
@@ -4713,7 +4713,7 @@
         "Cum_Date": "2026-05-20",
         "Cum_Price": 1806.67,
         "Ex_Price_1day": 1765.0,
-        "Lowest_After_Ex": 1765.0,
+        "Lowest_After_Ex": 1760.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -4919,7 +4919,7 @@
         "Year": 2021,
         "Dividend": 45.0,
         "Cum_Date": "2021-10-07",
-        "Cum_Price": 3863.11,
+        "Cum_Price": 3863.12,
         "Ex_Price_1day": 3945.09,
         "Lowest_After_Ex": 3620.6,
         "Recovery_Date": "2021-10-11",
@@ -5025,7 +5025,7 @@
         "Cum_Date": "2025-10-13",
         "Cum_Price": 5427.93,
         "Ex_Price_1day": 5497.42,
-        "Lowest_After_Ex": 5354.63,
+        "Lowest_After_Ex": 5125.0,
         "Recovery_Date": "2025-10-15",
         "Recovery_Days": null,
         "Status_Recovery": "Pulih"
@@ -5038,7 +5038,7 @@
         "Cum_Date": "2026-05-04",
         "Cum_Price": 5783.0,
         "Ex_Price_1day": 5750.0,
-        "Lowest_After_Ex": 5400.0,
+        "Lowest_After_Ex": 5125.0,
         "Recovery_Date": "2026-05-07",
         "Recovery_Days": 1,
         "Status_Recovery": "Pulih"
@@ -5050,7 +5050,7 @@
         "Dividend": 473.0,
         "Cum_Date": "2021-04-19",
         "Cum_Price": 12739.91,
-        "Ex_Price_1day": 13178.5,
+        "Ex_Price_1day": 13178.51,
         "Lowest_After_Ex": 10906.35,
         "Recovery_Date": "2021-04-21",
         "Recovery_Days": null,
@@ -5141,7 +5141,7 @@
         "Dividend": 667.0,
         "Cum_Date": "2024-10-07",
         "Cum_Price": 23316.89,
-        "Ex_Price_1day": 23486.41,
+        "Ex_Price_1day": 23486.42,
         "Lowest_After_Ex": 17747.25,
         "Recovery_Date": "2024-10-09",
         "Recovery_Days": null,
@@ -5153,7 +5153,7 @@
         "Year": 2025,
         "Dividend": 1484.0,
         "Cum_Date": "2025-05-06",
-        "Cum_Price": 20197.44,
+        "Cum_Price": 20197.43,
         "Ex_Price_1day": 20276.75,
         "Lowest_After_Ex": 19733.83,
         "Recovery_Date": "2025-05-08",
@@ -5181,7 +5181,7 @@
         "Cum_Date": "2026-04-24",
         "Cum_Price": 30754.0,
         "Ex_Price_1day": 30175.0,
-        "Lowest_After_Ex": 24050.0,
+        "Lowest_After_Ex": 23800.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -5489,7 +5489,7 @@
         "Ticker": "HEXA",
         "Sector": "Infrastructure",
         "Year": 2025,
-        "Dividend": 458.94,
+        "Dividend": 460.31,
         "Cum_Date": "2025-09-24",
         "Cum_Price": 5324.97,
         "Ex_Price_1day": 4800.0,
@@ -6026,7 +6026,7 @@
         "Cum_Date": "2026-04-23",
         "Cum_Price": 1719.0,
         "Ex_Price_1day": 1590.0,
-        "Lowest_After_Ex": 1490.0,
+        "Lowest_After_Ex": 1485.0,
         "Recovery_Date": null,
         "Recovery_Days": null,
         "Status_Recovery": "Berproses"
@@ -6621,12 +6621,12 @@
         "Sector": "Real Estate/Misc",
         "Year": 2026,
         "Dividend": 79.0,
-        "Cum_Date": "2026-05-21",
+        "Cum_Date": "2026-05-22",
         "Cum_Price": 2431.0,
-        "Ex_Price_1day": null,
-        "Lowest_After_Ex": null,
-        "Recovery_Date": null,
+        "Ex_Price_1day": 2510.0,
+        "Lowest_After_Ex": 2510.0,
+        "Recovery_Date": "2026-05-26",
         "Recovery_Days": null,
-        "Status_Recovery": "Berproses"
+        "Status_Recovery": "Pulih"
     }
 ]
