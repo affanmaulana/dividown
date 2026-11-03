@@ -7,12 +7,12 @@
     {
         "Ticker": "BBCA",
         "Date": "2021-02-01",
-        "Price": 5630.02
+        "Price": 5630.03
     },
     {
         "Ticker": "BBCA",
         "Date": "2021-03-01",
-        "Price": 5214.69
+        "Price": 5214.7
     },
     {
         "Ticker": "BBCA",
@@ -52,7 +52,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2021-11-01",
-        "Price": 6210.43
+        "Price": 6210.42
     },
     {
         "Ticker": "BBCA",
@@ -257,7 +257,7 @@
     {
         "Ticker": "BBCA",
         "Date": "2025-04-01",
-        "Price": 8340.26
+        "Price": 8340.25
     },
     {
         "Ticker": "BBCA",
@@ -847,7 +847,7 @@
     {
         "Ticker": "BMRI",
         "Date": "2023-04-01",
-        "Price": 3966.38
+        "Price": 3966.39
     },
     {
         "Ticker": "BMRI",
@@ -1142,7 +1142,7 @@
     {
         "Ticker": "BBNI",
         "Date": "2022-04-01",
-        "Price": 3564.9
+        "Price": 3564.91
     },
     {
         "Ticker": "BBNI",
@@ -1167,7 +1167,7 @@
     {
         "Ticker": "BBNI",
         "Date": "2022-09-01",
-        "Price": 3468.3
+        "Price": 3468.29
     },
     {
         "Ticker": "BBNI",
@@ -1182,7 +1182,7 @@
     {
         "Ticker": "BBNI",
         "Date": "2022-12-01",
-        "Price": 3564.9
+        "Price": 3564.91
     },
     {
         "Ticker": "BBNI",
@@ -1852,7 +1852,7 @@
     {
         "Ticker": "BDMN",
         "Date": "2022-04-01",
-        "Price": 2025.06
+        "Price": 2025.05
     },
     {
         "Ticker": "BDMN",
@@ -4622,7 +4622,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2021-02-01",
-        "Price": 5314.43
+        "Price": 5314.44
     },
     {
         "Ticker": "ITMG",
@@ -4657,7 +4657,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2021-09-01",
-        "Price": 9187.74
+        "Price": 9187.75
     },
     {
         "Ticker": "ITMG",
@@ -4747,7 +4747,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2023-03-01",
-        "Price": 22924.8
+        "Price": 22924.81
     },
     {
         "Ticker": "ITMG",
@@ -4762,7 +4762,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2023-06-01",
-        "Price": 16650.67
+        "Price": 16650.68
     },
     {
         "Ticker": "ITMG",
@@ -4817,7 +4817,7 @@
     {
         "Ticker": "ITMG",
         "Date": "2024-05-01",
-        "Price": 20178.26
+        "Price": 20178.27
     },
     {
         "Ticker": "ITMG",
@@ -4827,12 +4827,12 @@
     {
         "Ticker": "ITMG",
         "Date": "2024-07-01",
-        "Price": 21248.78
+        "Price": 21248.79
     },
     {
         "Ticker": "ITMG",
         "Date": "2024-08-01",
-        "Price": 21996.12
+        "Price": 21996.13
     },
     {
         "Ticker": "ITMG",
@@ -6827,7 +6827,7 @@
     {
         "Ticker": "MBAP",
         "Date": "2022-05-01",
-        "Price": 5253.46
+        "Price": 5253.47
     },
     {
         "Ticker": "MBAP",
@@ -6857,7 +6857,7 @@
     {
         "Ticker": "MBAP",
         "Date": "2022-11-01",
-        "Price": 5796.87
+        "Price": 5796.86
     },
     {
         "Ticker": "MBAP",
@@ -7157,7 +7157,7 @@
     {
         "Ticker": "PGAS",
         "Date": "2021-12-01",
-        "Price": 875.12
+        "Price": 875.11
     },
     {
         "Ticker": "PGAS",
@@ -7627,7 +7627,7 @@
     {
         "Ticker": "POWR",
         "Date": "2023-11-01",
-        "Price": 529.13
+        "Price": 529.12
     },
     {
         "Ticker": "POWR",
@@ -8237,7 +8237,7 @@
     {
         "Ticker": "GEMS",
         "Date": "2022-03-01",
-        "Price": 2595.14
+        "Price": 2595.15
     },
     {
         "Ticker": "GEMS",
@@ -8347,7 +8347,7 @@
     {
         "Ticker": "GEMS",
         "Date": "2024-01-01",
-        "Price": 4258.52
+        "Price": 4258.53
     },
     {
         "Ticker": "GEMS",
@@ -8602,7 +8602,7 @@
     {
         "Ticker": "UNVR",
         "Date": "2022-05-01",
-        "Price": 3688.62
+        "Price": 3688.63
     },
     {
         "Ticker": "UNVR",
@@ -8987,7 +8987,7 @@
     {
         "Ticker": "ICBP",
         "Date": "2022-11-01",
-        "Price": 9149.14
+        "Price": 9149.13
     },
     {
         "Ticker": "ICBP",
@@ -8997,7 +8997,7 @@
     {
         "Ticker": "ICBP",
         "Date": "2023-01-01",
-        "Price": 9149.14
+        "Price": 9149.13
     },
     {
         "Ticker": "ICBP",
@@ -9082,7 +9082,7 @@
     {
         "Ticker": "ICBP",
         "Date": "2024-06-01",
-        "Price": 9486.75
+        "Price": 9486.76
     },
     {
         "Ticker": "ICBP",
@@ -9122,7 +9122,7 @@
     {
         "Ticker": "ICBP",
         "Date": "2025-02-01",
-        "Price": 9813.64
+        "Price": 9813.63
     },
     {
         "Ticker": "ICBP",
@@ -10187,7 +10187,7 @@
     {
         "Ticker": "AMRT",
         "Date": "2025-02-01",
-        "Price": 2081.39
+        "Price": 2081.4
     },
     {
         "Ticker": "AMRT",
@@ -10697,7 +10697,7 @@
     {
         "Ticker": "GGRM",
         "Date": "2021-10-01",
-        "Price": 26770.3
+        "Price": 26770.31
     },
     {
         "Ticker": "GGRM",
@@ -10712,7 +10712,7 @@
     {
         "Ticker": "GGRM",
         "Date": "2022-01-01",
-        "Price": 24472.85
+        "Price": 24472.86
     },
     {
         "Ticker": "GGRM",
@@ -10737,7 +10737,7 @@
     {
         "Ticker": "GGRM",
         "Date": "2022-06-01",
-        "Price": 24912.37
+        "Price": 24912.36
     },
     {
         "Ticker": "GGRM",
@@ -11047,7 +11047,7 @@
     {
         "Ticker": "ROTI",
         "Date": "2021-09-01",
-        "Price": 909.1
+        "Price": 909.09
     },
     {
         "Ticker": "ROTI",
@@ -14717,7 +14717,7 @@
     {
         "Ticker": "JPFA",
         "Date": "2023-09-01",
-        "Price": 1118.81
+        "Price": 1118.8
     },
     {
         "Ticker": "JPFA",
@@ -16067,7 +16067,7 @@
     {
         "Ticker": "MLBI",
         "Date": "2022-07-01",
-        "Price": 7043.02
+        "Price": 7043.03
     },
     {
         "Ticker": "MLBI",
@@ -18217,12 +18217,12 @@
     {
         "Ticker": "ANTM",
         "Date": "2022-11-01",
-        "Price": 1561.3
+        "Price": 1561.29
     },
     {
         "Ticker": "ANTM",
         "Date": "2022-12-01",
-        "Price": 1561.3
+        "Price": 1561.29
     },
     {
         "Ticker": "ANTM",
@@ -18667,7 +18667,7 @@
     {
         "Ticker": "INCO",
         "Date": "2024-06-01",
-        "Price": 4086.23
+        "Price": 4086.22
     },
     {
         "Ticker": "INCO",
@@ -18697,7 +18697,7 @@
     {
         "Ticker": "INCO",
         "Date": "2024-12-01",
-        "Price": 3505.25
+        "Price": 3505.24
     },
     {
         "Ticker": "INCO",
@@ -18872,7 +18872,7 @@
     {
         "Ticker": "TINS",
         "Date": "2021-12-01",
-        "Price": 1239.93
+        "Price": 1239.92
     },
     {
         "Ticker": "TINS",
@@ -19322,7 +19322,7 @@
     {
         "Ticker": "SMGR",
         "Date": "2023-07-01",
-        "Price": 6494.14
+        "Price": 6494.13
     },
     {
         "Ticker": "SMGR",
@@ -20267,7 +20267,7 @@
     {
         "Ticker": "ASII",
         "Date": "2022-06-01",
-        "Price": 4550.07
+        "Price": 4550.08
     },
     {
         "Ticker": "ASII",
@@ -20282,7 +20282,7 @@
     {
         "Ticker": "ASII",
         "Date": "2022-09-01",
-        "Price": 4550.07
+        "Price": 4550.08
     },
     {
         "Ticker": "ASII",
@@ -20352,7 +20352,7 @@
     {
         "Ticker": "ASII",
         "Date": "2023-11-01",
-        "Price": 4170.12
+        "Price": 4170.11
     },
     {
         "Ticker": "ASII",
@@ -20432,7 +20432,7 @@
     {
         "Ticker": "ASII",
         "Date": "2025-03-01",
-        "Price": 4224.71
+        "Price": 4224.72
     },
     {
         "Ticker": "ASII",
@@ -20572,7 +20572,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2021-08-01",
-        "Price": 11771.23
+        "Price": 11771.24
     },
     {
         "Ticker": "UNTR",
@@ -20612,7 +20612,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2022-04-01",
-        "Price": 18546.24
+        "Price": 18546.25
     },
     {
         "Ticker": "UNTR",
@@ -20647,12 +20647,12 @@
     {
         "Ticker": "UNTR",
         "Date": "2022-11-01",
-        "Price": 19335.8
+        "Price": 19335.81
     },
     {
         "Ticker": "UNTR",
         "Date": "2022-12-01",
-        "Price": 16369.52
+        "Price": 16369.51
     },
     {
         "Ticker": "UNTR",
@@ -20662,7 +20662,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2023-02-01",
-        "Price": 17515.23
+        "Price": 17515.22
     },
     {
         "Ticker": "UNTR",
@@ -20677,7 +20677,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2023-05-01",
-        "Price": 17419.65
+        "Price": 17419.66
     },
     {
         "Ticker": "UNTR",
@@ -20732,7 +20732,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2024-04-01",
-        "Price": 19978.61
+        "Price": 19978.62
     },
     {
         "Ticker": "UNTR",
@@ -20747,7 +20747,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2024-07-01",
-        "Price": 22218.86
+        "Price": 22218.87
     },
     {
         "Ticker": "UNTR",
@@ -20787,7 +20787,7 @@
     {
         "Ticker": "UNTR",
         "Date": "2025-03-01",
-        "Price": 20793.42
+        "Price": 20793.43
     },
     {
         "Ticker": "UNTR",
@@ -24107,7 +24107,7 @@
     {
         "Ticker": "SCCO",
         "Date": "2021-05-01",
-        "Price": 9903.31
+        "Price": 9903.32
     },
     {
         "Ticker": "SCCO",
@@ -24122,7 +24122,7 @@
     {
         "Ticker": "SCCO",
         "Date": "2021-08-01",
-        "Price": 9531.25
+        "Price": 9531.26
     },
     {
         "Ticker": "SCCO",
@@ -24177,7 +24177,7 @@
     {
         "Ticker": "SCCO",
         "Date": "2022-07-01",
-        "Price": 8590.59
+        "Price": 8590.58
     },
     {
         "Ticker": "SCCO",
@@ -25632,7 +25632,7 @@
     {
         "Ticker": "CTRA",
         "Date": "2023-02-01",
-        "Price": 873.99
+        "Price": 873.98
     },
     {
         "Ticker": "CTRA",
